@@ -1,0 +1,1823 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "An API for SpatioTemporal Asset Catalogs",
+    "version": "1.0.0-RC10",
+    "description": "The SpatioTemporal Asset Catalog specification aims to standardize the way geospatial assets are exposed online and queried.  A 'spatiotemporal asset' is any file that represents information about the earth captured in a certain space and time. Most of the initial  use cases are related to imagery, but the api is designed to enable search of any spatiotemporal data items. SpatioTemporal Asset Catalogs  can be completely static, implemented as flat files on the web that can be crawled. This API has the same responses as a static catalog, but also offers querying capabilities in addition to exposing data online. This API was inspired by WFS 3.0, and the goal is to make it compatible with that specification.",
+    "contact": {
+      "name": "Boundless Geo",
+      "email": "jfix@boundlessgeo.com",
+      "url": "https://github.com/radiantearth/stac-spec/"
+    },
+    "license": {
+      "name": "CC-BY 4.0 license",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  "servers": [
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "https://virtserver.swaggerhub.com/boundlessgeo/stac/1.0.0-RC10"
+    },
+    {
+      "description": "SwaggerHub API Auto Mocking",
+      "url": "http://stac.boundlessgeo.io/stac"
+    }
+  ],
+  "paths": {
+    "/api": {
+      "get": {
+        "summary": "the API description - this document",
+        "operationId": "getApiDescription",
+        "tags": [
+          "Capabilities"
+        ],
+        "responses": {
+          "200": {
+            "description": "The formal documentation of this API according to the OpenAPI specification, version 3.0. I.e., this document.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "default": {
+                    "description": "An error occured.",
+                    "schema": {
+                      "$ref": "#/components/schemas/exception"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/{name}": {
+      "get": {
+        "operationId": "getSchemaByName",
+        "summary": "Get a schema by name.",
+        "tags": [
+          "Capabilities"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "description": "The name of the schema",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response containing a FeatureCollection of items across all indexes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "type": "string"
+                    },
+                    "properties": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/items": {
+      "get": {
+        "summary": "Retrieve STAC compliant Items matching filters",
+        "description": "Returns a pageable GeoJSON feature collection of the Items matching the query",
+        "operationId": "getItems",
+        "tags": [
+          "Items"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/bbox"
+          },
+          {
+            "$ref": "#/components/parameters/time"
+          },
+          {
+            "$ref": "#/components/parameters/filter"
+          },
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/next"
+          },
+          {
+            "$ref": "#/components/parameters/propertyname"
+          },
+          {
+            "$ref": "#/components/parameters/AcceptHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Description here",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemCollection"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/exception"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Accepts a JSON representation of the query parameters to seach and produce an ItemCollection",
+        "operationId": "getItemsPost",
+        "tags": [
+          "Items"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AcceptHeader"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/requestBodies/JsonPostBody"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a pageable GeoJSON feature collection of the items matching the query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemCollection"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/exception"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Adds one or more items to the catalog",
+        "description": "The request body may contain either a single item in JSON format or an array of items.",
+        "operationId": "addItem",
+        "tags": [
+          "Items"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Item"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a JSON response with the success status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occurred.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/exception"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/items/{id}": {
+      "get": {
+        "summary": "Retreive item by id",
+        "operationId": "getItem",
+        "tags": [
+          "Items"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An item.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Item"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The item with id {id} does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/exception"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/exception"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete item by id",
+        "operationId": "deleteItem",
+        "tags": [
+          "Items"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful delete",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The item with id {id} does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/exception"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/exception"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Allows partial updates to items",
+        "operationId": "updateItem",
+        "tags": [
+          "Items"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/requestBodies/JsonPostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful delete",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The item with id {id} does not exist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/exception"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An error occured.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/exception"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Capabilities",
+      "description": "Essential characteristics of this API including information about the data."
+    },
+    {
+      "name": "Items",
+      "description": "Access to data (items)."
+    }
+  ],
+  "components": {
+    "parameters": {
+      "next": {
+        "name": "next",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Token for the next set of paginated data."
+      },
+      "limit": {
+        "name": "limit",
+        "in": "query",
+        "description": "Defines the maximum number or results retruned by the API",
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "time": {
+        "name": "time",
+        "description": "An array of date-time strings that adheres to RFC3339 (for example 1985-04-12T23:20:50.52Z). One date-time in the array is the time to match. Two date-times represent a range. Any additional items in the array will be ignored.",
+        "in": "query",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "bbox": {
+        "name": "bbox",
+        "in": "query",
+        "description": "Only items that have a geometry that intersects the bounding box are selected. The bounding box is provided as four numbers, in longitude & latitude:\n* West, South, East, North",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minItems": 4,
+            "maxItems": 4,
+            "minimum": -180,
+            "maximum": 180
+          }
+        }
+      },
+      "filter": {
+        "name": "filter",
+        "in": "query",
+        "description": "A CQL string based off of GeoTools CQL language",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "propertyname": {
+        "name": "propertyname",
+        "in": "query",
+        "description": "A comma separated list of property names to be returned in the JSON response",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "id": {
+        "name": "id",
+        "in": "path",
+        "description": "The id of an item",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "AcceptHeader": {
+        "in": "header",
+        "name": "Accept",
+        "description": "Setting the Accept header value to 'text/event-stream' enables Server-Sent Events. Instead of returning a single ItemCollection, each Item will be streamed back from the server as they become available.",
+        "schema": {
+          "type": "string"
+        },
+        "required": false
+      }
+    },
+    "requestBodies": {
+      "JsonPostBody": {
+        "description": "JSON object containing query parameters",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/JsonPostRequest"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "JsonPostRequest": {
+        "type": "object",
+        "properties": {
+          "bbox": {
+            "description": "Array of doubles in order of minx, miny, maxx, maxy",
+            "type": "array"
+          },
+          "limit": {
+            "description": "An integer limiting the number of records to be returned.",
+            "type": "integer"
+          },
+          "time": {
+            "description": "A string array of date timestamps used to filter the returned records between two dates.",
+            "type": "array"
+          },
+          "filter": {
+            "description": "A CQL string used to filter the results",
+            "type": "string"
+          },
+          "next": {
+            "description": "An integer that can be used to get the next page of results. Can be used in conjuction with limit to provide for pagination of results.",
+            "type": "integer"
+          },
+          "propertyname": {
+            "description": "A string array of property names that should be returned in the response",
+            "type": "array"
+          }
+        }
+      },
+      "exception": {
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "HttpResponse": {
+        "description": "Response object for PUT and DELETE operations",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "result": {
+            "type": "object"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "bbox": {
+        "description": "West, South, East, North",
+        "type": "array",
+        "items": {
+          "minItems": 4,
+          "maxItems": 4,
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "example": [
+          -180,
+          -90,
+          180,
+          90
+        ]
+      },
+      "link": {
+        "type": "object",
+        "required": [
+          "href"
+        ],
+        "properties": {
+          "href": {
+            "type": "string"
+          },
+          "rel": {
+            "type": "string",
+            "example": "prev"
+          },
+          "type": {
+            "type": "string",
+            "example": "application/geo+json"
+          },
+          "hreflang": {
+            "type": "string",
+            "example": "en"
+          }
+        }
+      },
+      "ItemCollection": {
+        "type": "object",
+        "required": [
+          "items",
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ItemCollection"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "nextPageToken": {
+            "type": "string",
+            "description": "A token to obtain the next paginated data set",
+            "example": "ANsXtp9mrqN0yrKWhf-y2PUpHRLQb1GT-mtxNcXou8TwkXhi1Jbk"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ItemCollectionLinks"
+          }
+        }
+      },
+      "Item": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "geometry",
+          "links",
+          "properties"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "path/to/example.tif",
+            "description": "unique ID, potentially link to file"
+          },
+          "bbox": {
+            "$ref": "#/components/schemas/bbox"
+          },
+          "geometry": {
+            "type": "object",
+            "description": "footprint of the item"
+          },
+          "type": {
+            "type": "string",
+            "description": "The GeoJSON type",
+            "enum": [
+              "Item"
+            ]
+          },
+          "properties": {
+            "$ref": "#/components/schemas/ItemProperties"
+          },
+          "links": {
+            "$ref": "#/components/schemas/ItemLinks"
+          }
+        },
+        "example": {
+          "type": "Feature",
+          "id": "CS3-20160503_132130_04",
+          "bbox": [
+            -122.59750209,
+            37.48803556,
+            -122.2880486,
+            37.613537207
+          ],
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -122.308150179,
+                  37.488035566
+                ],
+                [
+                  -122.597502109,
+                  37.538869539
+                ],
+                [
+                  -122.576687533,
+                  37.613537207
+                ],
+                [
+                  -122.2880486,
+                  37.562818007
+                ],
+                [
+                  -122.308150179,
+                  37.488035566
+                ]
+              ]
+            ]
+          },
+          "properties": {
+            "start": "2016-05-03T13:21:30.040Z",
+            "end": "2016-05-03T13:21:30.410Z",
+            "provider": "http://www.cool-sat.com",
+            "license": "CC-BY-4.0"
+          },
+          "links": [
+            {
+              "rel": "self",
+              "href": "http://cool-sat.com/catalog/CS3-20160503_132130_04/CS3-20160503_132130_04.json"
+            },
+            {
+              "rel": "thumbnail",
+              "href": "http://cool-sat.com/catalog/CS3-20160503_132130_04/thumbnail.png"
+            }
+          ],
+          "assets": [
+            {
+              "href": "relative-path/to/analytic.tif",
+              "name": "4-Band Analytic"
+            }
+          ]
+        }
+      },
+      "ItemProperties": {
+        "type": "object",
+        "required": [
+          "start_date",
+          "end_date"
+        ],
+        "description": "provides the core metatdata fields plus extensions",
+        "properties": {
+          "start_date": {
+            "$ref": "#/components/schemas/Time"
+          },
+          "end_date": {
+            "$ref": "#/components/schemas/Time"
+          },
+          "provider": {
+            "type": "string",
+            "description": "Information about the provider"
+          },
+          "license": {
+            "type": "string",
+            "description": "Data license name based on SPDX License List"
+          }
+        },
+        "additionalProperties": {
+          "type": "object"
+        }
+      },
+      "ItemLinks": {
+        "type": "object",
+        "required": [
+          "self",
+          "thumbnail"
+        ],
+        "properties": {
+          "self": {
+            "type": "string"
+          },
+          "thumbnail": {
+            "type": "string"
+          }
+        }
+      },
+      "ItemCollectionLinks": {
+        "type": "object",
+        "properties": {
+          "next": {
+            "type": "string",
+            "format": "url",
+            "description": "A URL to obtain the next paginated data set. If not present, the client should utilize the `nextPageToken`.",
+            "example": "http://api.cool-sat.com/query/gasd312fsaeg/ANsXtp9mrqN0yrKWhf-y2PUpHRLQb1GT-mtxNcXou8TwkXhi1Jbk"
+          }
+        }
+      },
+      "Time": {
+        "type": "string",
+        "description": "A single date-time string that adheres to RFC3339, for example 1985-04-12T23:20:50.52Z"
+      },
+      "StringSet": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "Int64Set": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "TimeRange": {
+        "description": "begin and end timestamps adhering to RFC3339",
+        "properties": {
+          "begin": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          }
+        }
+      },
+      "Int64Range": {
+        "description": "An integer range with begin and end",
+        "properties": {
+          "begin": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "end": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DoubleRange": {
+        "description": "A double range with begin and end",
+        "properties": {
+          "begin": {
+            "type": "number",
+            "format": "double"
+          },
+          "end": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "Doc": {
+        "description": "Arbitrary json document",
+        "additionalProperties": {
+          "type": "object"
+        }
+      },
+      "GeoJson": {
+        "description": "root geojson object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ItemType"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "discriminator": {
+          "propertyName": "type"
+        }
+      },
+      "ItemType": {
+        "type": "string",
+        "enum": [
+          "Point",
+          "MultiPoint",
+          "LineString",
+          "MultiLineString",
+          "Polygon",
+          "MultiPolygon",
+          "GeometryCollection",
+          "Item",
+          "ItemCollection"
+        ]
+      },
+      "GeometryCollection": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeoJson"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "geometries": {
+                "$ref": "#/components/schemas/GeometryCollection2D"
+              }
+            },
+            "required": [
+              "geometries"
+            ]
+          }
+        ]
+      },
+      "MultiPolygon": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeoJson"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "coordinates": {
+                "$ref": "#/components/schemas/MultiPolygon2D"
+              }
+            },
+            "required": [
+              "coordinates"
+            ]
+          }
+        ]
+      },
+      "MultiLineString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeoJson"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "coordinates": {
+                "$ref": "#/components/schemas/MultiLineString2D"
+              }
+            },
+            "required": [
+              "coordinates"
+            ]
+          }
+        ]
+      },
+      "MultiPoint": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeoJson"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "coordinates": {
+                "$ref": "#/components/schemas/MultiPoint2D"
+              }
+            },
+            "required": [
+              "coordinates"
+            ]
+          }
+        ]
+      },
+      "Polygon": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeoJson"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "coordinates": {
+                "$ref": "#/components/schemas/Polygon2D"
+              }
+            },
+            "required": [
+              "coordinates"
+            ]
+          }
+        ]
+      },
+      "LineString": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeoJson"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "coordinates": {
+                "$ref": "#/components/schemas/LineString2D"
+              }
+            },
+            "required": [
+              "coordinates"
+            ]
+          }
+        ]
+      },
+      "Point": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeoJson"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "coordinates": {
+                "$ref": "#/components/schemas/Point2D"
+              }
+            },
+            "required": [
+              "coordinates"
+            ]
+          }
+        ]
+      },
+      "GeoPolygon2D": {
+        "description": "A geojson 2d polygon",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Type of geometry",
+            "type": "string",
+            "enum": [
+              "Polygon"
+            ]
+          },
+          "coordinates": {
+            "$ref": "#/components/schemas/Polygon2D"
+          }
+        },
+        "required": [
+          "type",
+          "coordinates"
+        ]
+      },
+      "GeometryCollection2D": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GeoJson"
+        }
+      },
+      "MultiPolygon2D": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Polygon2D"
+        }
+      },
+      "Polygon2D": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/components/schemas/LinearRing2D"
+        }
+      },
+      "MultiLineString2D": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LineString2D"
+        }
+      },
+      "LinearRing2D": {
+        "type": "array",
+        "minItems": 4,
+        "items": {
+          "$ref": "#/components/schemas/Point2D"
+        }
+      },
+      "LineString2D": {
+        "type": "array",
+        "minItems": 2,
+        "items": {
+          "$ref": "#/components/schemas/Point2D"
+        }
+      },
+      "MultiPoint2D": {
+        "type": "array",
+        "minItems": 2,
+        "items": {
+          "$ref": "#/components/schemas/Point2D"
+        }
+      },
+      "Point2D": {
+        "description": "A 2d geojson point",
+        "type": "array",
+        "minimum": 2,
+        "maximum": 2,
+        "items": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "FieldItemProperties": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Item type stated as 'field'"
+          },
+          "geohash": {
+            "type": "string",
+            "description": "geohash."
+          },
+          "updated": {
+            "type": "string",
+            "description": "Date item was updated."
+          },
+          "metadata": {
+            "type": "object"
+          },
+          "links": {
+            "type": "array"
+          }
+        }
+      },
+      "ImageryItemProperties": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Item type stated as 'imagery'"
+          },
+          "md5": {
+            "type": "string",
+            "description": "md5 hash of the imagery."
+          },
+          "orignialMetadata": {
+            "type": "object"
+          },
+          "newMetadata": {
+            "type": "object"
+          },
+          "updated": {
+            "type": "string",
+            "description": "Date item was updated."
+          },
+          "links": {
+            "type": "array"
+          }
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "enabledExtensions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the extension"
+                },
+                "organization": {
+                  "type": "string",
+                  "description": "Orgainization providing the extension"
+                },
+                "contact": {
+                  "type": "string",
+                  "description": "POC for the extension"
+                },
+                "version": {
+                  "type": "string",
+                  "description": "Extension version"
+                },
+                "modelClassName": {
+                  "type": "string",
+                  "description": "Class name of the model that defines the extension."
+                },
+                "endpoints": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "method": {
+                        "type": "string",
+                        "description": "The HTTP method for the endpoint"
+                      },
+                      "path": {
+                        "type": "string",
+                        "description": "Endpoint path"
+                      },
+                      "produces": {
+                        "type": "string",
+                        "description": "Response type"
+                      },
+                      "parameters": {
+                        "type": "object",
+                        "properties": {
+                          "filter": {
+                            "type": "string",
+                            "description": "CQL filter"
+                          },
+                          "next": {
+                            "type": "string",
+                            "description": "Next value to use for pagination [next=1] get page 2 with pages begin zero based."
+                          },
+                          "bbox": {
+                            "type": "string",
+                            "description": "The bounding box to use to query for intersecting geometries."
+                          },
+                          "limit": {
+                            "type": "integer",
+                            "description": "The number of records to return"
+                          },
+                          "time": {
+                            "type": "string",
+                            "description": "Time range to search by."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "model": {
+                  "type": "object",
+                  "properties": {
+                    "classes": {
+                      "type": "object",
+                      "properties": {
+                        "ItemCollectionLinks": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "next": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "MultiPoint": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "coordinates": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "ServerItemProperties": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "MultiLineString": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "coordinates": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "ItemLinks": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "thumbnail": {
+                                  "type": "string"
+                                },
+                                "self": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "ItemType": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "ITEM": {
+                                  "type": "string"
+                                },
+                                "MULTILINESTRING": {
+                                  "type": "string"
+                                },
+                                "POLYGON": {
+                                  "type": "string"
+                                },
+                                "MULTIPOINT": {
+                                  "type": "string"
+                                },
+                                "LINESTRING": {
+                                  "type": "string"
+                                },
+                                "ITEMCOLLECTION": {
+                                  "type": "string"
+                                },
+                                "POINT": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "string"
+                                },
+                                "MULTIPOLYGON": {
+                                  "type": "string"
+                                },
+                                "$VALUES": {
+                                  "type": "string"
+                                },
+                                "GEOMETRYCOLLECTION": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "GeoJson": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "GeometryCollection2D": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "GeoPolygon2D": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                },
+                                "coordinates": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "RasterLayerItemProperties": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "GeometryCollection": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Item": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "bbox": {
+                                  "type": "string"
+                                },
+                                "geometry": {
+                                  "type": "string"
+                                },
+                                "links": {
+                                  "type": "object"
+                                },
+                                "id": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "properties": {
+                                  "type": "object"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Point2D": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "Bbox": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "StringSet": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "Doc": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "Polygon": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "coordinates": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "FieldName": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "PROPERTIES": {
+                                  "type": "string"
+                                },
+                                "LINKS": {
+                                  "type": "string"
+                                },
+                                "SELF": {
+                                  "type": "string"
+                                },
+                                "THUMBNAIL": {
+                                  "type": "string"
+                                },
+                                "SELF_FULL": {
+                                  "type": "string"
+                                },
+                                "THUMBNAIL_FULL": {
+                                  "type": "string"
+                                },
+                                "START_FULL": {
+                                  "type": "string"
+                                },
+                                "END_FULL": {
+                                  "type": "string"
+                                },
+                                "GEOMETRY_TYPE": {
+                                  "type": "string"
+                                },
+                                "COORDINATES_FULL": {
+                                  "type": "string"
+                                },
+                                "LICENSE_FULL": {
+                                  "type": "string"
+                                },
+                                "BBOX": {
+                                  "type": "string"
+                                },
+                                "PROVIDER": {
+                                  "type": "string"
+                                },
+                                "START": {
+                                  "type": "string"
+                                },
+                                "END": {
+                                  "type": "string"
+                                },
+                                "ID": {
+                                  "type": "string"
+                                },
+                                "GEOMETRY_TYPE_FULL": {
+                                  "type": "string"
+                                },
+                                "COORDINATES": {
+                                  "type": "string"
+                                },
+                                "TYPE": {
+                                  "type": "string"
+                                },
+                                "LICENSE": {
+                                  "type": "string"
+                                },
+                                "GEOMETRY": {
+                                  "type": "string"
+                                },
+                                "PROVIDER_FULL": {
+                                  "type": "string"
+                                },
+                                "NEXT_PAGE_TOKEN": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "LineString2D": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "VectorLayerItemProperties": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "metadataLinks": {
+                                  "type": "string"
+                                },
+                                "storeType": {
+                                  "type": "string"
+                                },
+                                "keywords": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "centroid": {
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "type": "string"
+                                },
+                                "dataLinks": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "dimension": {
+                                  "type": "integer"
+                                },
+                                "geometryType": {
+                                  "type": "string"
+                                },
+                                "serviceEndpoints": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "ItemCollection": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "features": {
+                                  "type": "string"
+                                },
+                                "nextPageToken": {
+                                  "type": "string"
+                                },
+                                "Links": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Point": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "coordinates": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "MultiPoint2d": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "Polygon2D": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "Exception": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "code": {
+                                  "type": "string"
+                                },
+                                "description": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Int64Range": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "end": {
+                                  "type": "integer"
+                                },
+                                "begin": {
+                                  "type": "integer"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "MultiLineString2D": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "DoubleRange": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "end": {
+                                  "type": "integer"
+                                },
+                                "begin": {
+                                  "type": "integer"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "TimeRange": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "end": {
+                                  "type": "string"
+                                },
+                                "begin": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "Int64Set": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "ItemProperties": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "license": {
+                                  "type": "string"
+                                },
+                                "provider": {
+                                  "type": "string"
+                                },
+                                "start": {
+                                  "type": "string"
+                                },
+                                "end": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "LineString": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "MultiPolygon": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "TypeEnum": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "value": {
+                                  "type": "string"
+                                },
+                                "$VALUES": {
+                                  "type": "string"
+                                },
+                                "FEATURECOLLECTION": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "MultiPolygon2D": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "LinearRing2D": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "Link": {
+                          "type": "object",
+                          "properties": {
+                            "fields": {
+                              "type": "object",
+                              "properties": {
+                                "hreflang": {
+                                  "type": "string"
+                                },
+                                "rel": {
+                                  "type": "string"
+                                },
+                                "href": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

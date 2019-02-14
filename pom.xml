@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.boundlessgeo.staccato</groupId>
+    <artifactId>staccato</artifactId>
+    <version>0.0.1</version>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.2.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <name>staccato</name>
+    <description>Staccato STAC implementation by Boundless Spatial</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <staccato.version>${project.version}</staccato.version>
+        <lucene.version>7.1.0</lucene.version>
+        <elasticsearch.version>6.6.0</elasticsearch.version>
+    </properties>
+
+    <modules>
+        <module>staccato-main</module>
+        <module>staccato-collections</module>
+        <module>staccato-commons</module>
+        <module>staccato-community</module>
+        <module>staccato-elasticsearch</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Greenwich.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-aws</artifactId>
+                <version>2.0.0.RC1</version>
+                <roles>pom</roles>
+                <scope>import</scope>
+            </dependency>
+            -->
+
+            <dependency>
+                <groupId>com.boundlessgeo.staccato</groupId>
+                <artifactId>staccato-elasticsearch</artifactId>
+                <version>${staccato.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.boundlessgeo.staccato</groupId>
+                <artifactId>staccato-commons</artifactId>
+                <version>${staccato.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.boundlessgeo.staccato</groupId>
+                <artifactId>staccato-collections</artifactId>
+                <version>${staccato.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.boundlessgeo.staccato</groupId>
+                <artifactId>staccato-community</artifactId>
+                <version>${staccato.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.boundlessgeo.staccato</groupId>
+                <artifactId>stac-kafka</artifactId>
+                <version>${staccato.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>boundless</id>
+            <name>Boundless Maven Repository</name>
+            <url>https://repo.boundlessgeo.com/main</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>boundless-release</id>
+            <name>Boundless Maven Repository</name>
+            <url>https://repo.boundlessgeo.com/release/</url>
+        </repository>
+        <repository>
+            <id>boundless-snapshot</id>
+            <name>Boundless Maven Repository</name>
+            <url>https://repo.boundlessgeo.com/snapshot/</url>
+        </repository>
+        <repository>
+            <id>boundless_ext</id>
+            <name>Boundless Maven Repository</name>
+            <url>https://repo.boundlessgeo.com/ext-release-local/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+</project>

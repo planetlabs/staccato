@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_outer_classname = "CatalogServiceProto";
+option java_multiple_files = true;
+option java_package = "com.boundlessgeo.staccato.grpc.generated";
+option java_generic_services = true;
+
+
+message CatalogItemsRequest {
+    string id = 1;
+}
+
+message CatalogItemRequest {
+    string id = 1;
+}
+
+message CatalogItemBytes {
+    bytes item = 1;
+}
+
+service CatalogService {
+    rpc item(CatalogItemRequest) returns (stream CatalogItemBytes) {}
+    rpc items(CatalogItemsRequest) returns (stream CatalogItemBytes) {}
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.boundlessgeo.staccato</groupId>
+    <artifactId>staccato-collections</artifactId>
+    <version>0.0.1</version>
+    <packaging>pom</packaging>
+
+    <name>staccato-collections</name>
+    <description>Staccato Collections</description>
+
+    <modules>
+        <module>landsat8</module>
+        <module>planet</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.boundlessgeo.staccato</groupId>
+                <artifactId>staccato-commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

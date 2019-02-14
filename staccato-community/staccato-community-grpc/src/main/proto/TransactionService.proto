@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option java_outer_classname = "TransactionServiceProto";
+option java_multiple_files = true;
+option java_package = "com.boundlessgeo.staccato.grpc.generated";
+option java_generic_services = true;
+
+message TransactionUpdateRequest {
+    string id = 1;
+    string item = 2;
+}
+
+message TransactionDeleteRequest {
+    string id = 1;
+}
+
+message TransactionItemBytes {
+    bytes item = 1;
+}
+
+message TransactionResponse {
+    string id = 1;
+    bool success = 2;
+    string result = 3;
+    string reason = 4;
+}
+
+service TransactionService {
+    rpc putItem(TransactionItemBytes) returns (TransactionResponse) {}
+    rpc deleteItem(TransactionDeleteRequest) returns (TransactionResponse) {}
+    rpc updateItem(TransactionUpdateRequest) returns (TransactionResponse) {}
+}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+
+    <groupId>com.boundlessgeo.staccato</groupId>
+    <artifactId>staccato-community</artifactId>
+    <version>0.0.1</version>
+
+    <parent>
+        <groupId>com.boundlessgeo.staccato</groupId>
+        <artifactId>staccato</artifactId>
+        <version>0.0.1</version>
+    </parent>
+
+    <modules>
+        <module>staccato-community-grpc</module>
+        <module>staccato-community-kafka</module>
+        <module>staccato-community-rsocket</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <staccato.version>${project.version}</staccato.version>
+    </properties>
+<!--
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.boundlessgeo.staccato</groupId>
+                <artifactId>staccato-community</artifactId>
+                <version>${staccato.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    -->
+</project>
