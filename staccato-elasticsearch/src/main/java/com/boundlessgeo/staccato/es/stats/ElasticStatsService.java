@@ -1,4 +1,4 @@
-package com.boundlessgeo.staccato.es.aggregation;
+package com.boundlessgeo.staccato.es.stats;
 
 import com.boundlessgeo.staccato.dto.ItemStatisticsResponse;
 import com.boundlessgeo.staccato.es.api.DefaultQueryBuilderService;
@@ -9,11 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.BucketOrder;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.geobounds.GeoBounds;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
 import org.elasticsearch.search.aggregations.metrics.min.Min;
@@ -26,10 +25,9 @@ import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
- * Providers aggregation data from Elasticsearch.
+ * Providers stats data from Elasticsearch.
  *
  * @author joshfix
  * Created on 10/17/18
@@ -37,7 +35,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ElasticAggregationService implements AggregationService {
+public class ElasticStatsService implements AggregationService {
 
     private final RestHighLevelClient restClient;
     private final Scheduler scheduler;
@@ -147,7 +145,7 @@ public class ElasticAggregationService implements AggregationService {
 
     /**
      * Reactive, non-blocking wrapper for the {@link #getStats(String) getStats} method
-     * @param index The index to build aggregation data for
+     * @param index The index to build stats data for
      * @return An {@link ItemStatisticsResponse ItemStatisticsResponse} object wrapped in a Mono
      */
     @Override
@@ -166,8 +164,8 @@ public class ElasticAggregationService implements AggregationService {
                 new SearchSourceBuilder()
                         .aggregation(AggregationBuilders.min("start").field(FieldName.DATETIME_FULL))
                         .aggregation(AggregationBuilders.max("end").field(FieldName.DATETIME_FULL))
-                        .aggregation(AggregationBuilders.terms("licenses").field(FieldName.LICENSE_FULL).size(5).order(BucketOrder.count(true)))
-                        .aggregation(AggregationBuilders.terms("providers").field(FieldName.PROVIDER_FULL).size(5).order(BucketOrder.count(true)))
+                        //.stats(AggregationBuilders.terms("licenses").field(FieldName.LICENSE_FULL).size(5).order(BucketOrder.count(true)))
+                        //.stats(AggregationBuilders.terms("providers").field(FieldName.PROVIDER_FULL).size(5).order(BucketOrder.count(true)))
                         .aggregation(AggregationBuilders.geoBounds("bbox").field(FieldName.CENTROID))
                         //we don't want records back, just aggregations
                         .size(0)
@@ -176,15 +174,15 @@ public class ElasticAggregationService implements AggregationService {
 
         SearchResponse resp;
         try {
-            resp = restClient.search(sr);
+            resp = restClient.search(sr, RequestOptions.DEFAULT);
         } catch (IOException ex) {
             return new ItemStatisticsResponse();
         }
 
         Min start = resp.getAggregations().get("start");
         Max end = resp.getAggregations().get("end");
-        Terms lics = resp.getAggregations().get("licenses");
-        Terms provs = resp.getAggregations().get("providers");
+        //Terms lics = resp.getAggregations().get("licenses");
+        //Terms provs = resp.getAggregations().get("providers");
         GeoBounds bboxAggregation = resp.getAggregations().get("bbox");
 
         ItemStatisticsResponse stats = new ItemStatisticsResponse();
@@ -199,14 +197,6 @@ public class ElasticAggregationService implements AggregationService {
         String startValue = start.getValueAsString();
         if (null != startValue && !startValue.toLowerCase().contains("infinity")) {
             stats.setStart(startValue);
-        }
-
-        if (!lics.getBuckets().isEmpty()) {
-            stats.setLicenses(lics.getBuckets().stream().map(bucket -> bucket.getKey().toString()).collect(Collectors.toList()));
-        }
-
-        if (!provs.getBuckets().isEmpty()) {
-            stats.setProviders(provs.getBuckets().stream().map(bucket -> bucket.getKey().toString()).collect(Collectors.toList()));
         }
 
         try {

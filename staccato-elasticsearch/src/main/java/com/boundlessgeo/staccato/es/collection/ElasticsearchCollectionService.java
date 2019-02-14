@@ -3,7 +3,7 @@ package com.boundlessgeo.staccato.es.collection;
 import com.boundlessgeo.staccato.collection.CollectionMetadata;
 import com.boundlessgeo.staccato.config.LinksConfigProps;
 import com.boundlessgeo.staccato.dto.SearchRequest;
-import com.boundlessgeo.staccato.es.aggregation.ElasticAggregationService;
+import com.boundlessgeo.staccato.es.stats.ElasticStatsService;
 import com.boundlessgeo.staccato.es.repository.ElasticsearchRepository;
 import com.boundlessgeo.staccato.filter.ItemsFilterProcessor;
 import com.boundlessgeo.staccato.model.Item;
@@ -34,12 +34,12 @@ public class ElasticsearchCollectionService implements CollectionService {
 
     private final ElasticsearchRepository repository;
     private final ItemsFilterProcessor processor;
-    private final ElasticAggregationService aggregationService;
+    private final ElasticStatsService aggregationService;
     private Map<String, CollectionMetadata> collections = new HashMap<>();
     private static String LINK_BASE;
 
     public ElasticsearchCollectionService(ElasticsearchRepository repository, ItemsFilterProcessor processor,
-                                          ElasticAggregationService aggregationService, LinksConfigProps linksConfigProperties,
+                                          ElasticStatsService aggregationService, LinksConfigProps linksConfigProperties,
                                           List<CollectionMetadata> collectionMetadataList) {
         this.repository = repository;
         this.processor = processor;

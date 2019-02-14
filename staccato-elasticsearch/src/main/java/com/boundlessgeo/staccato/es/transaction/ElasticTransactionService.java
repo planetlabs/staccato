@@ -64,9 +64,9 @@ public class ElasticTransactionService implements TransactionService {
      */
     @Override
     public Mono<StacTransactionResponse> putItems(Flux<Item> items, String collectionId) {
-        //Flux<Item> itemFlux = processor.indexItemFlux(items);
-        //return itemFlux
-        return items
+        Flux<Item> itemFlux = processor.indexItemFlux(items);
+        return itemFlux
+        //return items
                 .parallel().runOn(Schedulers.parallel())
                 .flatMap(item -> {
                     String index = indexAliasLookup.getWriteAlias(collectionId);

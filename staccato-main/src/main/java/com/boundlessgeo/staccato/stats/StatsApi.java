@@ -18,7 +18,7 @@ public interface StatsApi {
     @GetMapping(path = "/stac/stats", produces = MediaType.APPLICATION_JSON_VALUE)
     Flux<ItemStatisticsResponse> getStats();
 
-    @GetMapping(path = "/stac/stats/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
-    Mono<ItemStatisticsResponse> getStats(@PathVariable("type") String type);
+    @GetMapping(path = "/stac/stats/{collection}", produces = MediaType.APPLICATION_JSON_VALUE)
+    Mono<ItemStatisticsResponse> getStats(@PathVariable("collection") String collection);
 
 }

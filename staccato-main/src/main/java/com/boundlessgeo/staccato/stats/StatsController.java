@@ -30,8 +30,8 @@ public class StatsController implements StatsApi {
     }
 
     @Override
-    public Mono<ItemStatisticsResponse> getStats(@PathVariable("type") String type) {
-        return service.getStats(type).name("getStats");
+    public Mono<ItemStatisticsResponse> getStats(@PathVariable("collection") String collection) {
+        return service.getStats(collection).name("getStats");
     }
 
 }

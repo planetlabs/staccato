@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Model for returning aggregation information.
+ * Model for returning stats information.
  *
  * @author joshfix
  * @author tingold
@@ -21,7 +21,5 @@ public class ItemStatisticsResponse {
     private Long count;
     private String start;
     private String end;
-    private List<String> providers;
-    private List<String> licenses;
-
+    
 }
