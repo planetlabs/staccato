@@ -13,10 +13,10 @@ import reactor.core.publisher.Mono;
  */
 public interface SchemaApi {
 
-    @GetMapping(value = "/api", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/stac/schema", produces = { MediaType.APPLICATION_JSON_VALUE })
     Mono<Object> getApiDescription();
 
-    @GetMapping(value = "/api/{name}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/stac/schema/{name}", produces = { MediaType.APPLICATION_JSON_VALUE })
     Mono<Object> getSchemaByName(@PathVariable("name") String name);
 
 }

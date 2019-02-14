@@ -21,5 +21,5 @@ public class ItemStatisticsResponse {
     private Long count;
     private String start;
     private String end;
-    
+
 }

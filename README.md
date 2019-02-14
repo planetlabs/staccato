@@ -46,16 +46,44 @@ Any of the following methods are acceptable ways of running Staccato
 ### The aggregationService is online and hosted in Kubernetes (in AWS)
 - http://stac.boundlessgeo.io/stac/
 
-    Main Endpoints
+    API Endpoints
     -
-    - http://stac.boundlessgeo.io/stac/api via GET for info about the aggregationService
-    - http://stac.boundlessgeo.io/stac/api/{roles} via GET for a JSON schema for the provided roles
-    - http://stac.boundlessgeo.io/stac/items via GET for retrieving items 
-    - http://stac.boundlessgeo.io/stac/items/{id} via GET for a single item
-    - http://stac.boundlessgeo.io/stac/items via POST for retrieving items via json query
-    - http://stac.boundlessgeo.io/stac/items via PUT for inserting 1 or more items 
-    - http://stac.boundlessgeo.io/stac/items/{id} via PUT for partial updates to items
-    - http://stac.boundlessgeo.io/stac/items/{id} via DELETE to delete an item
+    - GET /stac/search - dynamic catalog endpoint
+    - GET /stac/search/{id} - returns an item by ID
+    
+    Collection Endpoints
+    -
+    - GET /collection/{collection_id} - retrieves a collection by ID
+    - GET /collection/{collection_id}/items - retrieves a collection of items belonging to a collection
+    - GET /collection/{collection_id}/items/{id} - retrieves an item by ID from a collection
+    
+    Catalog Endpoints
+    -
+    - GET /stac - retrieves the root catalog
+    - GET /stac/{catalog_id} - retrieves a catalog by ID
+    - GET /stac/{catalog_id}/items - retrieves a collection of items belonging to a collection
+    - GET /stac/{collection_id}/items/{id} - retrieves an item by ID from a collection
+                 
+    Transaction Endpoints
+    -
+    - POST /stac/{collection_id}/items - creates a new item
+    - PUT /stac/{collection_id}/items/{item_id} - creates a new item
+    - PATCH /stac/{collection_id}/items/{item_id} - updates an item item
+    - DELETE /stac/{collection_id}/items/{item_id} - deletes an item
+                  
+    Stats Endpoints
+    -
+    - GET /stac/stats - retrieves aggregations for all collections
+    - GET /stac/stats/{collection_id} - retrieves aggregations for a specific collection
+    
+    Schema Endpoints
+    -
+    - GET /stac/schema - returns the STAC specification in JSON format
+    - GET /stac/schema/{collection_id} - returns the JSON schema for the specified collection
+    
+    Actuator Endpoints
+    -
+    - GET /actuator - returns a list of utility endpoints for the applications
     
 ### Query Parameters (all optional)
 - **limit** the maximum number of items to return, example limit=100
