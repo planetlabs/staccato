@@ -1,7 +1,5 @@
 <img src="https://github.com/radiantearth/stac-site/raw/master/images/logo/stac-030-long.png" alt="stac-logo" width="700"/>   
 
-[![Docker Repository on Quay](https://quay.io/repository/boundlessgeo/stac/status?token=56b279eb-fe2a-4a34-a3f3-08748a52163b "Docker Repository on Quay")](https://quay.io/repository/boundlessgeo/stac)
-
 ## About
 
 The SpatioTemporal Asset Catalog (STAC) specification aims to standardize the way geospatial assets are exposed online and queried. 
@@ -34,10 +32,10 @@ specified right now, but best practices should emerge with implementation and mo
 
 ### Running 
 - Requires maven 3.x, docker 
-- `docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.roles=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.0.0`
+- `docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.roles=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.6.0`
 
-Any of the following methods are acceptable ways of running STAC
-- `./stac-application-[version]-exec.jar (self executing jar)`
+Any of the following methods are acceptable ways of running Staccato
+- `./staccato-[version]-exec.jar (self executing jar)`
 - `java -jar stac-application-[version].jar`
 - `mvn spring-boot:run`
 - `docker run -d quay.io/boundlessgeo/stac-farmers`
@@ -64,7 +62,7 @@ Any of the following methods are acceptable ways of running STAC
 - **next** to paginate, example next=2 (for the second page of results)
 - **time** implicit range query, example time=1995-01-01T00:00:2005-01-01T00:00:00
 - **bbox** implicit intersects query, example bbox=-180,-90,180,90
-- **query** a Common Query Language text string to query properties of the catalog entry (see below for examples)
+- **search** a Common Query Language text string to query properties of the catalog entry (see below for examples)
 - **propertyname** a comma separated list of json field names to include in the result
 
 ### Configuartion
@@ -72,38 +70,37 @@ The STAC API has several properties that are configurable from the command line 
 
 Property | Default Value | Description
 ---------|---------------|------------
-stac.include-null-fields | false | Determines whether fields with null values should be serialized or excluded
-stac.generate-self-links | true | Determines whether self links are automatically generated for items
-stac.generate-thumbnail-links | true | Determines whether thumbnail links are automatically generated for items
-stac.async-bridge-thread-pool.max-threads | 200 | The size of the threadpool to be used for blocking async requests using the Elasticsearch REST client
-stac.async-bridge-thread-pool.daemon | true | false if the Scheduler requires an explicit Scheduler.dispose() to exit the VM
-stac.es.scheme | http | The scheme to be used for connection to Elasticsearch
-stac.es.host | localhost | The hostname of the Elasticsearch aggregationService
-stac.es.port | 9200 | The Elasticsearch aggregationService port
-stac.es.roles | item | The Elasticsearch roles to be used for item documents
-stac.es.number-of-shards | 2 | The number of shards to be used for Elasticsearch
-stac.es.number-of-replicas | 0 | The number of Elasticsearch replicas
-stac.es.max-reconnection-attempts | 10 | The number of reconnection attempts to the Elasticsearch aggregationService
-stac.es.rest-client-max-connections-total | 200 | The Elasticsearch client threadpool size.  This is the maximum number of connections a single STAC instance may have open to Elasticsearch.
-stac.es.rest-client-max-connections-per-route | 200 | The maximum number of Elasticsearch client connections per route.
-stac.es.rest-client-max-retry-timeout-millis | 60000 | The Elasticsearch client timeout value in milliseconds.
-stac.fields.script.add-script-template | | The template script to be used for adding field IDs to an imagery item's `properties.imagery:fieldIds`
-stac.fields.script.delete-script-template | | The template script to be used for removing field IDs from an imagery item's `properties.imagery:fieldIds`
-stac.grpc.port | 9999 | The listening port for incoming gRPC requests
-stac.links.self.scheme | http | The scheme to be used when building self links for items
-stac.links.self.host | localhost | The host to be used when building self links for items
-stac.links.self.port | 8080 | The port to be used when building self links for items
-stac.links.self.context-path | / | The context path to be used when building self links for items
-stac.links.thumbnails.scheme | http | The scheme to be used when building thumbnail links for items
-stac.links.thumbnails.host | localhost | The host to be used when building thumbnail links for items
-stac.links.thumbnails.port | 8080 | The port to be used when building thumbnail links for items
-stac.links.thumbnails.context-path | / | The context path to be used when building thumbnail links for items
-stac.kafka.enabled | false | Setting value to true enables the kafka listener for adding items to the catalog
-stac.kafka.bootstrap-servers | localhost:9092 | A list of Kafka bootstrap servers
-stac.kafka.group-id-config | stac-group | The Kafka group ID
-stac.kafka.client-id-config | stac-consumer | the Kafka client ID
-stac.kafka.auto-offset-reset-config | earliest | Used to set the start offset to the earliest or latest offset on the partition
-stac.kafka.topic | stac | The Kafka topic to listen on
+staccato.include-null-fields | false | Determines whether fields with null values should be serialized or excluded
+staccato.generate-self-links | true | Determines whether self links are automatically generated for items
+staccato.generate-thumbnail-links | true | Determines whether thumbnail links are automatically generated for items
+staccato.async-bridge-thread-pool.max-threads | 200 | The size of the threadpool to be used for blocking async requests using the Elasticsearch REST client
+staccato.async-bridge-thread-pool.daemon | true | false if the Scheduler requires an explicit Scheduler.dispose() to exit the VM
+staccato.es.scheme | http | The scheme to be used for connection to Elasticsearch
+staccato.es.host | localhost | The hostname of the Elasticsearch aggregationService
+staccato.es.port | 9200 | The Elasticsearch aggregationService port
+staccato.es.number-of-shards | 2 | The number of shards to be used for Elasticsearch
+staccato.es.number-of-replicas | 0 | The number of Elasticsearch replicas
+staccato.es.max-reconnection-attempts | 10 | The number of reconnection attempts to the Elasticsearch aggregationService
+staccato.es.rest-client-max-connections-total | 200 | The Elasticsearch client threadpool size.  This is the maximum number of connections a single STAC instance may have open to Elasticsearch.
+staccato.es.rest-client-max-connections-per-route | 200 | The maximum number of Elasticsearch client connections per route.
+staccato.es.rest-client-max-retry-timeout-millis | 60000 | The Elasticsearch client timeout value in milliseconds.
+staccato.fields.script.add-script-template | | The template script to be used for adding field IDs to an imagery item's `properties.imagery:fieldIds`
+staccato.fields.script.delete-script-template | | The template script to be used for removing field IDs from an imagery item's `properties.imagery:fieldIds`
+staccato.grpc.port | 9999 | The listening port for incoming gRPC requests
+staccato.links.self.scheme | http | The scheme to be used when building self links for items
+staccato.links.self.host | localhost | The host to be used when building self links for items
+staccato.links.self.port | 8080 | The port to be used when building self links for items
+staccato.links.self.context-path | / | The context path to be used when building self links for items
+staccato.links.thumbnails.scheme | http | The scheme to be used when building thumbnail links for items
+staccato.links.thumbnails.host | localhost | The host to be used when building thumbnail links for items
+staccato.links.thumbnails.port | 8080 | The port to be used when building thumbnail links for items
+staccato.links.thumbnails.context-path | / | The context path to be used when building thumbnail links for items
+staccato.kafka.enabled | false | Setting value to true enables the kafka listener for adding items to the catalog
+staccato.kafka.bootstrap-servers | localhost:9092 | A list of Kafka bootstrap servers
+staccato.kafka.group-id-config | stac-group | The Kafka group ID
+staccato.kafka.client-id-config | stac-consumer | the Kafka client ID
+staccato.kafka.auto-offset-reset-config | earliest | Used to set the start offset to the earliest or latest offset on the partition
+staccato.kafka.topic | stac | The Kafka topic to listen on
 
 Passing in custom properties depends on how you are running STAC.  Below are examples using java and maven from the command line:
 
@@ -126,8 +123,8 @@ Example:
 |------------------|---------------------------|
 | test | TEST |
 | server.port | SERVER_PORT |
-| stac.kafka.enabled | STAC_KAFKA_ENABLED |
-| stac.kafka.bootstrap-servers | STAC_KAFKA_BOOTSTRAP_SERVERS |
+| staccato.kafka.enabled | STACCATO_KAFKA_ENABLED |
+| staccato.kafka.bootstrap-servers | STACCATO_KAFKA_BOOTSTRAP_SERVERS |
 
 ## Code
 
@@ -141,7 +138,6 @@ STAC implements a concept called filters, which allows items to be modified or t
 Any Spring managed bean that implements one of these interfaces will be called during the corresponding event in the request lifecycle.  An bean that implements ItemIndexFilter will be called before an item is indexed in Elasticsearch.  The update query will be called before an item is updated in Elasticsearch.  The search query will be called *after* an item is retreived from Elasticsearch.
 
 Each query interface defines a method to return the list of item types that the query should be applied to, along with the acutal `doFilter` method which does the actual work.  The basic premise is that the `doFilter` method accepts an Item as input and returns an item as output.  This can be used to automatically add data, remove data, or transform data.  Several examples of some included filters can be found in [this](./stac-application/src/main/java/com/boundlessgeo/stac/filter) package.  Several extensions also come with filters to accomplish various tasks, such as automatically generating links to related items based on values found in the item's properties.
-
 
 ## Extensions and Collections
 
@@ -185,10 +181,10 @@ the `collection` field in every item. Because each collection will have a differ
 implement several different extension interfaces or custom fields, Jackson cannot deserialize Item classes without
 more information on which properties class to deserialize to. Having the "collections" field in each item provides an
 extremely convenient 1:1 relationship between the item and it's properties implementation.  The Jackson configuration 
-for this can be found [here](./stac-api/stac-application/src/main/java/com/boundlessgeo/stac/config/ExtensionConfig.java). 
-Also, the [Item class'](./stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/model/Item.java) primary generic 
-properties type is [CommonsCollection](./stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/extension/CommonsCollection.java) 
-so that various bits of code, eg the [FilterProcessor](./stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemsFilterProcessor.java)
+for this can be found [here](./staccato-main/src/main/java/com/boundlessgeo/stac/config/ExtensionConfig.java). 
+Also, the [Item class'](./staccato-commons/src/main/java/com/boundlessgeo/stac/model/Item.java) primary generic 
+properties type is [CommonsCollection](./staccato-commons/src/main/java/com/boundlessgeo/stac/extension/CommonsCollection.java) 
+so that various bits of code, eg the [FilterProcessor](./staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemsFilterProcessor.java)
 can easily determine what collection an item belongs to.
 
 ## Elasticsearch
@@ -200,7 +196,7 @@ can easily determine what collection an item belongs to.
 STAC can automatically detect all defined collections and create initial Elasticsearch indexes and basic mappings so 
 that no manual configuration of Elasticsearch (besides the actual endpoint) is needed. 
 
-Configure the Elasticsearch endpoint in [application.yml](./stac-api/stac-application/src/main/resources/application.yml) 
+Configure the Elasticsearch endpoint in [application.yml](./stac-main/src/main/resources/application.yml) 
  or using the environment variable equivalents using the following properties:
  
  * `stac.es.scheme`
@@ -276,11 +272,11 @@ actual index it belongs to and update it on that index.
 
 STAC will need to be configured with the mappings between the Elasticsearch alias name and the collection ID (eg, the
 value used in the `items.properties.collection` field). This can be set in 
-[application.yml](./stac-api/stac-application/src/main/resources/application.yml) under the path 
+[application.yml](./staccato-main/src/main/resources/application.yml) under the path 
 `stac.es.index.aliases`. The key should be the name of the write alias used in Elasticsearch (not the actual index 
 name!). The value should be the collection id.  So in our example case, the key would be `my-index-name` and the value 
 would be the collection ID.  STAC will automatically append `-search` to the alias for executing searches.
 
 At this point, you should be good to start inserting items. See the 
-[transaction API controller](./stac-api/stac-application/src/main/java/com/boundlessgeo/stac/transaction/TransactionApi.java)
+[transaction API controller](./staccato-main/src/main/java/com/boundlessgeo/stac/transaction/TransactionApi.java)
 for the proper methods to use for creating new items.

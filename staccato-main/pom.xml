@@ -27,12 +27,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <!--<exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-to-slf4j</artifactId>
-                </exclusion>
-            </exclusions>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -155,7 +149,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <repository>quay.io/boundlessgeo/stac</repository>
+                    <repository>quay.io/boundlessgeo/staccato</repository>
                     <tag>${project.version}</tag>
                     <buildArgs>
                         <JAR_NAME>${project.build.finalName}.jar</JAR_NAME>
