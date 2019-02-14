@@ -1,6 +1,7 @@
 package com.boundlessgeo.staccato.stats;
 
 import com.boundlessgeo.staccato.dto.ItemStatisticsResponse;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Flux;
@@ -14,10 +15,10 @@ import reactor.core.publisher.Mono;
  */
 public interface StatsApi {
 
-    @GetMapping("/stac/stats")
+    @GetMapping(path = "/stac/stats", produces = MediaType.APPLICATION_JSON_VALUE)
     Flux<ItemStatisticsResponse> getStats();
 
-    @GetMapping("/stac/stats/{type}")
+    @GetMapping(path = "/stac/stats/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<ItemStatisticsResponse> getStats(@PathVariable("type") String type);
 
 }

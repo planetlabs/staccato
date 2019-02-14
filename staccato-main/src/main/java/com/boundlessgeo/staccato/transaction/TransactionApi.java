@@ -15,18 +15,20 @@ import reactor.core.publisher.Mono;
  */
 public interface TransactionApi {
 
-    @PostMapping(value = "/collections/{collectionId}/items", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/collections/{collectionId}/items", produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     Mono<StacTransactionResponse> createItem(@RequestBody Flux<Item> items, @PathVariable("collectionId") String collectionId);
 
-    @PutMapping(value = "/collections/{collectionId}/items/{itemId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/collections/{collectionId}/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     Mono<StacTransactionResponse> createItem(@ModelAttribute Item item, @PathVariable("collectionId") String collectionId,
                                              @PathVariable("itemId") String itemId);
 
-    @PatchMapping("/collections/{collectionId}/items/{itemId}")
+    @PatchMapping(path = "/collections/{collectionId}/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<StacTransactionResponse> updateItem(@RequestBody String body, @PathVariable("collectionId") String collectionId,
                                              @PathVariable("itemId") String itemId);
 
-    @DeleteMapping("/collections/{collectionId}/items/{itemId}")
+    @DeleteMapping(path = "/collections/{collectionId}/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<StacTransactionResponse> deleteItem(@PathVariable("collectionId") String collectionId, @PathVariable("id") String id);
 
 }

@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
  */
 public interface ApiApi {
 
-    @GetMapping("/search/{id}")
+    @GetMapping(path = "/search/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<Item> getItem(@PathVariable("id") String id);
 
     @GetMapping(path = "/search")

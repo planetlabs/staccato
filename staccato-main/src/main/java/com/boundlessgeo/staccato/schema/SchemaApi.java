@@ -1,5 +1,6 @@
 package com.boundlessgeo.staccato.schema;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Mono;
@@ -12,10 +13,10 @@ import reactor.core.publisher.Mono;
  */
 public interface SchemaApi {
 
-    @GetMapping(value = "/api", produces = { "application/json" })
+    @GetMapping(value = "/api", produces = { MediaType.APPLICATION_JSON_VALUE })
     Mono<Object> getApiDescription();
 
-    @GetMapping(value = "/api/{name}", produces = { "application/json" })
+    @GetMapping(value = "/api/{name}", produces = { MediaType.APPLICATION_JSON_VALUE })
     Mono<Object> getSchemaByName(@PathVariable("name") String name);
 
 }
