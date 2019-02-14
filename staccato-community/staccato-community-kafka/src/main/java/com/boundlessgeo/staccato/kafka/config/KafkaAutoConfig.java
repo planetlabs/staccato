@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 @AllArgsConstructor
-@ConditionalOnProperty(prefix = "stac.kafka", value = "enabled", havingValue = "true")
+@ConditionalOnProperty(prefix = "staccato.kafka", value = "enabled", havingValue = "true")
 public class KafkaAutoConfig {
 
     private final TransactionService transactionService;
