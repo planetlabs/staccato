@@ -30,7 +30,7 @@ logging:
     #io.netty: DEBUG
     #com.boundlessgeo.staccato.rsocket: DEBUG
     com.boundlessgeo: INFO
-    com.boundlessgeo.staccato.es.initializer: DEBUG
+    #com.boundlessgeo.staccato.es.initializer: DEBUG
     #com.boundlessgeo.staccato.es.repository: DEBUG
     #io.grpc: DEBUG
     #org.springframework.web.reactive: TRACE

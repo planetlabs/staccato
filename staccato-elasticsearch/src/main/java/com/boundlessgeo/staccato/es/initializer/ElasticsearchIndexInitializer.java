@@ -16,6 +16,7 @@ import org.elasticsearch.action.admin.indices.template.put.PutIndexTemplateReque
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.GetIndexTemplatesRequest;
+import org.elasticsearch.common.settings.Settings;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -127,7 +128,6 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
         log.info("Template '" + indexTemplateName
                 + "' for collection '" + collection.getId() + "' initialized");
         return true;
-
     }
 
     private boolean createInitialIndex(CollectionMetadata collection) throws Exception {
@@ -135,7 +135,10 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
         String writeAlias = collection.getId();
 
         CreateIndexRequest request = new CreateIndexRequest(initialIndexName);
-        request.alias(new Alias(writeAlias));
+        request.alias(new Alias(writeAlias))
+                .settings(Settings.builder()
+                                .put("index.number_of_shards", configProps.getEs().getNumberOfShards())
+                                .put("index.number_of_replicas", configProps.getEs().getNumberOfReplicas()));
 
         client.indices().create(request, RequestOptions.DEFAULT);
         log.info("Index '" + initialIndexName + "' for collection '"

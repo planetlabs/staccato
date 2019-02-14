@@ -27,14 +27,15 @@ public class ElasticsearchConfigProps {
         private int port = 9200;
         private String user;
         private String password;
-        private String type = "_doc";  // this will be deprecated and unneccessary in ES7
+        private String type = "_doc";  // this will be deprecated and unnecessary in ES7
+        private int numberOfShards = 5;
+        private int numberOfReplicas = 1;
         private int maxReconnectionAttempts = 10;
         private int restClientMaxConnectionsTotal = 200;
         private int restClientMaxConnectionsPerRoute = 200;
         private int restClientMaxRetryTimeoutMillis = 60000;
 
         private Mappings mappings = new Mappings();
-        private Map<String, ShardReplicaConfig> shardReplicaConfig = new HashMap<>();
 
         @Data
         public static class Mappings {
