@@ -19,7 +19,6 @@ public class LinksConfigProps {
 
     private Self self = new Self();
     private Thumbnails thumbnails = new Thumbnails();
-    private Bcis bcis = new Bcis();
 
     public static String LINK_PREFIX;
 
@@ -47,14 +46,6 @@ public class LinksConfigProps {
         private String host = "localhost";
         private Integer port = 8080;
         private String contextPath = "/thumbs";
-    }
-
-    @Data
-    public static class Bcis {
-        private String scheme = "http";
-        private String host = "localhost";
-        private Integer port = 8080;
-        private String contextPath = "/";
     }
 
 }

@@ -106,15 +106,13 @@ staccato.async-bridge-thread-pool.daemon | true | false if the Scheduler require
 staccato.es.scheme | http | The scheme to be used for connection to Elasticsearch
 staccato.es.host | localhost | The hostname of the Elasticsearch aggregationService
 staccato.es.port | 9200 | The Elasticsearch aggregationService port
-staccato.es.number-of-shards | 2 | The number of shards to be used for Elasticsearch
-staccato.es.number-of-replicas | 0 | The number of Elasticsearch replicas
+staccato.es.number-of-shards | 5 | The number of shards used when auto-initializing an Elasticsearch index
+staccato.es.number-of-replicas | 0 | The number of replicas used when auto-initializing an Elasticsearch index
+staccato.es.type | _doc | The Elasticsearch document type.  It is not recommended to change this from it's default value as "_doc" will be the only value supported in ES7
 staccato.es.max-reconnection-attempts | 10 | The number of reconnection attempts to the Elasticsearch aggregationService
 staccato.es.rest-client-max-connections-total | 200 | The Elasticsearch client threadpool size.  This is the maximum number of connections a single STAC instance may have open to Elasticsearch.
 staccato.es.rest-client-max-connections-per-route | 200 | The maximum number of Elasticsearch client connections per route.
 staccato.es.rest-client-max-retry-timeout-millis | 60000 | The Elasticsearch client timeout value in milliseconds.
-staccato.fields.script.add-script-template | | The template script to be used for adding field IDs to an imagery item's `properties.imagery:fieldIds`
-staccato.fields.script.delete-script-template | | The template script to be used for removing field IDs from an imagery item's `properties.imagery:fieldIds`
-staccato.grpc.port | 9999 | The listening port for incoming gRPC requests
 staccato.links.self.scheme | http | The scheme to be used when building self links for items
 staccato.links.self.host | localhost | The host to be used when building self links for items
 staccato.links.self.port | 8080 | The port to be used when building self links for items
@@ -129,6 +127,13 @@ staccato.kafka.group-id-config | stac-group | The Kafka group ID
 staccato.kafka.client-id-config | stac-consumer | the Kafka client ID
 staccato.kafka.auto-offset-reset-config | earliest | Used to set the start offset to the earliest or latest offset on the partition
 staccato.kafka.topic | stac | The Kafka topic to listen on
+staccato.grpc.port | 9999 | The listening port for incoming gRPC requests
+staccato.rsocket.port | 7000 | The listening port for incoming RSocket requests
+
+Additionally, Spring framework uses configuration properties for its configuration.  While not exhaustive, Spring 
+offers a list of 
+<a href="https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html">commonly 
+used configuration properties</a>.
 
 Passing in custom properties depends on how you are running STAC.  Below are examples using java and maven from the command line:
 
@@ -227,11 +232,11 @@ that no manual configuration of Elasticsearch (besides the actual endpoint) is n
 Configure the Elasticsearch endpoint in [application.yml](./stac-main/src/main/resources/application.yml) 
  or using the environment variable equivalents using the following properties:
  
- * `stac.es.scheme`
- * `stac.es.host`
- * `stac.es.port`
- * `stac.es.user` (optional)
- * `stac.es.password` (optional)
+ * `staccato.es.scheme`
+ * `staccato.es.host`
+ * `staccato.es.port`
+ * `staccato.es.user` (optional)
+ * `staccato.es.password` (optional)
 
 ### Production Environments
 

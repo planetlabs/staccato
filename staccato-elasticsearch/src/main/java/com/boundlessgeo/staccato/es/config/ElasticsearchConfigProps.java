@@ -57,5 +57,6 @@ public class ElasticsearchConfigProps {
     @Data
     public static class AsyncBridgeThreadPool {
         private boolean daemon = true;
+        private int maxThreads = 200;
     }
 }
