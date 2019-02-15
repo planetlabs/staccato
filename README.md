@@ -26,6 +26,8 @@ But efforts will be made to maintain the core fields established in the central
 [Collection spec](https://github.com/radiantearth/stac-spec/tree/master/collection-spec). The minimal amount is 
 specified right now, but best practices should emerge with implementation and more will likely be specified.
 
+## Requirements
+
 ### Building 
 - Requires maven 3.x
 - `mvn clean install`
@@ -40,53 +42,49 @@ Any of the following methods are acceptable ways of running Staccato
 - `./staccato-[version]-exec.jar (self executing jar)`
 - `java -jar staccato-[version].jar`
 - `mvn spring-boot:run`
-- `docker run -d quay.io/boundlessgeo/stac-farmers`
+- `docker run -d -i -t -p:8080:8080 quay.io/boundlessgeo/staccato:0.0.1`
 
-### Running via Docker
-- `docker run quay.io/boundlessgeo/stac:latest`
+## Endpoints
 
-### The aggregationService is online and hosted in Kubernetes (in AWS)
-- http://stac.boundlessgeo.io/stac/
+### API Endpoints
 
-    API Endpoints
-    -
-    - GET /stac/search - dynamic catalog endpoint
-    - GET /stac/search/{id} - returns an item by ID
-    
-    Collection Endpoints
-    -
-    - GET /collection/{collection_id} - retrieves a collection by ID
-    - GET /collection/{collection_id}/items - retrieves a collection of items belonging to a collection
-    - GET /collection/{collection_id}/items/{id} - retrieves an item by ID from a collection
-    
-    Catalog Endpoints
-    -
-    - GET /stac - retrieves the root catalog
-    - GET /stac/{catalog_id} - retrieves a catalog by ID
-    - GET /stac/{catalog_id}/items - retrieves a collection of items belonging to a collection
-    - GET /stac/{collection_id}/items/{id} - retrieves an item by ID from a collection
-                 
-    Transaction Endpoints
-    -
-    - POST /stac/{collection_id}/items - creates a new item
-    - PUT /stac/{collection_id}/items/{item_id} - creates a new item
-    - PATCH /stac/{collection_id}/items/{item_id} - updates an item item
-    - DELETE /stac/{collection_id}/items/{item_id} - deletes an item
-                  
-    Stats Endpoints
-    -
-    - GET /stac/stats - retrieves aggregations for all collections
-    - GET /stac/stats/{collection_id} - retrieves aggregations for a specific collection
-    
-    Schema Endpoints
-    -
-    - GET /stac/schema - returns the STAC specification in JSON format
-    - GET /stac/schema/{collection_id} - returns the JSON schema for the specified collection
-    
-    Actuator Endpoints
-    -
-    - GET /actuator - returns a list of utility endpoints for the applications
-    
+- GET /stac/search - dynamic catalog endpoint
+- GET /stac/search/{id} - returns an item by ID
+
+### Collection Endpoints
+
+- GET /collection/{collection_id} - retrieves a collection by ID
+- GET /collection/{collection_id}/items - retrieves a collection of items belonging to a collection
+- GET /collection/{collection_id}/items/{id} - retrieves an item by ID from a collection
+
+### Catalog Endpoints
+
+- GET /stac - retrieves the root catalog
+- GET /stac/{catalog_id} - retrieves a catalog by ID
+- GET /stac/{catalog_id}/items - retrieves a collection of items belonging to a collection
+- GET /stac/{collection_id}/items/{id} - retrieves an item by ID from a collection
+             
+### Transaction Endpoints
+
+- POST /stac/{collection_id}/items - creates a new item
+- PUT /stac/{collection_id}/items/{item_id} - creates a new item
+- PATCH /stac/{collection_id}/items/{item_id} - updates an item item
+- DELETE /stac/{collection_id}/items/{item_id} - deletes an item
+              
+### Stats Endpoints
+
+- GET /stac/stats - retrieves aggregations for all collections
+- GET /stac/stats/{collection_id} - retrieves aggregations for a specific collection
+
+### Schema Endpoints
+
+- GET /stac/schema - returns the STAC specification in JSON format
+- GET /stac/schema/{collection_id} - returns the JSON schema for the specified collection
+
+### Actuator Endpoints
+
+- GET /actuator - returns a list of utility endpoints for the applications
+
 ### Query Parameters (all optional)
 - **limit** the maximum number of items to return, example limit=100
 - **next** to paginate, example next=2 (for the second page of results)
@@ -95,7 +93,8 @@ Any of the following methods are acceptable ways of running Staccato
 - **search** a Common Query Language text string to query properties of the catalog entry (see below for examples)
 - **propertyname** a comma separated list of json field names to include in the result
 
-### Configuartion
+## Configuartion
+
 The STAC API has several properties that are configurable from the command line or from environment properties.  The table below details the properties that are available for configuration.
 
 Property | Default Value | Description
