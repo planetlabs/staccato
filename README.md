@@ -31,12 +31,14 @@ specified right now, but best practices should emerge with implementation and mo
 - `mvn clean install`
 
 ### Running 
-- Requires maven 3.x, docker 
-- `docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.roles=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.6.0`
+- Requires maven 3.x, Java 8.x, Elasticsearch 6.x 
+
+An Elasticsearch instance must be available.  To run locally in a docker container, use:
+`docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.roles=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.6.0`
 
 Any of the following methods are acceptable ways of running Staccato
 - `./staccato-[version]-exec.jar (self executing jar)`
-- `java -jar stac-application-[version].jar`
+- `java -jar staccato-[version].jar`
 - `mvn spring-boot:run`
 - `docker run -d quay.io/boundlessgeo/stac-farmers`
 
@@ -162,15 +164,25 @@ Example:
 ## Code
 
 ### Filters
-STAC implements a concept called filters, which allows items to be modified or transformed during any/all of 3 different operations:
+STAC implements a concept called filters, which allows items to be modified or transformed during any/all of 3 different 
+operations:
 
 * [index](./staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemIndexFilter.java)
 * [update](./staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemUpdateFilter.java)
 * [search](./staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemSearchFilter.java)
 
-Any Spring managed bean that implements one of these interfaces will be called during the corresponding event in the request lifecycle.  An bean that implements ItemIndexFilter will be called before an item is indexed in Elasticsearch.  The update query will be called before an item is updated in Elasticsearch.  The search query will be called *after* an item is retreived from Elasticsearch.
+Any Spring managed bean that implements one of these interfaces will be called during the corresponding event in the 
+request lifecycle.  An bean that implements ItemIndexFilter will be called before an item is indexed in Elasticsearch.  
+The update query will be called before an item is updated in Elasticsearch.  The search query will be called *after* an 
+item is retrieved from Elasticsearch.
 
-Each query interface defines a method to return the list of item types that the query should be applied to, along with the acutal `doFilter` method which does the actual work.  The basic premise is that the `doFilter` method accepts an Item as input and returns an item as output.  This can be used to automatically add data, remove data, or transform data.  Several examples of some included filters can be found in [this](./stac-application/src/main/java/com/boundlessgeo/stac/filter) package.  Several extensions also come with filters to accomplish various tasks, such as automatically generating links to related items based on values found in the item's properties.
+Each query interface defines a method to return the list of item types that the query should be applied to, along with 
+the actual `doFilter` method which does the actual work.  The basic premise is that the `doFilter` method accepts an 
+Item as input and returns an item as output.  This can be used to automatically add data, remove data, or transform 
+data.  Several examples of some included filters can be found in the 
+[filter](./staccato-main/src/main/java/com/boundlessgeo/stac/filter) package.  Collections can also provide custom  
+filters to accomplish various tasks, such as automatically generating links to related items based on values found in 
+the item's properties.
 
 ## Extensions and Collections
 
