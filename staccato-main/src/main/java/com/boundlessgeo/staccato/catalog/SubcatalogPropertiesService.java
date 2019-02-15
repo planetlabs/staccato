@@ -47,28 +47,18 @@ public class SubcatalogPropertiesService {
             jsonToJavaNames.put(collectionId, new HashMap<>());
 
             // use reflection to examine all of the annotated interface methods
-            //Class[] interfaces = collection.getPropertiesClass().getInterfaces();
             Class[] interfaces = collection.getProperties().getClass().getInterfaces();
             for (Class interfase : interfaces) {
-                //List<Field> fields = Arrays.asList(collection.getPropertiesClass().getDeclaredFields());
-                List<Field> fields = Arrays.asList(collection.getProperties().getClass().getDeclaredFields());
                 List<Method> methods = Arrays.asList(interfase.getDeclaredMethods());
-                methods.forEach(method -> {
-                    PropertyDescriptor p = BeanUtils.findPropertyForMethod(method);
-                    String name = p.getName();
-                    for (Field field : fields) {
-                        // if we found the jackson annotated interface method for this field, use the JsonProperty value
-                        if (field.getName().equalsIgnoreCase(name) && method.isAnnotationPresent(JsonProperty.class) &&
-                                field.isAnnotationPresent(Subcatalog.class)) {
-                            String jsonName = method.getAnnotation(JsonProperty.class).value();
-                            String javaName = field.getName();
-                            collectionsProperties.get(collectionId).add(new PropertyField().jsonName(jsonName).javaName(javaName));
-                            javaToJsonNames.get(collectionId).put(javaName, jsonName);
-                            jsonToJavaNames.get(collectionId).put(jsonName, javaName);
-                        }
+                for (Method method : methods) {
+                    if (method.isAnnotationPresent(JsonProperty.class) && method.isAnnotationPresent(Subcatalog.class)) {
+                        String javaName = BeanUtils.findPropertyForMethod(method).getName();
+                        String jsonName = method.isAnnotationPresent(JsonProperty.class) ? method.getAnnotation(JsonProperty.class).value() : javaName;
+                        collectionsProperties.get(collectionId).add(new PropertyField().jsonName(jsonName).javaName(javaName));
+                        javaToJsonNames.get(collectionId).put(javaName, jsonName);
+                        jsonToJavaNames.get(collectionId).put(jsonName, javaName);
                     }
-
-                });
+                }
             }
         });
     }
@@ -85,7 +75,7 @@ public class SubcatalogPropertiesService {
      * Determines which remaining fields are eligible to be subcataloged given the current request path.
      *
      * @param collectionId The id of the collection
-     * @param path The request path
+     * @param path         The request path
      * @return A list of remaining eligible property fields
      */
     public List<PropertyField> getRemainingProperties(String collectionId, String path) {
@@ -126,12 +116,12 @@ public class SubcatalogPropertiesService {
      * /stac/my_collection/path/10, the map will be populated with `path -> 10`.
      *
      * @param collectionId The id of the collection
-     * @param path The request path
+     * @param path         The request path
      * @return A map of subcataloged property fields to field value
      */
     public Map<String, String> createSubcatalogPathParamMap(String collectionId, String path) {
         List<String> pathList = new ArrayList<>(parsePath(path));
-        pathList.remove("staccato");
+        pathList.remove("stac");
         pathList.remove(collectionId);
         pathList.remove("items");
 

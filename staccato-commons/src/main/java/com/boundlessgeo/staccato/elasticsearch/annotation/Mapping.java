@@ -9,12 +9,11 @@ import java.lang.annotation.Target;
  * @author joshfix
  * Created on 2/12/19
  */
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Mapping {
 
-    MappingType type() default MappingType.TEXT;
+    MappingType type() default MappingType.KEYWORD;
 
     String fieldName() default "";
 }
-

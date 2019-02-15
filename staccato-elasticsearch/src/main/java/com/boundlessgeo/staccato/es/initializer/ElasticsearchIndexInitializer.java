@@ -3,6 +3,7 @@ package com.boundlessgeo.staccato.es.initializer;
 import com.boundlessgeo.staccato.StacInitializer;
 import com.boundlessgeo.staccato.collection.CatalogType;
 import com.boundlessgeo.staccato.collection.CollectionMetadata;
+import com.boundlessgeo.staccato.collection.Subcatalog;
 import com.boundlessgeo.staccato.elasticsearch.annotation.Mapping;
 import com.boundlessgeo.staccato.elasticsearch.annotation.MappingType;
 import com.boundlessgeo.staccato.es.config.ElasticsearchConfigProps;
@@ -17,8 +18,12 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.GetIndexTemplatesRequest;
 import org.elasticsearch.common.settings.Settings;
+import org.springframework.beans.BeanUtils;
 
-import java.lang.reflect.Field;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -170,17 +175,39 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
             }
         }
 
-        // process annotated fields
-        for (Field field : collection.getProperties().getClass().getDeclaredFields()) {
-            Mapping mapping = field.getAnnotation(Mapping.class);
-            JsonProperty jsonProperty = field.getAnnotation(JsonProperty.class);
-            if (null != mapping) {
-                MappingType mappingType = mapping.type();
-                String fieldName = (null != jsonProperty && null != jsonProperty.value() && !jsonProperty.value().isEmpty())
-                        ? jsonProperty.value() : field.getName();
-                Map<String, Object> type = new HashMap<>(1);
-                type.put("type", mappingType);
-                docPropertiesPropertiesProperties.put(fieldName, type);
+        // process annotated interface methods
+        for (Class interfase : collection.getProperties().getClass().getInterfaces()) {
+            for (Method method : interfase.getDeclaredMethods()) {
+                Mapping mapping = method.getAnnotation(Mapping.class);
+                Subcatalog subcatalog = method.getAnnotation(Subcatalog.class);
+
+                // if there was no mapping set, but the method was marked as a subcatalog, then the mapping needs to
+                // a keyword, so we just create a new anonymous instance of the mapping annotation
+                if (null == mapping && null != subcatalog) {
+                    mapping = new Mapping() {
+                        @Override
+                        public MappingType type() {
+                            return MappingType.KEYWORD;
+                        }
+                        @Override
+                        public String fieldName() {
+                            return null;
+                        }
+                        @Override
+                        public Class<? extends Annotation> annotationType() {
+                            return Mapping.class;
+                        }
+                    };
+                }
+                JsonProperty jsonProperty = method.getAnnotation(JsonProperty.class);
+                if (null != mapping) {
+                    MappingType mappingType = mapping.type();
+                    String fieldName = (null != jsonProperty && null != jsonProperty.value() && !jsonProperty.value().isEmpty())
+                            ? jsonProperty.value() : getBeanName(method);
+                    Map<String, Object> type = new HashMap<>(1);
+                    type.put("type", mappingType);
+                    docPropertiesPropertiesProperties.put(fieldName, type);
+                }
             }
         }
 
@@ -191,6 +218,13 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
         Map<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("_doc", doc);
         return jsonMap;
+    }
+
+    private String getBeanName(Method method) {
+        PropertyDescriptor p = BeanUtils.findPropertyForMethod(method);
+        return p.getName();
+        // Assume the method starts with either get or is.
+        //return Introspector.decapitalize(methodName.substring(methodName.startsWith("is") ? 2 : 3));
     }
 
     private void processMapping(Map<String, Object> docProperties,

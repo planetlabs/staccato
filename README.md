@@ -202,6 +202,8 @@ the item's properties.
 
 ## Extensions and Collections
 
+### Overview
+
 The STAC item spec only has one requirement for item properties: to provide a `datetime` field. Properties specific to
 certain datasets or product types will be developed by the community as extensions and move through a series of maturity 
 steps as outlined [here](https://github.com/radiantearth/stac-spec/tree/master/extensions). This STAC implementation was
@@ -213,6 +215,8 @@ For each extension that has currently been proposed, the `properties` fields def
 interfaces in the [commons extension package](/stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/extension).
 The extensions are defined as interfaces so that a mix of multiple extensions can be combined to create a set of
 heterogeneous properties for a collection. 
+
+### Creating a new collection
 
 Collections are currently defined in the [staccato-collections](./staccato-collections) module. When defining a new 
 collection, you'll typically want to create at least 4 Java classes and one Spring auto-configuration file:
@@ -253,6 +257,25 @@ properties type is
 various bits of code, eg the 
 [FilterProcessor](./staccato-commons/src/main/java/com/boundlessgeo/staccato/filter/ItemsFilterProcessor.java)
 can easily determine what collection an item belongs to.
+
+### Custom annotations
+
+Staccato currently provides two custom annotations:
+- [@Mapping](./staccato-commons/src/main/java/com/boundlessgeo/staccato/elasticsearch/annotation/Mapping.java)
+- [@Subcatalog](./staccato-commons/src/main/java/com/boundlessgeo/staccato/collection/Subcatalog.java)
+
+The `@Mapping` annotation allows you to define Elasticsearch mapping types that will be applied during 
+[automatic index creation](./staccato-elasticsearch/src/main/java/com/boundlessgeo/staccato/es/initializer/ElasticsearchIndexInitializer.java).  
+Set type `type` attribute to one of the enumerated values found in 
+[MappingType](./staccato-commons/src/main/java/com/boundlessgeo/staccato/elasticsearch/annotation/MappingType.java). 
+
+The `@Subcatalog` annotation, when applied to a `getter` interface method, will make that field eligible to be 
+automatically subcataloged via the `/stac/{catalog}` endpoint.  The 
+[catalog spec implementation](./staccato-main/src/main/java/com/boundlessgeo/staccato/catalog) will automatically detect 
+methods with this annotation and build a subcatalog link containing the field name.  That subcatalog will build links 
+containing all unique values in Elasticsearch for that field.  After all eligible subcatalog fields have been 
+traversed, the links section will be populated with links to all items that match the selected subcatalog values.
+
 
 ## Elasticsearch
 

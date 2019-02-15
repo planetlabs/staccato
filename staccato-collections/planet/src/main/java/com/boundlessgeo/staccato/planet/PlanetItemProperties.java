@@ -2,8 +2,7 @@ package com.boundlessgeo.staccato.planet;
 
 import com.boundlessgeo.staccato.elasticsearch.annotation.Mapping;
 import com.boundlessgeo.staccato.elasticsearch.annotation.MappingType;
-import com.boundlessgeo.staccato.extension.CommonsCollection;
-import com.boundlessgeo.staccato.extension.CommonsLicense;
+import com.boundlessgeo.staccato.extension.Collection;
 import com.boundlessgeo.staccato.extension.EO;
 import com.boundlessgeo.staccato.model.MandatoryProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -17,16 +16,13 @@ import java.util.List;
  */
 @Data
 @JsonTypeName("pl")
-public class PlanetItemProperties implements MandatoryProperties, EO, Planet, CommonsCollection, CommonsLicense {
+public class PlanetItemProperties implements MandatoryProperties, EO, Planet, Collection {
 
     // MandatoryProperties
     private String datetime;
 
     // Collection field as part of the commons extension (merged from the collection metadata)
     private String collection = PlanetCollectionMetadata.ID;
-
-    // License field as part of the commons extension (merged from the collection metadata)
-    private String license = PlanetCollectionMetadata.LICENSE;
 
     // EO
     private String platform;

@@ -1,6 +1,6 @@
 package com.boundlessgeo.staccato.collection;
 
-import com.boundlessgeo.staccato.extension.CommonsCollection;
+import com.boundlessgeo.staccato.extension.Collection;
 import com.boundlessgeo.staccato.model.Extent;
 import com.boundlessgeo.staccato.model.Link;
 import com.boundlessgeo.staccato.model.MandatoryProperties;
@@ -17,7 +17,7 @@ import java.util.Set;
  * @author joshfix
  * Created on 10/23/18
  */
-public interface CollectionMetadata<T extends CommonsCollection & MandatoryProperties> {
+public interface CollectionMetadata<T extends Collection & MandatoryProperties> {
 
     @JsonProperty("stac_version")
     String getStacVersion();

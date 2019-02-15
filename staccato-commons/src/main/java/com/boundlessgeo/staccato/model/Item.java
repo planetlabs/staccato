@@ -1,6 +1,6 @@
 package com.boundlessgeo.staccato.model;
 
-import com.boundlessgeo.staccato.extension.CommonsCollection;
+import com.boundlessgeo.staccato.extension.Collection;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Set;
  * Item
  */
 @Data
-public class Item<T extends CommonsCollection & MandatoryProperties> {
+public class Item<T extends Collection & MandatoryProperties> {
 
     private String id;
     private Bbox bbox;

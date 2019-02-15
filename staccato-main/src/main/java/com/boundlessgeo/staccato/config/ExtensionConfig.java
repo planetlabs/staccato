@@ -1,7 +1,7 @@
 package com.boundlessgeo.staccato.config;
 
 import com.boundlessgeo.staccato.collection.CollectionMetadata;
-import com.boundlessgeo.staccato.extension.CommonsCollection;
+import com.boundlessgeo.staccato.extension.Collection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,9 +37,10 @@ public class ExtensionConfig {
     @PostConstruct
     public void init() {
         collectionMetadataList.forEach(metadata -> {
-                NamedType namedType = new NamedType(metadata.getProperties().getClass(), metadata.getProperties().getCollection());
+                NamedType namedType =
+                        new NamedType(metadata.getProperties().getClass(), metadata.getProperties().getCollection());
                 mapper.registerSubtypes(namedType);
-                mapper.addMixIn(CommonsCollection.class, ItemPropertiesMixin.class);
+                mapper.addMixIn(Collection.class, ItemPropertiesMixin.class);
         });
         // TODO -- this isn't being set from the main initializer for some reason???
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

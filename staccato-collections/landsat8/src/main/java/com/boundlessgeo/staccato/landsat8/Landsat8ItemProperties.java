@@ -1,7 +1,6 @@
 package com.boundlessgeo.staccato.landsat8;
 
-import com.boundlessgeo.staccato.collection.Subcatalog;
-import com.boundlessgeo.staccato.extension.CommonsCollection;
+import com.boundlessgeo.staccato.extension.Collection;
 import com.boundlessgeo.staccato.extension.EO;
 import com.boundlessgeo.staccato.model.MandatoryProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -17,7 +16,7 @@ import java.util.List;
 @Data
 @JsonTypeName("landsat-8-l1")
 @JsonDeserialize(as = Landsat8ItemProperties.class)
-public class Landsat8ItemProperties implements MandatoryProperties, CommonsCollection, EO, Landsat8 {
+public class Landsat8ItemProperties implements MandatoryProperties, Collection, EO, Landsat8 {
 
     // MandatoryProperties
     private String datetime;
@@ -39,8 +38,8 @@ public class Landsat8ItemProperties implements MandatoryProperties, CommonsColle
     private List<Band> bands;
 
     // Landsat8
-    @Subcatalog private String wrsPath;
-    @Subcatalog private String wrsRow;
+    private String wrsRow;
+    private String wrsPath;
     private Double earthSunDistance;
     private Double geometricRmseModel;
     private Double groundControlPointsVerify;

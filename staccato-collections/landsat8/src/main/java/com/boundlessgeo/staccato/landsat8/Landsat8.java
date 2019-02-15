@@ -1,5 +1,8 @@
 package com.boundlessgeo.staccato.landsat8;
 
+import com.boundlessgeo.staccato.collection.Subcatalog;
+import com.boundlessgeo.staccato.elasticsearch.annotation.Mapping;
+import com.boundlessgeo.staccato.elasticsearch.annotation.MappingType;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,11 +12,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public interface Landsat8 {
 
+
+    @Subcatalog
+    @Mapping(type = MappingType.KEYWORD)
     @JsonAlias("wrs_path")
     @JsonProperty("landsat:wrs_path")
     String getWrsPath();
     void setWrsPath(String wrsPath);
 
+    @Subcatalog
+    @Mapping(type = MappingType.KEYWORD)
     @JsonAlias("wrs_row")
     @JsonProperty("landsat:wrs_row")
     String getWrsRow();
