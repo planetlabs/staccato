@@ -144,6 +144,7 @@
                 <configuration>
                     <finalName>staccato-${project.version}</finalName>
                     <mainClass>com.boundlessgeo.staccato.StaccatoApplication</mainClass>
+                    <executable>true</executable>
                 </configuration>
             </plugin>
 

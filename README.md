@@ -29,20 +29,26 @@ specified right now, but best practices should emerge with implementation and mo
 ## Requirements
 
 ### Building 
-- Requires maven 3.x
-- `mvn clean install`
+Requires:
+- maven 3.x
+
+Example build command: `mvn clean install`
+
+Additionally the docker image can be built from the [staccato-main](./staccato-main) package using the command: 
+`mvn dockerfile:build`
 
 ### Running 
-- Requires maven 3.x, Java 8.x, Elasticsearch 6.x 
+- Requires Java 8.x, Elasticsearch 6.x 
 
 An Elasticsearch instance must be available.  To run locally in a docker container, use:
+
 `docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.roles=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.6.0`
 
 Any of the following methods are acceptable ways of running Staccato
-- `./staccato-[version]-exec.jar (self executing jar)`
-- `java -jar staccato-[version].jar`
-- `mvn spring-boot:run`
-- `docker run -d -i -t -p:8080:8080 quay.io/boundlessgeo/staccato:0.0.1`
+- `./staccato-{version}.jar (self executing jar)`
+- `java -jar staccato-{version}.jar`
+- `mvn spring-boot:run` (from the [staccato-main](./staccato-main) directory)
+- `docker run -d -i -t -p:8080:8080 quay.io/boundlessgeo/staccato:{version}`
 
 ## Endpoints
 
@@ -95,8 +101,9 @@ Any of the following methods are acceptable ways of running Staccato
 
 ## Configuartion
 
-The STAC API has several properties that are configurable from the command line or from environment properties.  The 
-table below details the properties that are available for configuration.
+The STAC API has several properties that are configurable from the command line, as environment properties in the 
+[application.yml](./staccato-main/src/main/resources/application.yml) file.  The table below details the properties that 
+are available for configuration.
 
 Property | Default Value | Description
 ---------|---------------|------------
@@ -168,17 +175,17 @@ Example:
 
 Staccato is built using the latest versions of 
 <a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/">Spring Boot</a> and 
-<a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html">Spring WebFlux</a>.  
-The codebase is written reactively, utilizing the <a href="https://projectreactor.io/">Project Reactor</a> library.
+<a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html">Spring WebFlux</a>. The 
+codebase is written reactively, utilizing the <a href="https://projectreactor.io/">Project Reactor</a> library.
 
 ### Filters
 
 Staccato implements a concept called filters, which allows items to be modified or transformed during any/all of 3 
 different operations:
 
-* [index](./staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemIndexFilter.java)
-* [update](./staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemUpdateFilter.java)
-* [search](./staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemSearchFilter.java)
+* [index](./staccato-commons/src/main/java/com/boundlessgeo/staccato/filter/ItemIndexFilter.java)
+* [update](./staccato-commons/src/main/java/com/boundlessgeo/staccato/filter/ItemUpdateFilter.java)
+* [search](./staccato-commons/src/main/java/com/boundlessgeo/stacccato/filter/ItemSearchFilter.java)
 
 Any Spring managed bean that implements one of these interfaces will be called during the corresponding event in the 
 request lifecycle.  An bean that implements ItemIndexFilter will be called before an item is indexed in Elasticsearch.  
@@ -189,7 +196,7 @@ Each query interface defines a method to return the list of item types that the 
 the actual `doFilter` method which does the actual work.  The basic premise is that the `doFilter` method accepts an 
 Item as input and returns an item as output.  This can be used to automatically add data, remove data, or transform 
 data.  Several examples of some included filters can be found in the 
-[filter](./staccato-main/src/main/java/com/boundlessgeo/stac/filter) package.  Collections can also provide custom  
+[filter](./staccato-main/src/main/java/com/boundlessgeo/staccato/filter) package.  Collections can also provide custom  
 filters to accomplish various tasks, such as automatically generating links to related items based on values found in 
 the item's properties.
 
@@ -207,22 +214,25 @@ interfaces in the [commons extension package](/stac-api/staccato-commons/src/mai
 The extensions are defined as interfaces so that a mix of multiple extensions can be combined to create a set of
 heterogeneous properties for a collection. 
 
-Collections are currently defined in the link:./staccato-collections[staccato-collections] module. When defining a new collection,
-you'll typically want to create at least 4 Java classes and one Spring auto-configuration file:
+Collections are currently defined in the [staccato-collections](./staccato-collections) module. When defining a new 
+collection, you'll typically want to create at least 4 Java classes and one Spring auto-configuration file:
 
 1) If you need to define more properties for you collection than are defined by the community in the
-[commons extension package](./staccato-commons/src/main/java/com/boundlessgeo/stac/extension), you'll need to
+[commons extension package](./staccato-commons/src/main/java/com/boundlessgeo/staccato/extension), you'll need to
 create an interface that defines all the getters and setters for your model, along with Jackson annotations to make sure
 the data is serialized/deserialized the way you want.
 2) An implementation of your model. This implementation _MUST_ also implement
-[`MandatoryProperties`](./staccato-commons/src/main/java/com/boundlessgeo/stac/model/MandatoryProperties.java)
-3) An implementation of [`CollectionMetadata`](./staccato-commons/src/main/java/com/boundlessgeo/stac/collection/CollectionMetadata.java)
-or simply extend [`CollectionMetadataAdapter`](./stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/collection/CollectionMetadataAdapter.java).
+[`MandatoryProperties`](./staccato-commons/src/main/java/com/boundlessgeo/staccato/model/MandatoryProperties.java)
+3) An implementation of 
+[`CollectionMetadata`](./staccato-commons/src/main/java/com/boundlessgeo/staccato/collection/CollectionMetadata.java)
+or simply extend 
+[`CollectionMetadataAdapter`](./stac-api/staccato-commons/src/main/java/com/boundlessgeo/staccato/collection/CollectionMetadataAdapter.java).
 4) A class annotated with `@Configuration` that creates 2 beans, both instances of your `CollectionMetadata` class.
 One bean is the the WFS3 collection and one is the STAC catalog. Yes, it seems silly, but there are differences per
 the spec (the collection is WFS3 compliant; the catalog enables STAC-specific capabilities, such as the traversing
-subcatalogs). It is important that when creating the collection bean, you set `metadata.setCatalogType(CatalogType.COLLECTION);`
-and when you create the catalog bean, you set `metadata.setCatalogType(CatalogType.CATALOG);`.
+subcatalogs). It is important that when creating the collection bean, you set 
+`metadata.setCatalogType(CatalogType.COLLECTION);` and when you create the catalog bean, you set 
+`metadata.setCatalogType(CatalogType.CATALOG);`.
 5) A [spring.factories](./staccato-collections/landsat8/src/main/resources/META-INF/spring.factories) file in 
 `/src/main/resources/META-INF` that points to your `@Configuration` class. This tells any Spring Boot application that 
 uses this module as a dependency where to find the auto configuration class, even if component scanning isn't configured 
@@ -236,10 +246,12 @@ the `collection` field in every item. Because each collection will have a differ
 implement several different extension interfaces or custom fields, Jackson cannot deserialize Item classes without
 more information on which properties class to deserialize to. Having the "collections" field in each item provides an
 extremely convenient 1:1 relationship between the item and it's properties implementation.  The Jackson configuration 
-for this can be found [here](./staccato-main/src/main/java/com/boundlessgeo/stac/config/ExtensionConfig.java). 
-Also, the [Item class'](./staccato-commons/src/main/java/com/boundlessgeo/stac/model/Item.java) primary generic 
-properties type is [CommonsCollection](./staccato-commons/src/main/java/com/boundlessgeo/stac/extension/CommonsCollection.java) 
-so that various bits of code, eg the [FilterProcessor](./staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemsFilterProcessor.java)
+for this can be found [here](./staccato-main/src/main/java/com/boundlessgeo/staccato/config/ExtensionConfig.java). 
+Also, the [Item class'](./staccato-commons/src/main/java/com/boundlessgeo/staccato/model/Item.java) primary generic 
+properties type is 
+[CommonsCollection](./staccato-commons/src/main/java/com/boundlessgeo/staccato/extension/CommonsCollection.java) so that 
+various bits of code, eg the 
+[FilterProcessor](./staccato-commons/src/main/java/com/boundlessgeo/staccato/filter/ItemsFilterProcessor.java)
 can easily determine what collection an item belongs to.
 
 ## Elasticsearch
@@ -333,5 +345,5 @@ name!). The value should be the collection id.  So in our example case, the key 
 would be the collection ID.  STAC will automatically append `-search` to the alias for executing searches.
 
 At this point, you should be good to start inserting items. See the 
-[transaction API controller](./staccato-main/src/main/java/com/boundlessgeo/stac/transaction/TransactionApi.java)
+[transaction API controller](./staccato-main/src/main/java/com/boundlessgeo/staccato/transaction/TransactionApi.java)
 for the proper methods to use for creating new items.
