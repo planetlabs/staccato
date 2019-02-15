@@ -1,5 +1,7 @@
 <img src="https://github.com/radiantearth/stac-site/raw/master/images/logo/stac-030-long.png" alt="stac-logo" width="700"/>   
 
+[![Docker Repository on Quay](https://quay.io/repository/boundlessgeo/staccato/status "Docker Repository on Quay")](https://quay.io/repository/boundlessgeo/staccato)
+
 ## About
 
 The SpatioTemporal Asset Catalog (STAC) specification aims to standardize the way geospatial assets are exposed online 
