@@ -1,5 +1,6 @@
 <img src="https://github.com/radiantearth/stac-site/raw/master/images/logo/stac-030-long.png" alt="stac-logo" width="700"/>   
 
+[![Build Status](https://travis-ci.org/boundlessgeo/staccato.svg?branch=master)](https://travis-ci.org/boundlessgeo/staccato)
 [![Docker Repository on Quay](https://quay.io/repository/boundlessgeo/staccato/status "Docker Repository on Quay")](https://quay.io/repository/boundlessgeo/staccato)
 
 ## About
