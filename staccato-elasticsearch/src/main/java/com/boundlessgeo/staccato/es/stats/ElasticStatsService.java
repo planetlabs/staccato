@@ -3,7 +3,7 @@ package com.boundlessgeo.staccato.es.stats;
 import com.boundlessgeo.staccato.dto.ItemStatisticsResponse;
 import com.boundlessgeo.staccato.es.api.DefaultQueryBuilderService;
 import com.boundlessgeo.staccato.model.Extent;
-import com.boundlessgeo.staccato.modelx.FieldName;
+import com.boundlessgeo.staccato.FieldName;
 import com.boundlessgeo.staccato.service.AggregationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

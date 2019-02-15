@@ -9,7 +9,7 @@ import com.boundlessgeo.staccato.filter.ItemsFilterProcessor;
 import com.boundlessgeo.staccato.model.Item;
 import com.boundlessgeo.staccato.model.ItemCollection;
 import com.boundlessgeo.staccato.model.Link;
-import com.boundlessgeo.staccato.modelx.ScrollWrapper;
+import com.boundlessgeo.staccato.es.ScrollWrapper;
 import com.boundlessgeo.staccato.service.CollectionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

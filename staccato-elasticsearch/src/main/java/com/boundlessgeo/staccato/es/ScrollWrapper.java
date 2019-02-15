@@ -1,4 +1,4 @@
-package com.boundlessgeo.staccato.modelx;
+package com.boundlessgeo.staccato.es;
 
 import com.boundlessgeo.staccato.model.Item;
 import lombok.Data;
