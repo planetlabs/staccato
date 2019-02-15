@@ -1,10 +1,9 @@
 package com.boundlessgeo.staccato.es.api;
 
-import com.boundlessgeo.staccato.es.exception.FilterException;
 import com.boundlessgeo.staccato.FieldName;
+import com.boundlessgeo.staccato.es.exception.FilterException;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.geo.ShapeRelation;
-import org.elasticsearch.common.geo.SpatialStrategy;
 import org.elasticsearch.common.geo.builders.EnvelopeBuilder;
 import org.elasticsearch.index.query.GeoShapeQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -39,23 +38,23 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
 
     /**
      * Builds an Elasticsearch bbox query
+     *
      * @param bbox The bbox values passed in the api request
      * @return The Elasticsearch query builder
      */
     @Override
     public Optional<QueryBuilder> bboxBuilder(double[] bbox) {
-
         Coordinate c1 = new Coordinate(bbox[WEST], bbox[NORTH]);
         Coordinate c2 = new Coordinate(bbox[EAST], bbox[SOUTH]);
-
         EnvelopeBuilder envelopeBuilder = new EnvelopeBuilder(c1, c2);
 
-        return Optional.of(new GeoShapeQueryBuilder(FieldName.GEOMETRY, envelopeBuilder)
-                .relation(ShapeRelation.INTERSECTS).strategy(SpatialStrategy.RECURSIVE));
+        return Optional.of(
+                new GeoShapeQueryBuilder(FieldName.GEOMETRY, envelopeBuilder).relation(ShapeRelation.INTERSECTS));
     }
 
     /**
      * Builds an Elasticsearch temporal query
+     *
      * @param time The time values passed in the api request
      * @return The Elasticsearch query builder
      */
@@ -99,6 +98,7 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
 
     /**
      * Builds an Elasticsearch query
+     *
      * @param search The query values passed in the api request
      * @return The Elasticsearch query builder
      */

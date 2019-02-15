@@ -30,6 +30,9 @@ logging:
     #io.netty: DEBUG
     #com.boundlessgeo.staccato.rsocket: DEBUG
     com.boundlessgeo: INFO
+    org.elasticsearch: TRACE
+    org.locationtech: TRACE
+    com.vividsolutions: TRACE
     #com.boundlessgeo.staccato.es.initializer: DEBUG
     #com.boundlessgeo.staccato.es.repository: DEBUG
     #io.grpc: DEBUG

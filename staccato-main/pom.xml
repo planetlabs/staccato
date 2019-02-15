@@ -49,11 +49,22 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jsonSchema</artifactId>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.locationtech.spatial4j</groupId>
             <artifactId>spatial4j</artifactId>
             <version>0.6</version>
         </dependency>
+-->
+
+        <!-- needed for centroid filter -->
+
+        <dependency>
+            <groupId>com.vividsolutions</groupId>
+            <artifactId>jts</artifactId>
+            <version>1.13</version>
+        </dependency>
+
         <!-- weird transitive dep from spatial4j -->
         <dependency>
             <groupId>org.noggit</groupId>
