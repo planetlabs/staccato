@@ -89,7 +89,7 @@ Any of the following methods are acceptable ways of running Staccato
 
 ### Actuator Endpoints
 
-- GET /actuator - returns a list of utility endpoints for the applications
+- GET /actuator - returns a list of utility endpoints for the application
 
 ### Query Parameters (all optional)
 - **limit** the maximum number of items to return, example limit=100
@@ -294,6 +294,10 @@ Configure the Elasticsearch endpoint in [application.yml](./stac-main/src/main/r
  * `staccato.es.port`
  * `staccato.es.user` (optional)
  * `staccato.es.password` (optional)
+ 
+ The automatic initializer _will_ create a template containing a basic matching pattern, a read alias, and mappings, 
+ along with the initial index and write alias.  This is a bit more robust of a configuration than simply creating a 
+ single index per collection and follows the pattern described below for production environments.
 
 ### Production Environments
 
