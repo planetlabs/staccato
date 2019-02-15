@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -31,7 +31,8 @@ public class DefaultSchemaService implements SchemaService {
 
     @Autowired(required = false)
     private List<CollectionMetadata> collections;
-    private Map<String, Class> collectionMap = new HashMap<>();
+
+    private Map<String, Object> schemaMap = new HashMap<>();
     @Autowired
     private ObjectMapper mapper;
     private JsonSchemaGenerator genny;
@@ -39,31 +40,54 @@ public class DefaultSchemaService implements SchemaService {
     @PostConstruct
     private void init() {
         genny = new JsonSchemaGenerator(mapper);
+
+
         if (null != collections && !collections.isEmpty()) {
+
             for (CollectionMetadata collection : collections) {
-                collectionMap.put(collection.getId(), collection.getProperties().getClass());
+                try {
+                    Class clazz = collection.getProperties().getClass();
+                    schemaMap.put(collection.getId(),
+                            mapper.readValue(mapper.writeValueAsString(genny.generateSchema(clazz)), Object.class));
+                } catch (Exception e) {
+                    log.error("Error generating item property schema for class '" +
+                            collection.getProperties().getClass() + "'", e);
+                }
+            }
+
+            try {
+                Resource catalogResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.6.1/catalog-spec/json-schema/catalog.json");
+                Resource collectionResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.6.1/collection-spec/json-schema/collection.json");
+                Resource itemResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.6.1/item-spec/json-schema/item.json");
+
+                BufferedReader catalogReader = new BufferedReader(new InputStreamReader(catalogResource.getInputStream()));
+                BufferedReader collectionReader = new BufferedReader(new InputStreamReader(collectionResource.getInputStream()));
+                BufferedReader itemReader = new BufferedReader(new InputStreamReader(itemResource.getInputStream()));
+
+                schemaMap.put("catalog-spec", mapper.readValue(catalogReader, Object.class));
+                schemaMap.put("collection-spec", mapper.readValue(collectionReader, Object.class));
+                schemaMap.put("item-spec", mapper.readValue(itemReader, Object.class));
+            } catch (IOException e) {
+                log.error("Error reading remote schemas.", e);
             }
         }
     }
 
     public Mono<Object> getSchemaByName(String name) {
-        try {
-            return Mono.just(genny.generateSchema(collectionMap.get(name)));
 
-        } catch (Exception ex) {
-            return Mono.just(null);
+        if (schemaMap.containsKey(name)) {
+            try {
+                return Mono.just(schemaMap.get(name));
+            } catch (Exception ex) {
+                return Mono.empty();
+            }
         }
+        throw new RuntimeException("Unable to locate schema for " + name);
+
     }
 
     public Mono<Object> getApiDescription() {
-        try {
-            Resource resource = new ClassPathResource("openapi.json");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
-            return Mono.just(mapper.readValue(reader, Object.class));
-        } catch (IOException e) {
-            log.error("Error reading openapi.json from resources.", e);
-        }
-        return Mono.just("Error reading OpenAPI doucment.");
+            return Mono.just(schemaMap);
     }
 
 }

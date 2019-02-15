@@ -265,7 +265,7 @@ Staccato currently provides two custom annotations:
 - [@Subcatalog](./staccato-commons/src/main/java/com/boundlessgeo/staccato/collection/Subcatalog.java)
 
 The `@Mapping` annotation allows you to define Elasticsearch mapping types that will be applied during 
-[automatic index creation](./staccato-elasticsearch/src/main/java/com/boundlessgeo/staccato/es/initializer/ElasticsearchIndexInitializer.java).  
+[automatic index creation](./staccato-elasticsearch/src/main/java/com/boundlessgeo/staccato/es/initializer/ElasticsearchIndexInitializer.java). 
 Set type `type` attribute to one of the enumerated values found in 
 [MappingType](./staccato-commons/src/main/java/com/boundlessgeo/staccato/elasticsearch/annotation/MappingType.java). 
 
