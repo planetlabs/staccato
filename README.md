@@ -2,17 +2,17 @@
 
 ## About
 
-The SpatioTemporal Asset Catalog (STAC) specification aims to standardize the way geospatial assets are exposed online and queried. 
-A 'spatiotemporal asset' is any file that represents information about the earth captured in a certain space and 
-time. The initial focus is primarily remotely-sensed imagery (from satellites, but also planes, drones, balloons, etc), but 
-the core is designed to be extensible to SAR, full motion video, point clouds, hyperspectral, LiDAR and derived data like
-NDVI, Digital Elevation Models, mosaics, etc. 
+The SpatioTemporal Asset Catalog (STAC) specification aims to standardize the way geospatial assets are exposed online 
+and queried. A 'spatiotemporal asset' is any file that represents information about the earth captured in a certain 
+space and time. The initial focus is primarily remotely-sensed imagery (from satellites, but also planes, drones, 
+balloons, etc), but the core is designed to be extensible to SAR, full motion video, point clouds, hyperspectral, LiDAR 
+and derived data like NDVI, Digital Elevation Models, mosaics, etc. 
 
-The goal is for all major providers of imagery and other earth observation data to expose their data as SpatioTemporal Asset 
-Catalogs, so that new code doesn't need to be written whenever a new JSON-based REST API comes out that makes its data 
-available in a slightly different way. This will enable standard library components in many languages. STAC can also be
-implemented in a completely 'static' manner, enabling data publishers to expose their data by simply publishing linked JSON
-files online.
+The goal is for all major providers of imagery and other earth observation data to expose their data as SpatioTemporal 
+Asset Catalogs, so that new code doesn't need to be written whenever a new JSON-based REST API comes out that makes its 
+data available in a slightly different way. This will enable standard library components in many languages. STAC can 
+also be implemented in a completely 'static' manner, enabling data publishers to expose their data by simply publishing 
+linked JSON files online.
 
 ## WARNING
 
@@ -95,7 +95,8 @@ Any of the following methods are acceptable ways of running Staccato
 
 ## Configuartion
 
-The STAC API has several properties that are configurable from the command line or from environment properties.  The table below details the properties that are available for configuration.
+The STAC API has several properties that are configurable from the command line or from environment properties.  The 
+table below details the properties that are available for configuration.
 
 Property | Default Value | Description
 ---------|---------------|------------
@@ -136,7 +137,8 @@ offers a list of
 <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html">commonly 
 used configuration properties</a>.
 
-Passing in custom properties depends on how you are running STAC.  Below are examples using java and maven from the command line:
+Passing in custom properties depends on how you are running STAC.  Below are examples using java and maven from the 
+command line:
 
 Set the active profile:
  * java: <code>java -jar -Dstac.es.host=127.0.0.1 stac.jar</code>
@@ -162,9 +164,17 @@ Example:
 
 ## Code
 
+### Spring Boot / WebFlux
+
+Staccato is built using the latest versions of 
+<a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/">Spring Boot</a> and 
+<a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html">Spring WebFlux</a>.  
+The codebase is written reactively, utilizing the <a href="https://projectreactor.io/">Project Reactor</a> library.
+
 ### Filters
-STAC implements a concept called filters, which allows items to be modified or transformed during any/all of 3 different 
-operations:
+
+Staccato implements a concept called filters, which allows items to be modified or transformed during any/all of 3 
+different operations:
 
 * [index](./staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemIndexFilter.java)
 * [update](./staccato-commons/src/main/java/com/boundlessgeo/stac/filter/ItemUpdateFilter.java)
@@ -186,14 +196,14 @@ the item's properties.
 ## Extensions and Collections
 
 The STAC item spec only has one requirement for item properties: to provide a `datetime` field. Properties specific to
-certain datasets or product types will be developed by the community as extensions and move through a series of maturity steps
-as outlined https://github.com/radiantearth/stac-spec/tree/master/extensions[here]. This STAC implementation was
+certain datasets or product types will be developed by the community as extensions and move through a series of maturity 
+steps as outlined [here](https://github.com/radiantearth/stac-spec/tree/master/extensions). This STAC implementation was
 originally designed for internal use at Boundless Spatial and was intended to only offer only a small number of static
 collections. As such, it is not currently capable of providing a way to dynamically add or define collections. Adding
 such a capability may be a good idea for the future.
 
-For each extension that has currently been proposed, the `properties` fields defined by the extension are described in interfaces
-in the link:./stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/extension[commons extension package].
+For each extension that has currently been proposed, the `properties` fields defined by the extension are described in 
+interfaces in the [commons extension package](/stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/extension).
 The extensions are defined as interfaces so that a mix of multiple extensions can be combined to create a set of
 heterogeneous properties for a collection. 
 
@@ -201,21 +211,22 @@ Collections are currently defined in the link:./staccato-collections[staccato-co
 you'll typically want to create at least 4 Java classes and one Spring auto-configuration file:
 
 1) If you need to define more properties for you collection than are defined by the community in the
-link:./stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/extension[commons extension package], you'll need to
+[commons extension package](./staccato-commons/src/main/java/com/boundlessgeo/stac/extension), you'll need to
 create an interface that defines all the getters and setters for your model, along with Jackson annotations to make sure
 the data is serialized/deserialized the way you want.
 2) An implementation of your model. This implementation _MUST_ also implement
-link:./stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/model/MandatoryProperties.java[`MandatoryProperties`]
-3) An implementation of link:./stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/collection/CollectionMetadata.java[`CollectionMetadata`]
-or simply extend link:./stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/collection/CollectionMetadataAdapter.java[`CollectionMetadataAdapter`].
+[`MandatoryProperties`](./staccato-commons/src/main/java/com/boundlessgeo/stac/model/MandatoryProperties.java)
+3) An implementation of [`CollectionMetadata`](./staccato-commons/src/main/java/com/boundlessgeo/stac/collection/CollectionMetadata.java)
+or simply extend [`CollectionMetadataAdapter`](./stac-api/staccato-commons/src/main/java/com/boundlessgeo/stac/collection/CollectionMetadataAdapter.java).
 4) A class annotated with `@Configuration` that creates 2 beans, both instances of your `CollectionMetadata` class.
 One bean is the the WFS3 collection and one is the STAC catalog. Yes, it seems silly, but there are differences per
 the spec (the collection is WFS3 compliant; the catalog enables STAC-specific capabilities, such as the traversing
 subcatalogs). It is important that when creating the collection bean, you set `metadata.setCatalogType(CatalogType.COLLECTION);`
 and when you create the catalog bean, you set `metadata.setCatalogType(CatalogType.CATALOG);`.
-5) A link:./staccato-collections/landsat8/src/main/resources/META-INF/spring.factories[spring.factories] file in `/src/main/resources/META-INF`
-that points to your `@Configuration` class. This tells any Spring Boot application that uses this module as a dependency
-where to find the auto configuration class, even if component scanning isn't configured to scan your extension package path. 
+5) A [spring.factories](./staccato-collections/landsat8/src/main/resources/META-INF/spring.factories) file in 
+`/src/main/resources/META-INF` that points to your `@Configuration` class. This tells any Spring Boot application that 
+uses this module as a dependency where to find the auto configuration class, even if component scanning isn't configured 
+to scan your extension package path. 
 
 Notes on the `CollectionMetadata` class: The `properties` section in the collection endpoint can contain fields/values
 that are shared amongst all items in your collection to avoid duplicating the data in every single item.
