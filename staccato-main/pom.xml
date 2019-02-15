@@ -49,20 +49,12 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jsonSchema</artifactId>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>org.locationtech.spatial4j</groupId>
-            <artifactId>spatial4j</artifactId>
-            <version>0.6</version>
-        </dependency>
--->
 
         <!-- needed for centroid filter -->
 
         <dependency>
             <groupId>com.vividsolutions</groupId>
             <artifactId>jts</artifactId>
-            <version>1.13</version>
         </dependency>
 
         <!-- weird transitive dep from spatial4j -->
@@ -110,13 +102,11 @@
         <dependency>
             <groupId>com.boundlessgeo.staccato</groupId>
             <artifactId>landsat8</artifactId>
-            <version>0.0.1</version>
         </dependency>
 
         <dependency>
             <groupId>com.boundlessgeo.staccato</groupId>
             <artifactId>planet</artifactId>
-            <version>0.0.1</version>
         </dependency>
 
         <dependency>

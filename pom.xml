@@ -25,6 +25,9 @@
         <staccato.version>${project.version}</staccato.version>
         <lucene.version>7.1.0</lucene.version>
         <elasticsearch.version>6.6.0</elasticsearch.version>
+        <locationtech-jts.version>1.16.0</locationtech-jts.version>
+        <locationtech-spatial4j.version>0.7</locationtech-spatial4j.version>
+        <vividsolutions-jts.version>1.13</vividsolutions-jts.version>
     </properties>
 
     <modules>
@@ -44,16 +47,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-aws</artifactId>
-                <version>2.0.0.RC1</version>
-                <roles>pom</roles>
-                <scope>import</scope>
-            </dependency>
-            -->
-
             <dependency>
                 <groupId>com.boundlessgeo.staccato</groupId>
                 <artifactId>staccato-elasticsearch</artifactId>
@@ -76,8 +69,29 @@
             </dependency>
             <dependency>
                 <groupId>com.boundlessgeo.staccato</groupId>
-                <artifactId>stac-kafka</artifactId>
+                <artifactId>landsat8</artifactId>
                 <version>${staccato.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.boundlessgeo.staccato</groupId>
+                <artifactId>planet</artifactId>
+                <version>${staccato.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.locationtech.spatial4j</groupId>
+                <artifactId>spatial4j</artifactId>
+                <version>${locationtech-spatial4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.locationtech.jts</groupId>
+                <artifactId>jts-core</artifactId>
+                <version>${locationtech-jts.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vividsolutions</groupId>
+                <artifactId>jts</artifactId>
+                <version>${vividsolutions-jts.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
