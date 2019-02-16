@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/boundlessgeo/staccato.svg?branch=master)](https://travis-ci.org/boundlessgeo/staccato)
 [![Docker Repository on Quay](https://quay.io/repository/boundlessgeo/staccato/status "Docker Repository on Quay")](https://quay.io/repository/boundlessgeo/staccato)
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)]https://gitter.im/SpatioTemporal-Asset-Catalog/Lobby)
+[![Gitter chat](https://badges.gitter.im/USER/REPO.png)](https://gitter.im/SpatioTemporal-Asset-Catalog/Lobby "Gitter chat")
 
 ## About
 
