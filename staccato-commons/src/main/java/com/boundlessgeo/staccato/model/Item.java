@@ -21,7 +21,7 @@ public class Item<T extends Collection & MandatoryProperties> {
     private TypeEnum type;
     private T properties;
     private Set<Link> links;
-    protected Map<String, Asset> assets = new HashMap<>();
+    protected Map<String, Asset> assets;
 
     public Item assets(Map<String, Asset> assets) {
         setAssets(assets);
