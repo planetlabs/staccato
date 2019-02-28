@@ -117,7 +117,7 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
     }
 
     private boolean createTemplate(CollectionMetadata collection) throws Exception {
-        String searchAlias = collection.getId() + "-api";
+        String searchAlias = collection.getId() + "-search";
         String indexTemplateName = collection.getId() + "-template";
         String indexTemplatePattern = collection.getId() + "-*";
 
@@ -130,8 +130,7 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
 
         client.indices().putTemplate(request, RequestOptions.DEFAULT);
 
-        log.info("Template '" + indexTemplateName
-                + "' for collection '" + collection.getId() + "' initialized");
+        log.info("Template '" + indexTemplateName + "' for collection '" + collection.getId() + "' initialized");
         return true;
     }
 
@@ -146,8 +145,7 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
                                 .put("index.number_of_replicas", configProps.getEs().getNumberOfReplicas()));
 
         client.indices().create(request, RequestOptions.DEFAULT);
-        log.info("Index '" + initialIndexName + "' for collection '"
-                + collection.getId() + "' initialized");
+        log.info("Index '" + initialIndexName + "' for collection '" + collection.getId() + "' initialized");
         return true;
     }
 

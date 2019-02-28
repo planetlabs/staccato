@@ -27,7 +27,7 @@ public class IndexAliasLookup {
     private final Map<String, String> readAliasMap = new HashMap<>();
     private final List<String> writeAliases;
     private final List<String> readAliases;
-    public static final String READ_ALIAS_SUFFIX = "-api";
+    public static final String READ_ALIAS_SUFFIX = "-search";
 
     public IndexAliasLookup(@Autowired(required = false) List<CollectionMetadata> collectionMetadata,
                             IndexAliasConfigProps configProps) {
