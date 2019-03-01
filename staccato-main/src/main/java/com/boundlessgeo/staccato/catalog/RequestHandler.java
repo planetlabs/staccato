@@ -98,9 +98,8 @@ public class RequestHandler {
             log.debug("ODD (should display values) - path: " + path + " - size: " + size);
 
             collection.getLinks().clear();
-            String fieldName = parsePath.get(parsePath.size() - 1);
 
-            List<String> values = catalogService.getValuesForField(collection, fieldName);
+            List<String> values = catalogService.getValuesForField(collection, parsePath);
             linkGenerator.generatePropertyValueLinks(request, collection, values);
 
             return Mono.just(collection);

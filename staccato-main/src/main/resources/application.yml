@@ -6,6 +6,7 @@ spring:
       write_enums_using_to_string: true
     deserialization:
       read_enums_using_to_string: true
+    default-property-inclusion: non_null
 
 management:
   health:

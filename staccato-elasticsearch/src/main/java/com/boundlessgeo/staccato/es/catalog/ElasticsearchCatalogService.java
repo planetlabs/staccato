@@ -12,6 +12,7 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedTerms;
@@ -55,19 +56,29 @@ public class ElasticsearchCatalogService implements CatalogService {
      * Produces a list of all unique values for a given field in a collection.
      *
      * @param collection The collection that will be queried.
-     * @param fieldName The name of the field to fetch unique values for
+     * @param path The request path containing property fields and values for which to find unique values
      * @return A list of unique values
      */
     @Override
-    public List<String> getValuesForField(CollectionMetadata collection, String fieldName) {
+    public List<String> getValuesForField(CollectionMetadata collection, List<String> path) {
+        String fieldName = path.get(path.size() - 1);
+
         List<String> values = new LinkedList<>();
         fieldName = "properties." + fieldName;
-        int requiredSize = 10;
+
+        // build the term aggregation from the last subcatalog property in the url path
         TermsAggregationBuilder aggregationBuilder = new TermsAggregationBuilder(fieldName + "_Agg", ValueType.STRING).size(10000);
         aggregationBuilder.field(fieldName);
-        //aggregationBuilder.bucketCountThresholds(new TermsAggregator.BucketCountThresholds(1, 1, requiredSize, 5));
 
-        QueryBuilder query = QueryBuilders.matchAllQuery();
+        // the query based on all of the unique subcatalog value previously selected
+        QueryBuilder query = QueryBuilders.boolQuery();
+        for (int i = 2; i * 2 <= path.size(); i = i + 2) {
+            String property = "properties." + path.get(i);
+            String value = path.get(i + 1);
+            QueryBuilder pathQuery = QueryBuilders.termQuery(property, value);
+
+            ((BoolQueryBuilder) query).must(pathQuery);
+        }
 
         SearchRequest request = new SearchRequest().indices(indexAliasLookup.getReadAlias(collection.getProperties().getCollection()))
                 .searchType(SearchType.DFS_QUERY_THEN_FETCH)

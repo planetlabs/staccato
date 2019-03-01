@@ -17,7 +17,7 @@ import java.util.Map;
 public interface CatalogService {
     Mono<Item> getItem(String itemId, String collectionId);
 
-    List<String> getValuesForField(CollectionMetadata collection, String fieldName);
+    List<String> getValuesForField(CollectionMetadata collection, List<String> path);
 
     Mono<ItemCollection> getItems(String collectionId, Map<String, String> pathVariables);
 }
