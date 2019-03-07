@@ -43,7 +43,7 @@ public class IndexAliasLookup {
             }
 
             if (!readAliasMap.containsKey(metadata.getId())) {
-                readAliasMap.put(metadata.getId(), metadata.getId());
+                readAliasMap.put(metadata.getId(), metadata.getId() + READ_ALIAS_SUFFIX);
             }
         }
 

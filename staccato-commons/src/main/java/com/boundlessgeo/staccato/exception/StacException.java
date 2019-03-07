@@ -1,16 +1,20 @@
-package com.boundlessgeo.staccato.model;
+package com.boundlessgeo.staccato.exception;
 
 import java.util.Objects;
 
 /**
- * Exception
+ * StacException
  */
-public class Exception {
+public class StacException {
 
   private String code;
   private String description;
 
-  public Exception code(String code) {
+  public StacException(String description) {
+    this.description = description;
+  }
+
+  public StacException code(String code) {
     this.code = code;
     return this;
   }
@@ -27,7 +31,7 @@ public class Exception {
     this.code = code;
   }
 
-  public Exception description(String description) {
+  public StacException description(String description) {
     this.description = description;
     return this;
   }
@@ -53,9 +57,9 @@ public class Exception {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Exception exception = (Exception) o;
-    return Objects.equals(this.code, exception.code) &&
-        Objects.equals(this.description, exception.description);
+    StacException stacException = (StacException) o;
+    return Objects.equals(this.code, stacException.code) &&
+        Objects.equals(this.description, stacException.description);
   }
 
   @Override
@@ -67,7 +71,7 @@ public class Exception {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Exception {\n");
+    sb.append("class StacException {\n");
 
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");

@@ -56,9 +56,9 @@ public class DefaultSchemaService implements SchemaService {
             }
 
             try {
-                Resource catalogResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.6.1/catalog-spec/json-schema/catalog.json");
-                Resource collectionResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.6.1/collection-spec/json-schema/collection.json");
-                Resource itemResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.6.1/item-spec/json-schema/item.json");
+                Resource catalogResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.6.2/catalog-spec/json-schema/catalog.json");
+                Resource collectionResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.6.2/collection-spec/json-schema/collection.json");
+                Resource itemResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.6.2/item-spec/json-schema/item.json");
 
                 BufferedReader catalogReader = new BufferedReader(new InputStreamReader(catalogResource.getInputStream()));
                 BufferedReader collectionReader = new BufferedReader(new InputStreamReader(collectionResource.getInputStream()));

@@ -8,12 +8,12 @@
 
     <groupId>com.boundlessgeo.staccato</groupId>
     <artifactId>staccato-community</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 
     <parent>
         <groupId>com.boundlessgeo.staccato</groupId>
         <artifactId>staccato</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
     </parent>
 
     <modules>

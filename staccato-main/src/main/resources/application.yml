@@ -50,7 +50,7 @@ staccato:
   kafka:
     enabled: false
   grpc:
-    enabled: true
+    enabled: false
   include-null-fields: false
   generate-thumbnail-links: false
   es:
@@ -59,9 +59,4 @@ staccato:
       aliases:
         # alias key name should be the alias name, value should be the alias providers value
         landsat-8-l1: landsat-8-l1
-  #links:
-    #scheme: http
-    #host: staccato.boundlessgeo.io
-    #port: 80
-    #context-path: /stac/
 

@@ -1,6 +1,6 @@
 package com.boundlessgeo.staccato;
 
-import com.boundlessgeo.staccato.error.ErrorResponse;
+import com.boundlessgeo.staccato.exception.StacException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,12 +17,11 @@ import reactor.core.publisher.Mono;
 public class StaccatoControllerAdvice {
 
     @ExceptionHandler(Throwable.class)
-    public Mono<ResponseEntity<ErrorResponse>> handleException(Exception ex) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setDescription(ex.getMessage());
-        errorResponse.setCode(HttpStatus.BAD_REQUEST.value());
+    public Mono<ResponseEntity<StacException>> handleException(Exception ex) {
+        StacException stacException = new StacException(ex.getMessage());
+        stacException.setCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
 
-        ResponseEntity<ErrorResponse> responseEntity = new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        ResponseEntity<StacException> responseEntity = new ResponseEntity<>(stacException, HttpStatus.BAD_REQUEST);
 
         return Mono.just(responseEntity);
     }

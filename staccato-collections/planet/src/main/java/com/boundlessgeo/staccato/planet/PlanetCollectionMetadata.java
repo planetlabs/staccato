@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class PlanetCollectionMetadata extends CollectionMetadataAdapter<PlanetItemProperties> {
 
-    public static final String STAC_VERSION = "0.6.1";
+    public static final String STAC_VERSION = "0.6.2";
     public static final String ID = "planet";
     public static final String TITLE = "Planet";
     public static final String DESCRIPTION = "Planet data";

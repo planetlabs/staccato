@@ -35,7 +35,7 @@ public class CatalogConfig {
         catalog.setId("staccato");
         catalog.setTitle("Staccato");
         catalog.setVersion("0.6.1");
-        catalog.setDescription("STAC v0.6.1 implementation by Boundless Spatial");
+        catalog.setDescription("STAC v0.6.2 implementation by Boundless Spatial");
 
         catalog.getLinks().add(Link.build()
                 .rel("self")
