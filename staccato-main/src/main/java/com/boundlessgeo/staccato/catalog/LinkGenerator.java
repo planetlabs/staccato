@@ -38,16 +38,19 @@ public class LinkGenerator {
 
         String self = getSelfString(request);
 
+        // don't want to add double slashes
+        String separator = self.endsWith("/") ? "" : "/";
+
         for (PropertyField property : remainingProperties) {
             collection.getLinks().add(
                     new Link()
-                            .href(self + "/" + property.getJsonName())
+                            .href(self + separator + property.getJsonName())
                             .rel("child"));
         }
 
         collection.getLinks().add(ROOT);
         collection.getLinks().add(new Link().href(self).rel("self"));
-        collection.getLinks().add(new Link().href(self + "/items").rel("items"));
+        collection.getLinks().add(new Link().href(self + separator + "items").rel("items"));
         collection.getLinks().add(new Link().href(self.substring(0, self.lastIndexOf("/"))).rel("parent"));
 
     }
@@ -60,13 +63,14 @@ public class LinkGenerator {
      * @param values A list of unique values in the database for the selected subcataloged field
      */
     public void generatePropertyValueLinks(ServerRequest request, CollectionMetadata collection, List<String> values) {
+        String separator = request.path().endsWith("/") ? "" : "/";
         values.forEach(value -> collection.getLinks().add(
-                new Link().href(LinksConfigProps.LINK_PREFIX + request.path() + "/" + value).rel("child")));
+                new Link().href(LinksConfigProps.LINK_PREFIX + request.path() + separator + value).rel("child")));
 
         String self = getSelfString(request);
         collection.getLinks().add(ROOT);
         collection.getLinks().add(new Link().href(self).rel("self"));
-        collection.getLinks().add(new Link().href(self + "/items").rel("items"));
+        collection.getLinks().add(new Link().href(self + separator + "items").rel("items"));
         collection.getLinks().add(new Link().href(self.substring(0, self.lastIndexOf("/"))).rel("parent"));
     }
 
