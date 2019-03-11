@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.boundlessgeo.staccato.landsat8.Landsat8AutoConfig
+com.planet.staccato.landsat8.Landsat8AutoConfig

@@ -8,12 +8,12 @@
 
     <groupId>com.boundlessgeo.staccato</groupId>
     <artifactId>staccato-community</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
 
     <parent>
         <groupId>com.boundlessgeo.staccato</groupId>
         <artifactId>staccato</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.4</version>
     </parent>
 
     <modules>
@@ -32,7 +32,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.boundlessgeo.staccato</groupId>
+                <groupId>com.planetato</groupId>
                 <artifactId>staccato-community</artifactId>
                 <version>${staccato.version}</version>
             </dependency>

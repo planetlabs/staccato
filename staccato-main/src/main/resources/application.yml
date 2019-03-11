@@ -29,15 +29,15 @@ logging:
     reactor: WARN
     #io.rsocket: TRACE
     #io.netty: DEBUG
-    #com.boundlessgeo.staccato.rsocket: DEBUG
+    #com.planet.staccato.rsocket: DEBUG
     com.boundlessgeo: INFO
-    #com.boundlessgeo.staccato.es.initializer: DEBUG
-    #com.boundlessgeo.staccato.es.repository: DEBUG
+    #com.planet.staccato.es.initializer: DEBUG
+    #com.planet.staccato.es.repository: DEBUG
     #io.grpc: DEBUG
     #org.springframework.web.reactive: TRACE
     o.s.b.web.embedded.netty.NettyWebServer: INFO
     #org.springframework.web: DEBUG
-    #com.boundlessgeo.ng.bcis.index.rsocket: DEBUG
+    #com.planet.ng.bcis.index.rsocket: DEBUG
     #reactor.ipc: trace
     #io.api: DEBUG
     #org.springframework.web.reactive.function.client: debug

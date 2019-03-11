@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.boundlessgeo.staccato.grpc.GrpcAutoConfig
+com.planet.staccato.grpc.GrpcAutoConfig

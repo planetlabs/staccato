@@ -12,7 +12,7 @@
     <parent>
         <groupId>com.boundlessgeo.staccato</groupId>
         <artifactId>staccato</artifactId>
-        <version>0.0.3</version>
+        <version>0.0.4</version>
     </parent>
 
     <properties>
@@ -140,7 +140,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.boundlessgeo.staccato.StaccatoApplication</mainClass>
+                            <mainClass>com.planet.staccato.StaccatoApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -159,7 +159,7 @@
                 </executions>
                 <configuration>
                     <finalName>staccato-${project.version}</finalName>
-                    <mainClass>com.boundlessgeo.staccato.StaccatoApplication</mainClass>
+                    <mainClass>com.planet.staccato.StaccatoApplication</mainClass>
                     <executable>true</executable>
                 </configuration>
             </plugin>

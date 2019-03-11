@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.boundlessgeo.staccato.rsocket.RSocketAutoConfig
+com.planet.staccato.rsocket.RSocketAutoConfig

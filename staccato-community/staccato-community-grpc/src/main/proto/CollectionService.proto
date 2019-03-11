@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option java_outer_classname = "CollectionServiceProto";
 option java_multiple_files = true;
-option java_package = "com.boundlessgeo.staccato.grpc.generated";
+option java_package = "com.planet.staccato.grpc.generated";
 option java_generic_services = true;
 
 message CollectionItemRequest {
