@@ -6,12 +6,12 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <groupId>com.boundlessgeo.staccato</groupId>
+    <groupId>com.planet.staccato</groupId>
     <artifactId>staccato-community</artifactId>
     <version>0.0.4</version>
 
     <parent>
-        <groupId>com.boundlessgeo.staccato</groupId>
+        <groupId>com.planet.staccato</groupId>
         <artifactId>staccato</artifactId>
         <version>0.0.4</version>
     </parent>

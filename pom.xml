@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.boundlessgeo.staccato</groupId>
+    <groupId>com.planet.staccato</groupId>
     <artifactId>staccato</artifactId>
     <version>0.0.4</version>
     <packaging>pom</packaging>
@@ -16,7 +16,7 @@
     </parent>
 
     <name>staccato</name>
-    <description>Staccato STAC implementation by Boundless Spatial</description>
+    <description>Staccato STAC implementation by Planet Labs</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,33 +48,33 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.boundlessgeo.staccato</groupId>
+                <groupId>com.planet.staccato</groupId>
                 <artifactId>staccato-elasticsearch</artifactId>
                 <version>${staccato.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.boundlessgeo.staccato</groupId>
+                <groupId>com.planet.staccato</groupId>
                 <artifactId>staccato-commons</artifactId>
                 <version>${staccato.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.boundlessgeo.staccato</groupId>
+                <groupId>com.planet.staccato</groupId>
                 <artifactId>staccato-collections</artifactId>
                 <version>${staccato.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.boundlessgeo.staccato</groupId>
+                <groupId>com.planet.staccato</groupId>
                 <artifactId>staccato-community</artifactId>
                 <version>${staccato.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.boundlessgeo.staccato</groupId>
+                <groupId>com.planet.staccato</groupId>
                 <artifactId>landsat8</artifactId>
                 <version>${staccato.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.boundlessgeo.staccato</groupId>
+                <groupId>com.planet.staccato</groupId>
                 <artifactId>planet</artifactId>
                 <version>${staccato.version}</version>
             </dependency>

@@ -7,7 +7,7 @@
     <artifactId>landsat8</artifactId>
 
     <parent>
-        <groupId>com.boundlessgeo.staccato</groupId>
+        <groupId>com.planet.staccato</groupId>
         <artifactId>staccato-collections</artifactId>
         <version>0.0.4</version>
     </parent>
@@ -20,7 +20,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.boundlessgeo.staccato</groupId>
+            <groupId>com.planet.staccato</groupId>
             <artifactId>staccato-commons</artifactId>
         </dependency>
     </dependencies>

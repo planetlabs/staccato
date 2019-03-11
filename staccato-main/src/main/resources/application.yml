@@ -30,7 +30,7 @@ logging:
     #io.rsocket: TRACE
     #io.netty: DEBUG
     #com.planet.staccato.rsocket: DEBUG
-    com.boundlessgeo: INFO
+    com.planet: INFO
     #com.planet.staccato.es.initializer: DEBUG
     #com.planet.staccato.es.repository: DEBUG
     #io.grpc: DEBUG

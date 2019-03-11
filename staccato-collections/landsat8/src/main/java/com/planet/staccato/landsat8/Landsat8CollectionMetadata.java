@@ -60,7 +60,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
                 .url("https://landsatonaws.com/"));
 
         providers.add(Provider.build()
-                .name("Boundless Geospatial")
+                .name("Planet Labs")
                 .addRole(Provider.Role.PROCESSOR)
                 .url("https://planet.com"));
     }

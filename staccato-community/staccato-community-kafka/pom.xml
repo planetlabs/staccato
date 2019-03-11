@@ -4,17 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>staccato-community</artifactId>
-        <groupId>com.boundlessgeo.staccato</groupId>
+        <groupId>com.planet.staccato</groupId>
         <version>0.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.boundlessgeo.staccato</groupId>
+    <groupId>com.planet.staccato</groupId>
     <artifactId>staccato-community-kafka</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.boundlessgeo.staccato</groupId>
+            <groupId>com.planet.staccato</groupId>
             <artifactId>staccato-commons</artifactId>
         </dependency>
         <dependency>

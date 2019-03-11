@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.boundlessgeo.staccato</groupId>
+    <groupId>com.planet.staccato</groupId>
     <artifactId>staccato-main</artifactId>
 
     <name>staccato-main</name>
-    <description>Boundless STAC Implementation</description>
+    <description>Planet STAC Implementation</description>
 
     <parent>
-        <groupId>com.boundlessgeo.staccato</groupId>
+        <groupId>com.planet.staccato</groupId>
         <artifactId>staccato</artifactId>
         <version>0.0.4</version>
     </parent>
@@ -32,11 +32,11 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.boundlessgeo.staccato</groupId>
+            <groupId>com.planet.staccato</groupId>
             <artifactId>staccato-commons</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.boundlessgeo.staccato</groupId>
+            <groupId>com.planet.staccato</groupId>
             <artifactId>staccato-elasticsearch</artifactId>
         </dependency>
         <dependency>
@@ -99,12 +99,12 @@
         <!-- collections -->
 
         <dependency>
-            <groupId>com.boundlessgeo.staccato</groupId>
+            <groupId>com.planet.staccato</groupId>
             <artifactId>landsat8</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.boundlessgeo.staccato</groupId>
+            <groupId>com.planet.staccato</groupId>
             <artifactId>planet</artifactId>
         </dependency>
 
