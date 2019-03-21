@@ -1,4 +1,3 @@
-<img src="https://github.com/radiantearth/stac-site/raw/master/images/logo/stac-030-long.png" alt="stac-logo" width="700"/>   
 
 [![Build Status](https://travis-ci.org/boundlessgeo/staccato.svg?branch=master)](https://travis-ci.org/boundlessgeo/staccato)
 [![Docker Repository on Quay](https://quay.io/repository/boundlessgeo/staccato/status "Docker Repository on Quay")](https://quay.io/repository/boundlessgeo/staccato)
@@ -6,29 +5,28 @@
 
 ## About
 
+Staccato is a server that enables browsing and search of geospatial assets like satellite imagery. It implements the 
+SpatioTemporal Asset Catalog (STAC) standard and is backed by [ElasticSearch](https://www.elastic.co/products/elasticsearch).
+In addition to the core STAC catalog browsing and search functionality, it includes support for transactions, statistics,
+auto-generated schemas, [gRPC](https://grpc.io/) endpoints and [Kafka](https://kafka.apache.org/) ingestion.
+
+Staccato is built using the latest versions of [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/) 
+and [Spring WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html). The 
+codebase is written reactively, utilizing the [Project Reactor](https://projectreactor.io) library. 
+
+
+## About the STAC Spec
+
+<img src="https://github.com/radiantearth/stac-site/raw/master/images/logo/stac-030-long.png" alt="stac-logo" width="300"/>   
+
 The SpatioTemporal Asset Catalog (STAC) specification aims to standardize the way geospatial assets are exposed online 
 and queried. A 'spatiotemporal asset' is any file that represents information about the earth captured in a certain 
 space and time. The initial focus is primarily remotely-sensed imagery (from satellites, but also planes, drones, 
 balloons, etc), but the core is designed to be extensible to SAR, full motion video, point clouds, hyperspectral, LiDAR 
 and derived data like NDVI, Digital Elevation Models, mosaics, etc. 
 
-The goal is for all major providers of imagery and other earth observation data to expose their data as SpatioTemporal 
-Asset Catalogs, so that new code doesn't need to be written whenever a new JSON-based REST API comes out that makes its 
-data available in a slightly different way. This will enable standard library components in many languages. STAC can 
-also be implemented in a completely 'static' manner, enabling data publishers to expose their data by simply publishing 
-linked JSON files online.
+**For more see the [STAC Spec github repo](https://github.com/radiantearth/stac-spec)**
 
-## WARNING
-
-The specification is currently still an early version, with the potential for some major things to change. The core is 
-now fleshed out, so implementors are encouraged to try it out and give feedback. But the goal is to actually be able to 
-act on that feedback, which will mean changes are quite possible. 
-
-But efforts will be made to maintain the core fields established in the central 
-[Item spec](https://github.com/radiantearth/stac-spec/tree/master/item-spec), 
-[Catalog spec](https://github.com/radiantearth/stac-spec/tree/master/catalog-spec) and 
-[Collection spec](https://github.com/radiantearth/stac-spec/tree/master/collection-spec). The minimal amount is 
-specified right now, but best practices should emerge with implementation and more will likely be specified.
 
 ## Requirements
 
@@ -208,7 +206,7 @@ the item's properties.
 
 ### Overview
 
-The STAC item spec only has one requirement for item properties: to provide a `datetime` field. Properties specific to
+The [STAC Item spec](https://github.com/radiantearth/stac-spec) only has one requirement for item properties: to provide a `datetime` field. Properties specific to
 certain datasets or product types will be developed by the community as extensions and move through a series of maturity 
 steps as outlined [here](https://github.com/radiantearth/stac-spec/tree/master/extensions). This STAC implementation was
 originally designed for internal use at Boundless Spatial and was intended to only offer only a small number of static
