@@ -38,18 +38,13 @@ public class Landsat8ItemProperties implements MandatoryProperties, Collection, 
     private List<Band> bands;
 
     // Landsat8
-    private String wrsRow;
-    private String wrsPath;
+    private Integer wrsPath;
+    private Integer wrsRow;
+    private Integer imageQualityTirs;
+    private Integer imageQualityOli;
     private Double earthSunDistance;
-    private Double geometricRmseModel;
-    private Double groundControlPointsVerify;
-    private String groundControlPointsModel;
-    private String imageQualityTirs;
-    private String geometricRmseModelX;
-    private String geometricRmseModelY;
-    private String geometricRmseVerify;
-    private String imageQualityOli;
-    private String entityId;
+    private String sceneId;
+    private String productId;
     private String processingLevel;
 }
 

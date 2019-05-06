@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 public class Asset {
 
+
     private String href;
     private String name;
     private String type;

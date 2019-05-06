@@ -1,5 +1,8 @@
 package com.planet.staccato.extension;
 
+import com.planet.staccato.elasticsearch.annotation.Mapping;
+import com.planet.staccato.elasticsearch.annotation.MappingType;
+
 /**
  * The "collection" field is typically found as part of the collection metadata.  This is field can be useful to include
  * in each item's properties as it defines the primary collection the item belongs to.  This interface defines the
@@ -12,6 +15,7 @@ package com.planet.staccato.extension;
  */
 public interface Collection {
 
+    @Mapping(type = MappingType.KEYWORD)
     String getCollection();
     void setCollection(String collection);
 }

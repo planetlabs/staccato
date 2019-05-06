@@ -50,6 +50,7 @@ public class ElasticsearchConfigProps {
                 coreMappings.put("properties.collection", MappingType.KEYWORD);
                 coreMappings.put("properties.datetime", MappingType.DATE);
                 coreMappings.put("centroid", MappingType.GEO_POINT);
+
             }
         }
     }

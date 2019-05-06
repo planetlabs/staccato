@@ -1,6 +1,8 @@
 package com.planet.staccato.extension;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.planet.staccato.elasticsearch.annotation.Mapping;
+import com.planet.staccato.elasticsearch.annotation.MappingType;
 import lombok.Data;
 
 import java.util.List;
@@ -13,14 +15,17 @@ import java.util.List;
  */
 public interface EO {
 
+    @Mapping(type = MappingType.KEYWORD)
     @JsonProperty("eo:constellation")
     String getConstellation();
     void setConstellation(String constellation);
 
+    @Mapping(type = MappingType.KEYWORD)
     @JsonProperty("eo:platform")
     String getPlatform();
     void setPlatform(String platform);
 
+    @Mapping(type = MappingType.KEYWORD)
     @JsonProperty("eo:instrument")
     String getInstrument();
     void setInstrument(String instrument);
@@ -49,6 +54,7 @@ public interface EO {
     Double getSunElevation();
     void setSunElevation(Double sunElevation);
 
+    @Mapping(type = MappingType.KEYWORD)
     @JsonProperty("eo:epsg")
     String getEpsg();
     void setEpsg(String epsg);
@@ -60,8 +66,10 @@ public interface EO {
     @Data
     class Band {
 
+        @Mapping(type = MappingType.KEYWORD)
         private String id;
 
+        @Mapping(type = MappingType.KEYWORD)
         @JsonProperty("common_name")
         private String commmonName;
 
@@ -77,11 +85,13 @@ public interface EO {
             return new Band();
         }
 
+        @Mapping(type = MappingType.KEYWORD)
         public Band id(String id) {
             setId(id);
             return this;
         }
 
+        @Mapping(type = MappingType.KEYWORD)
         public Band commonName(String commonName) {
             setCommmonName(commonName);
             return this;

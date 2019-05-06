@@ -1,5 +1,7 @@
 package com.planet.staccato.extension;
 
+import com.planet.staccato.elasticsearch.annotation.Mapping;
+import com.planet.staccato.elasticsearch.annotation.MappingType;
 import com.planet.staccato.model.Provider;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,6 +15,7 @@ import java.util.Collection;
  */
 public interface SingleItem {
 
+    @Mapping(type = MappingType.KEYWORD)
     @JsonProperty("item:license")
     String getLicense();
     void setLicense(String license);
