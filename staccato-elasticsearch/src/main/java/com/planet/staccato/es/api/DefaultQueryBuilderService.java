@@ -11,9 +11,12 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.stereotype.Service;
-import org.xbib.cql.CQLParser;
+import org.xbib.cql.*;
+import org.xbib.cql.Modifier;
 import org.xbib.cql.elasticsearch.ElasticsearchQueryGenerator;
+import org.xbib.cql.elasticsearch.ast.*;
 
+import java.lang.reflect.Field;
 import java.time.Instant;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
@@ -111,7 +114,9 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
             CQLParser parser = new CQLParser(search);
             parser.parse();
             ElasticsearchQueryGenerator generator = new ElasticsearchQueryGenerator();
-            parser.getCQLQuery().accept(generator);
+            SortedQuery sq  = parser.getCQLQuery();
+            sq.getQuery().getScopedClause().accept(new PropertiesVisitor());
+            sq.accept(generator);
             QueryBuilder builder = QueryBuilders.wrapperQuery(generator.getQueryResult());
             return Optional.of(builder);
         } catch (Exception e) {
