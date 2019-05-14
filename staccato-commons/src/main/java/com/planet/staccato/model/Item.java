@@ -18,6 +18,7 @@ public class Item<T extends Collection & MandatoryProperties> {
     private Object geometry;
     private Centroid centroid;
     private TypeEnum type;
+    private String collection;
     private T properties;
     private Set<Link> links;
     protected Map<String, Asset> assets;
@@ -29,6 +30,11 @@ public class Item<T extends Collection & MandatoryProperties> {
 
     public Item id(String id) {
         setId(id);
+        return this;
+    }
+
+    public Item collection(String collection) {
+        setCollection(collection);
         return this;
     }
 
@@ -104,6 +110,7 @@ public class Item<T extends Collection & MandatoryProperties> {
         }
         Item item = (Item) o;
         return Objects.equals(this.id, item.id) &&
+                Objects.equals(this.collection, item.collection) &&
                 Objects.equals(this.bbox, item.bbox) &&
                 Objects.equals(this.geometry, item.geometry) &&
                 Objects.equals(this.type, item.type) &&
@@ -123,6 +130,7 @@ public class Item<T extends Collection & MandatoryProperties> {
         sb.append("class Item {\n");
 
         sb.append("    id: ").append(toIndentedString(id)).append("\n");
+        sb.append("    collection: ").append(toIndentedString(collection)).append("\n");
         sb.append("    bbox: ").append(toIndentedString(bbox)).append("\n");
         sb.append("    geometry: ").append(toIndentedString(geometry)).append("\n");
         sb.append("    roles: ").append(toIndentedString(type)).append("\n");

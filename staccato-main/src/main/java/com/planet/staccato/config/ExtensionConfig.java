@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
+import com.planet.staccato.model.Item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -40,16 +41,19 @@ public class ExtensionConfig {
                 NamedType namedType =
                         new NamedType(metadata.getProperties().getClass(), metadata.getProperties().getCollection());
                 mapper.registerSubtypes(namedType);
-                mapper.addMixIn(Collection.class, ItemPropertiesMixin.class);
+                mapper.addMixIn(Item.class, ItemPropertiesMixin.class);
         });
         // TODO -- this isn't being set from the main initializer for some reason???
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-    @JsonTypeInfo(
-            use = JsonTypeInfo.Id.NAME,
-            include = JsonTypeInfo.As.EXISTING_PROPERTY,
-            property = "collection"
-    )
-    private abstract class ItemPropertiesMixin {}
+    private interface ItemPropertiesMixin<T> {
+
+        @JsonTypeInfo(
+                use = JsonTypeInfo.Id.NAME,
+                include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
+                property = "collection"
+        )
+        public T getProperties();
+    }
 }
