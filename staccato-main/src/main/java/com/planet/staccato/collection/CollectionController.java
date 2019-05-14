@@ -37,8 +37,8 @@ public class CollectionController implements CollectionApi {
 
     @Override
     public Mono<ItemCollection> getCollectionItemsScroll(@PathVariable("collectionId") String collectionId,
-                                                  @RequestParam("next") String next) {
-        return collectionService.getItemsScroll(collectionId, next);
+                                                  @RequestParam("page") Integer page) {
+        return collectionService.getItemsScroll(collectionId, page);
     }
 
     @Override

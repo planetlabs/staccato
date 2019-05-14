@@ -79,7 +79,7 @@ public class ElasticsearchApiService implements ApiService {
     @Override
     public Flux<Item> getItemsFlux(SearchRequest request, String collectionId) {
         return getItemsFlux(request.getBbox(), request.getTime(), request.getQuery(), request.getLimit(),
-                request.getNext(), request.getPropertyname(), collectionId);
+                request.getPage(), request.getPropertyname(), collectionId);
     }
 
     /**
@@ -89,20 +89,19 @@ public class ElasticsearchApiService implements ApiService {
      * @param time The time parameter provided in the api request
      * @param filter The query parameter provided in the api request
      * @param limit The limit parameter provided in the api request
-     * @param next The next parameter provided in the api request
+     * @param page The page parameter provided in the api request
      * @param propertyname The propertyname parameter provided in the api request
      * @param collectionId The ID of the collection to api.  If null, all collections will be searched.
      * @return A flux of items
      */
     @Override
-    public Flux<Item> getItemsFlux(double[] bbox, String time, String filter, Integer limit, String next,
+    public Flux<Item> getItemsFlux(double[] bbox, String time, String filter, Integer limit, Integer page,
                                    String[] propertyname, String collectionId) {
         Set<String> includeFields = (null != propertyname && propertyname.length > 0) ?
                 new HashSet(Arrays.asList(propertyname)) : null;
 
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
 
-        int offset = queryBuilderService.getOffset(next);
         limit = queryBuilderService.getLimit(limit);
 
 
@@ -139,9 +138,9 @@ public class ElasticsearchApiService implements ApiService {
         List<String> indices = (collectionId == null) ? aliasLookup.getReadAliases() : Arrays.asList(collectionId);
 
         Flux<Item> itemFlux = repository.searchItemFlux(indices, configProps.getEs().getType(),
-                boolQueryBuilder, limit, offset, includeFields);
+                boolQueryBuilder, limit, page, includeFields);
         return processor.searchItemFlux(
-                itemFlux, SearchRequestUtils.generateSearchRequest(bbox, time, filter, limit, next, propertyname));
+                itemFlux, SearchRequestUtils.generateSearchRequest(bbox, time, filter, limit, page, propertyname));
     }
 
     /**
@@ -151,19 +150,18 @@ public class ElasticsearchApiService implements ApiService {
      * @param time The time parameter provided in the api request
      * @param filter The query parameter provided in the api request
      * @param limit The limit parameter provided in the api request
-     * @param next The next parameter provided in the api request
+     * @param page The page parameter provided in the api request
      * @param propertyname The propertyname parameter provided in the api request
      * @param collectionId The ID of the collection to api.  If null, all collections will be searched.
      * @return A collection of items wrapped in a mono
      */
     @Override
-    public Mono<ItemCollection> getItems(double[] bbox, String time, String filter, Integer limit, String next,
+    public Mono<ItemCollection> getItems(double[] bbox, String time, String filter, Integer limit, Integer page,
                                          String[] propertyname, String collectionId) {
-        int offset = queryBuilderService.getOffset(next);
-        final String nextOffset = (null == next) ? "1" : String.valueOf(offset + 1);
+        final int nextPage = (null == page) ? 1 : page + 1;
         int finalLimit = queryBuilderService.getLimit(limit);
 
-        return getItemsFlux(bbox, time, filter, limit, next, propertyname, collectionId)
+        return getItemsFlux(bbox, time, filter, limit, page, propertyname, collectionId)
                 .collectList()
                 // take the api list build an item collection from it
                 .map(itemList -> {
@@ -187,11 +185,11 @@ public class ElasticsearchApiService implements ApiService {
                             .href(link)
                             .rel("self"));
 
-                    // if the number of api in the collection is less than or equal to the limit, do not provide a next page token
+                    // if the number of api in the collection is less than or equal to the limit, do not provide a page page token
                     if (itemCollection.getFeatures().size() >= finalLimit) {
                         itemCollection.addLink(new Link()
-                                .href(link + "&next=" + nextOffset)
-                                .rel("next"));
+                                .href(link + "&page=" + nextPage)
+                                .rel("page"));
                     }
 
 

@@ -25,10 +25,10 @@ public interface ApiApi {
                                   @RequestParam(value = "time", required = false) String time,
                                   @RequestParam(value = "query", required = false) String query,
                                   @RequestParam(value = "limit", required = false) Integer limit,
-                                  @RequestParam(value = "next", required = false) String next,
+                                  @RequestParam(value = "page", required = false) Integer page,
                                   @RequestParam(value = "propertyname", required = false) String[] propertyname);
 
     @GetMapping(path = "/search", produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})
-    Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, String next, String[] propertyname);
+    Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, Integer page, String[] propertyname);
 
 }

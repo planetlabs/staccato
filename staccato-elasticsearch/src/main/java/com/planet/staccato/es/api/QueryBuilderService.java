@@ -18,8 +18,6 @@ public interface QueryBuilderService {
 
     Optional<QueryBuilder> searchBuilder(String filter);
 
-    int getOffset(String next);
-
     int getLimit(Integer limit);
 
 }

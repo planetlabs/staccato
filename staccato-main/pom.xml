@@ -18,7 +18,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
         <dockerfile-maven-version>1.4.4</dockerfile-maven-version>
     </properties>
 
@@ -125,6 +124,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
+                    <parameters>true</parameters>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>

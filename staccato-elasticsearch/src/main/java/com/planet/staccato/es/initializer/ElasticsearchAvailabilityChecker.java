@@ -51,7 +51,7 @@ public class ElasticsearchAvailabilityChecker implements StacInitializer {
                         + " seconds before reattempting connection.");
                 TimeUnit.SECONDS.sleep(backoffPeriod);
             } catch (InterruptedException e) {
-                // do nothing -- just move on to next attempt
+                // do nothing -- just move on to page attempt
             }
         }
 

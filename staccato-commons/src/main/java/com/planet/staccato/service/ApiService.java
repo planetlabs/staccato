@@ -18,9 +18,9 @@ public interface ApiService {
 
     Flux<Item> getItemsFlux(SearchRequest request, String collectionId);
 
-    Flux<Item> getItemsFlux(double[] bbox, String time, String query, Integer limit, String next,
+    Flux<Item> getItemsFlux(double[] bbox, String time, String query, Integer limit, Integer page,
                             String[] propertyname, String collectionId);
 
-    Mono<ItemCollection> getItems(double[] bbox, String time, String query, Integer limit, String next,
+    Mono<ItemCollection> getItems(double[] bbox, String time, String query, Integer limit, Integer page,
                                   String[] propertyname, String collectionId);
 }

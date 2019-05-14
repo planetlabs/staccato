@@ -24,9 +24,9 @@ public interface CollectionApi {
     Mono<ItemCollection> getCollectionItems(@PathVariable("collectionId") String collectionId,
                                             @RequestParam(name = "limit", defaultValue = "10") Integer limit);
 
-    @GetMapping(value = "/collections/{collectionId}/items", params = "next", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/collections/{collectionId}/items", params = "page", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<ItemCollection> getCollectionItemsScroll(@PathVariable("collectionId") String collectionId,
-                                            @RequestParam("next") String next);
+                                            @RequestParam("page") Integer page);
 
     @GetMapping(value = "/collections/{collectionId}/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<Item> getCollectionItems(@PathVariable("collectionId") String collectionId,

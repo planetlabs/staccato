@@ -76,25 +76,25 @@ public class ElasticsearchCollectionService implements CollectionService {
                             .type(ItemCollection.TypeEnum.FEATURECOLLECTION);
                     if (!itemList.isEmpty() && null != wrapper.getScrollId()) {
                         itemCollection.addLink(new Link()
-                                .href(LINK_BASE + collectionId + "/items?next=" + wrapper.getScrollId())
-                                .rel("next"));
+                                .href(LINK_BASE + collectionId + "/items?page=" + wrapper.getScrollId())
+                                .rel("page"));
                     }
                     return itemCollection;
                 });
     }
 
     /**
-     * Retreives the next page of item results using the Elasticsearch scroll API
+     * Retreives the page page of item results using the Elasticsearch scroll API
      *
      * @param collectionId The ID of the collection to query
-     * @param next The page number
+     * @param page The page number
      * @return The collection of items wrapped in a Mono
      */
     @Override
-    public Mono<ItemCollection> getItemsScroll(String collectionId, String next) {
-        Flux<Item> itemFlux = repository.scroll(next);
+    public Mono<ItemCollection> getItemsScroll(String collectionId, Integer page) {
+        Flux<Item> itemFlux = repository.scroll(page);
 
-        SearchRequest sr = generateSearchRequest(null, null, null, 0, next, null);
+        SearchRequest sr = generateSearchRequest(null, null, null, 0, page, null);
         return processor.searchItemFlux(itemFlux, sr)
                 .collectList()
                 // take the api list build an item collection from it
@@ -104,8 +104,8 @@ public class ElasticsearchCollectionService implements CollectionService {
                             .type(ItemCollection.TypeEnum.FEATURECOLLECTION);
                     if (!itemList.isEmpty()) {
                         itemCollection.addLink(new Link()
-                                .href(LINK_BASE + collectionId + "/items?next=" + next)
-                                .rel("next"));
+                                .href(LINK_BASE + collectionId + "/items?page=" + page)
+                                .rel("page"));
                     }
                     return itemCollection;
                 });

@@ -189,13 +189,13 @@ public class ElasticsearchRepository {
     /**
      * Uses the ES scroll API to retrieve a flux of items
      *
-     * @param next The scroll ID
+     * @param page The scroll ID
      * @return A flux of items
      */
-    public Flux<Item> scroll(String next) {
-        SearchScrollRequest scrollRequest = new SearchScrollRequest(next);
+    public Flux<Item> scroll(Integer page) {
+        SearchScrollRequest scrollRequest = new SearchScrollRequest(String.valueOf(page));
         scrollRequest.scroll(TimeValue.timeValueMillis(300000));
-        String searchString = "{\"scroll\":\"5m\",\"scroll_id\": \"" + next + "\"}";
+        String searchString = "{\"scroll\":\"5m\",\"scroll_id\": \"" + page + "\"}";
         //final ScrollWrapper wrapper = new ScrollWrapper();
         return client.searchScroll(searchString)
                 // build a flux from the hits

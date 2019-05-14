@@ -14,7 +14,7 @@ public class SearchRequest {
     private double[] bbox;
     private String time;
     private String query;
-    private int limit;
-    private String next;
+    private Integer limit;
+    private Integer page;
     private String[] propertyname;
 }

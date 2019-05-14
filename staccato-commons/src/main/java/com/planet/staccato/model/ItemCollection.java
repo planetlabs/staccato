@@ -92,7 +92,7 @@ public class ItemCollection {
     }
 
     /**
-     * A token to obtain the next paginated data set
+     * A token to obtain the page paginated data set
      *
      * @return nextPageToken
      **/

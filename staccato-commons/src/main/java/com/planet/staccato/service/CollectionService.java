@@ -14,7 +14,7 @@ public interface CollectionService {
 
     Mono<ItemCollection> getItemsInitialScroll(String collectionId, Integer limit);
 
-    Mono<ItemCollection> getItemsScroll(String collectionId, String next);
+    Mono<ItemCollection> getItemsScroll(String collectionId, Integer page);
 
     Mono<CollectionMetadata> getCollectionMetadata(String collectionId);
 }

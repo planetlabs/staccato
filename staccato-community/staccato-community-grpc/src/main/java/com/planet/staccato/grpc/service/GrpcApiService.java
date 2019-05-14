@@ -37,7 +37,7 @@ public class GrpcApiService extends ReactorApiServiceGrpc.ApiServiceImplBase {
         log.debug("Incoming gRPC api request.");
         return request
                 .flatMapMany(r -> apiService.getItemsFlux(Doubles.toArray(r.getBboxList()),
-                        r.getTime(), r.getSearch(), r.getLimit(), r.getNext(),
+                        r.getTime(), r.getSearch(), r.getLimit(), r.getPage(),
                         r.getPropertynameList().toArray(new String[r.getPropertynameList().size()]), r.getCollection())
                         .map(item -> SerializationUtils.serializeItem(item, mapper))
                         .map(item -> ApiItemBytes.newBuilder().setItem(ByteString.copyFrom(item)).build())

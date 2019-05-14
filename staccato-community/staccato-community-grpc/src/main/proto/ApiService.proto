@@ -9,7 +9,7 @@ message ApiRequest {
     repeated double bbox = 1;
     string time = 2;
     string search = 3;
-    string next = 4;
+    int32 page = 4;
     int32 limit = 5;
     repeated string propertyname = 6;
     string collection = 7;

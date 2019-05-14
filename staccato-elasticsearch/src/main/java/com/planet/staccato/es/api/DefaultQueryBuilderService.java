@@ -120,25 +120,6 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
     }
 
     /**
-     * Attempts to parse an integer offset from the value of the "next" string
-     *
-     * @param next The "next" token passed in the request
-     * @return The integer value of the "next" string
-     */
-    @Override
-    public int getOffset(String next) {
-        int offset = 0;
-        if (null != next && !next.isEmpty()) {
-            try {
-                offset = Integer.parseInt(next);
-            } catch (NumberFormatException nfe) {
-                log.warn("Error parsing 'next' parameter to int.  Using 0 offset.  Received value: '" + next + "'.", nfe);
-            }
-        }
-        return offset;
-    }
-
-    /**
      * Sets a default item limit if none was set or if the set limit is invalid.
      *
      * @param limit The maximum number of items passed in the request
