@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsat8ItemProperties> {
 
-    public static final String STAC_VERSION = "0.6.2";
+    public static final String STAC_VERSION = "0.7.0";
     public static final String ID = "landsat-8-l1";
     public static final String TITLE = "Landsat 8 L1";
     public static final String DESCRIPTION = "Landsat 8 imagery radiometrically calibrated and orthorectified using "

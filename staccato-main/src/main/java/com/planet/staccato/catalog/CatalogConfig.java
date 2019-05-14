@@ -34,8 +34,8 @@ public class CatalogConfig {
 
         catalog.setId("staccato");
         catalog.setTitle("Staccato");
-        catalog.setVersion("0.6.2");
-        catalog.setDescription("STAC v0.6.2 implementation by Planet Labs");
+        catalog.setVersion("0.7.0");
+        catalog.setDescription("STAC v0.7.0 implementation by Planet Labs");
 
         catalog.getLinks().add(Link.build()
                 .rel("self")
