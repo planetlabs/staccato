@@ -214,7 +214,7 @@ collections. As such, it is not currently capable of providing a way to dynamica
 such a capability may be a good idea for the future.
 
 For each extension that has currently been proposed, the `properties` fields defined by the extension are described in 
-interfaces in the [commons extension package](/stac-api/staccato-commons/src/main/java/com/planet/staccato/extension).
+interfaces in the [commons extension package](./staccato-commons/src/main/java/com/planet/staccato/extension).
 The extensions are defined as interfaces so that a mix of multiple extensions can be combined to create a set of
 heterogeneous properties for a collection. 
 
@@ -223,7 +223,7 @@ heterogeneous properties for a collection.
 Collections are currently defined in the [staccato-collections](./staccato-collections) module. When defining a new 
 collection, you'll typically want to create at least 4 Java classes and one Spring auto-configuration file:
 
-1) If you need to define more properties for you collection than are defined by the community in the
+1) If you need to define more properties for your collection than are defined by the community in the
 [commons extension package](./staccato-commons/src/main/java/com/planet/staccato/extension), you'll need to
 create an interface that defines all the getters and setters for your model, along with Jackson annotations to make sure
 the data is serialized/deserialized the way you want.
@@ -232,7 +232,7 @@ the data is serialized/deserialized the way you want.
 3) An implementation of 
 [`CollectionMetadata`](./staccato-commons/src/main/java/com/planet/staccato/collection/CollectionMetadata.java)
 or simply extend 
-[`CollectionMetadataAdapter`](./stac-api/staccato-commons/src/main/java/com/planet/staccato/collection/CollectionMetadataAdapter.java).
+[`CollectionMetadataAdapter`](../staccato-commons/src/main/java/com/planet/staccato/collection/CollectionMetadataAdapter.java).
 4) A class annotated with `@Configuration` that creates 2 beans, both instances of your `CollectionMetadata` class.
 One bean is the the WFS3 collection and one is the STAC catalog. Yes, it seems silly, but there are differences per
 the spec (the collection is WFS3 compliant; the catalog enables STAC-specific capabilities, such as the traversing
@@ -253,12 +253,6 @@ implement several different extension interfaces or custom fields, Jackson canno
 more information on which properties class to deserialize to. Having the "collections" field in each item provides an
 extremely convenient 1:1 relationship between the item and it's properties implementation.  The Jackson configuration 
 for this can be found [here](./staccato-main/src/main/java/com/planet/staccato/config/ExtensionConfig.java). 
-Also, the [Item class'](./staccato-commons/src/main/java/com/planet/staccato/model/Item.java) primary generic 
-properties type is 
-[CommonsCollection](./staccato-commons/src/main/java/com/planet/staccato/extension/CommonsCollection.java) so that 
-various bits of code, eg the 
-[FilterProcessor](./staccato-commons/src/main/java/com/planet/staccato/filter/ItemsFilterProcessor.java)
-can easily determine what collection an item belongs to.
 
 ### Custom annotations
 
