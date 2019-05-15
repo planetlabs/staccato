@@ -174,7 +174,9 @@ public class ElasticsearchApiService implements ApiService {
 
                     link += time == null ? Strings.EMPTY : "&time=" + time;
                     link += query == null ? Strings.EMPTY : "&query=" + query;
-                    link += propertyname == null ? Strings.EMPTY : "&propertyname=" + propertyname;
+                    link += ids == null ? Strings.EMPTY : "&ids=" + String.join(",", ids);
+                    link += collections == null ? Strings.EMPTY : "&collections=" + String.join(",", collections);
+                    link += propertyname == null ? Strings.EMPTY : "&propertyname=" + String.join(",", propertyname);
 
                     itemCollection.addLink(new Link()
                             .href(link)
@@ -192,4 +194,13 @@ public class ElasticsearchApiService implements ApiService {
                 });
     }
 
+    public static void main(String... args) {
+        String[] t1 = new String[]{"hi"};
+        String[] t2 = new String[]{"hi","bye"};
+
+        System.out.println(String.join(",", t1));
+        System.out.println(String.join(",", t2));
+    }
+
 }
+
