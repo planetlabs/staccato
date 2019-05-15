@@ -1,12 +1,12 @@
 package com.planet.staccato.config;
 
-import com.planet.staccato.collection.CollectionMetadata;
-import com.planet.staccato.extension.Collection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
+import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.model.Item;
+import com.planet.staccato.model.MandatoryProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -37,17 +37,18 @@ public class ExtensionConfig {
      */
     @PostConstruct
     public void init() {
+
+        mapper.addMixIn(Item.class, ItemMixin.class);
         collectionMetadataList.forEach(metadata -> {
-                NamedType namedType =
-                        new NamedType(metadata.getProperties().getClass(), metadata.getProperties().getCollection());
+                NamedType namedType = new NamedType(metadata.getProperties().getClass(), metadata.getId());
                 mapper.registerSubtypes(namedType);
-                mapper.addMixIn(Item.class, ItemPropertiesMixin.class);
         });
+
         // TODO -- this isn't being set from the main initializer for some reason???
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-    private interface ItemPropertiesMixin<T> {
+    private interface ItemMixin<T extends MandatoryProperties> {
 
         @JsonTypeInfo(
                 use = JsonTypeInfo.Id.NAME,
@@ -56,4 +57,5 @@ public class ExtensionConfig {
         )
         public T getProperties();
     }
+
 }

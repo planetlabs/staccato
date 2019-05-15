@@ -1,6 +1,5 @@
 package com.planet.staccato.collection;
 
-import com.planet.staccato.extension.Collection;
 import com.planet.staccato.model.Extent;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.model.MandatoryProperties;
@@ -19,7 +18,7 @@ import java.util.Set;
  * Created on 10/15/18
  */
 @Data
-public class CollectionMetadataAdapter<T extends Collection & MandatoryProperties> implements CollectionMetadata<T> {
+public class CollectionMetadataAdapter<T extends MandatoryProperties> implements CollectionMetadata<T> {
 
     protected String stacVersion;
     protected String id;

@@ -80,7 +80,7 @@ public class ElasticsearchCatalogService implements CatalogService {
             ((BoolQueryBuilder) query).must(pathQuery);
         }
 
-        SearchRequest request = new SearchRequest().indices(indexAliasLookup.getReadAlias(collection.getProperties().getCollection()))
+        SearchRequest request = new SearchRequest().indices(indexAliasLookup.getReadAlias(collection.getId()))
                 .searchType(SearchType.DFS_QUERY_THEN_FETCH)
                 .source(new SearchSourceBuilder().query(query).aggregation(aggregationBuilder).size(0));
 
@@ -128,7 +128,8 @@ public class ElasticsearchCatalogService implements CatalogService {
             }
         }
 
-        return searchService.getItems(null, null, sb.toString(), 10, null, null, collectionId);
+        return searchService.getItems(null, null, sb.toString(), 10, null, null,
+                new String[]{collectionId}, null);
     }
 
 }

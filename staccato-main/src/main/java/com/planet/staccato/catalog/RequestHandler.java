@@ -36,15 +36,15 @@ public class RequestHandler {
     public Mono<ItemCollection> handleItemsRequest(CollectionMetadata collection, ServerRequest request) {
         // api for all items with the given subcatalog parameters
         Map<String, String> subcatalogPathParamMap = subcatalogPropertiesService
-                .createSubcatalogPathParamMap(collection.getProperties().getCollection(), request.path());
-        return catalogService.getItems(collection.getProperties().getCollection(), subcatalogPathParamMap);
+                .createSubcatalogPathParamMap(collection.getId(), request.path());
+        return catalogService.getItems(collection.getId(), subcatalogPathParamMap);
     }
 
     public Mono<Item> handleItemRequest(CollectionMetadata collection, ServerRequest request) {
         // the path contains /items, but it doesn't end with items... assume it ends with an item id
         String[] pathParts = request.path().split("/");
         String itemId = pathParts[pathParts.length - 1];
-        return catalogService.getItem(itemId, collection.getProperties().getCollection());
+        return catalogService.getItem(itemId, collection.getId());
     }
 
     /**
@@ -56,14 +56,17 @@ public class RequestHandler {
      */
     public Mono<CollectionMetadata> handleSubcatalogRequest(CollectionMetadata collection, ServerRequest request) {
         String path = request.path();
-        String collectionId = collection.getProperties().getCollection();
+        String collectionId = collection.getId();
         List<String> parsePath = subcatalogPropertiesService.parsePath(path);
         Map<String, String> propertiesMap =
                 subcatalogPropertiesService.createSubcatalogPathParamMap(collectionId, request.path());
 
         // calculate and set the extent given the url path filters
         collection.setExtent(aggregationService.getExtent(collectionId, propertiesMap));
-        collection.setId(request.path().replace("/stac/", ""));
+        // TODO: cholmes requested that the id change with each subcatalog, but since we removed the collection field from
+        // properties, we rely on the collection id.  but we also rely on the collection id for the name of the es index.
+        // this all gets muddled.  we could parse out additional path segments to only use the original ID /shrug
+        //collection.setId(request.path().replace("/stac/", ""));
         generatePrettyTitle(collection, parsePath);
 
         int size = parsePath.size();
@@ -71,7 +74,7 @@ public class RequestHandler {
             // even -- means we have both a property name and value -- should display more property name links
             log.debug("EVEN (should display properties) - path: " + path + " - size: " + size);
 
-            List<PropertyField> remainingProperties = subcatalogPropertiesService.getRemainingProperties(collection.getProperties().getCollection(), request.path());
+            List<PropertyField> remainingProperties = subcatalogPropertiesService.getRemainingProperties(collection.getId(), request.path());
             linkGenerator.generatePropertyFieldLinks(request, collection, remainingProperties);
 
             // if there are no remaining properties (eg, no more subcatalogs to traverse down), generate item links
@@ -85,7 +88,7 @@ public class RequestHandler {
                         filterBuilder.append(" AND ");
                     }
                 }
-                return searchService.getItemsFlux(null, null, filterBuilder.toString(), 10000, null, new String[]{"id"}, collectionId)
+                return searchService.getItemsFlux(null, null, filterBuilder.toString(), 10000, null, null, new String[]{collectionId}, new String[]{"id"})
                         .map(item -> item.getId())
                         .map(id -> linkGenerator.buildItemLink(collectionId, id))
                         .map(link -> collection.getLinks().add(link))

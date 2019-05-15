@@ -79,13 +79,13 @@ public class LinkBuilderFilter implements ItemSearchFilter {
 
     private void buildSelfLink(Item item) {
         item.getLinks().add(Link.build()
-                .href(LINK_BASE + "collections/" + item.getProperties().getCollection() + "/items/" + item.getId())
+                .href(LINK_BASE + "collections/" + item.getCollection() + "/items/" + item.getId())
                 .rel("self"));
     }
 
     private void buildCollectionLink(Item item) {
         item.getLinks().add(Link.build()
-                .href(LINK_BASE + "collections/" + item.getProperties().getCollection())
+                .href(LINK_BASE + "collections/" + item.getCollection())
                 .rel("collection"));
     }
 

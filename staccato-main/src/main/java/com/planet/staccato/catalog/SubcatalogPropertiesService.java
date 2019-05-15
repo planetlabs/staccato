@@ -1,9 +1,9 @@
 package com.planet.staccato.catalog;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.planet.staccato.collection.CatalogType;
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.collection.Subcatalog;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class SubcatalogPropertiesService {
             if (collection.getCatalogType() == CatalogType.COLLECTION) {
                 return;
             }
-            String collectionId = collection.getProperties().getCollection();
+            String collectionId = collection.getId();
             collectionsProperties.put(collectionId, new HashSet<>());
             javaToJsonNames.put(collectionId, new HashMap<>());
             jsonToJavaNames.put(collectionId, new HashMap<>());

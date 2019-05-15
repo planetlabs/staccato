@@ -11,12 +11,10 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.stereotype.Service;
-import org.xbib.cql.*;
-import org.xbib.cql.Modifier;
+import org.xbib.cql.CQLParser;
+import org.xbib.cql.SortedQuery;
 import org.xbib.cql.elasticsearch.ElasticsearchQueryGenerator;
-import org.xbib.cql.elasticsearch.ast.*;
 
-import java.lang.reflect.Field;
 import java.time.Instant;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
@@ -47,6 +45,9 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
      */
     @Override
     public Optional<QueryBuilder> bboxBuilder(double[] bbox) {
+        if (null == bbox || bbox.length != 4) {
+            return Optional.empty();
+        }
         Coordinate c1 = new Coordinate(bbox[WEST], bbox[NORTH]);
         Coordinate c2 = new Coordinate(bbox[EAST], bbox[SOUTH]);
         EnvelopeBuilder envelopeBuilder = new EnvelopeBuilder(c1, c2);
@@ -63,6 +64,9 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
      */
     @Override
     public Optional<QueryBuilder> timeBuilder(String time) {
+        if (null == time || time.isBlank()) {
+            return Optional.empty();
+        }
         String startTimeProperty;
         String endTimeProperty;
 
@@ -102,16 +106,16 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
     /**
      * Builds an Elasticsearch query
      *
-     * @param search The query values passed in the api request
+     * @param query The query values passed in the api request
      * @return The Elasticsearch query builder
      */
     @Override
-    public Optional<QueryBuilder> searchBuilder(String search) {
-        if (search == null || search.isEmpty()) {
+    public Optional<QueryBuilder> queryBuilder(String query) {
+        if (query == null || query.isEmpty()) {
             return Optional.empty();
         }
         try {
-            CQLParser parser = new CQLParser(search);
+            CQLParser parser = new CQLParser(query);
             parser.parse();
             ElasticsearchQueryGenerator generator = new ElasticsearchQueryGenerator();
             SortedQuery sq  = parser.getCQLQuery();
@@ -122,6 +126,14 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
         } catch (Exception e) {
             throw new FilterException("Error parsing query.");
         }
+    }
+
+    @Override
+    public Optional<QueryBuilder> idsBuilder(String[] ids) {
+        if (null == ids || ids.length == 0) {
+            return Optional.empty();
+        }
+        return Optional.of(QueryBuilders.termsQuery("id", ids));
     }
 
     /**

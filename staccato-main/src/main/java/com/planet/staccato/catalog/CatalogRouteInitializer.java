@@ -48,11 +48,11 @@ public class CatalogRouteInitializer {
             if (collection.getCatalogType() == CatalogType.CATALOG) {
                 registerCatalogEndpoints(collection);
                 rootCatalog.getLinks().add(
-                        Link.build().href(LinksConfigProps.LINK_PREFIX + "/stac/" + collection.getProperties().getCollection()).rel("child"));
+                        Link.build().href(LinksConfigProps.LINK_PREFIX + "/stac/" + collection.getId()).rel("child"));
             } else {
                 registerCollectionEndpoints(collection);
                 rootCatalog.getLinks().add(
-                        Link.build().href(LinksConfigProps.LINK_PREFIX + "/collections/" + collection.getProperties().getCollection()).rel("child"));
+                        Link.build().href(LinksConfigProps.LINK_PREFIX + "/collections/" + collection.getId()).rel("child"));
             }
         });
     }
@@ -67,17 +67,17 @@ public class CatalogRouteInitializer {
 
         // register the route for /stac/<collection_id>
         RouterFunction<ServerResponse> route =
-                route(GET("/stac/" + collection.getProperties().getCollection()), (request) -> {
+                route(GET("/stac/" + collection.getId()), (request) -> {
                     CollectionMetadata newCollection = getNewInstance(collection);
-                    List<PropertyField> remainingProperties = subcatalogPropertiesService.getRemainingProperties(newCollection.getProperties().getCollection(), request.path());
+                    List<PropertyField> remainingProperties = subcatalogPropertiesService.getRemainingProperties(newCollection.getId(), request.path());
                     linkGenerator.generatePropertyFieldLinks(request, newCollection, remainingProperties);
                     return ServerResponse.ok().body(fromObject(newCollection));
                 });
-        context.registerBean(collection.getProperties().getCollection() + "SubcatalogRoute", RouterFunction.class, () -> route);
+        context.registerBean(collection.getId() + "SubcatalogRoute", RouterFunction.class, () -> route);
 
         // register wildcard route for all path structures under /stac/<collection_id, including further subcatalogs and items
         RouterFunction<ServerResponse> subRoute =
-                route(GET("/stac/" + collection.getProperties().getCollection() + "/**"), (request) -> {
+                route(GET("/stac/" + collection.getId() + "/**"), (request) -> {
                     CollectionMetadata newCollection = getNewInstance(collection);
                     if (request.path().toLowerCase().endsWith("/items")) {
                                 return ServerResponse.ok().body(requestHandler.handleItemsRequest(newCollection, request), ItemCollection.class);
@@ -87,7 +87,7 @@ public class CatalogRouteInitializer {
                             }
                             return ServerResponse.ok().body(requestHandler.handleSubcatalogRequest(newCollection, request), CollectionMetadata.class);
                         });
-        context.registerBean(collection.getProperties().getCollection() + "SubcatalogChildRoute", RouterFunction.class, () -> subRoute);
+        context.registerBean(collection.getId() + "SubcatalogChildRoute", RouterFunction.class, () -> subRoute);
     }
 
     /**
@@ -97,8 +97,8 @@ public class CatalogRouteInitializer {
      */
     public void registerCollectionEndpoints(CollectionMetadata collection) {
         RouterFunction<ServerResponse> route =
-                route(GET("/collections/" + collection.getProperties().getCollection()), (request) -> ServerResponse.ok().body(fromObject(collection)));
-        context.registerBean(collection.getProperties().getCollection() + "CollectionRoute", RouterFunction.class, () -> route);
+                route(GET("/collections/" + collection.getId()), (request) -> ServerResponse.ok().body(fromObject(collection)));
+        context.registerBean(collection.getId() + "CollectionRoute", RouterFunction.class, () -> route);
     }
 
     /**

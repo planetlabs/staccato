@@ -16,11 +16,11 @@ public interface ApiService {
 
     Mono<Item> getItem(String id, String collectionId);
 
-    Flux<Item> getItemsFlux(SearchRequest request, String collectionId);
+    Flux<Item> getItemsFlux(SearchRequest request);
 
     Flux<Item> getItemsFlux(double[] bbox, String time, String query, Integer limit, Integer page,
-                            String[] propertyname, String collectionId);
+                            String[] ids, String[] collections, String[] propertyname);
 
     Mono<ItemCollection> getItems(double[] bbox, String time, String query, Integer limit, Integer page,
-                                  String[] propertyname, String collectionId);
+                                  String[] ids, String[] collections, String[] propertyname);
 }

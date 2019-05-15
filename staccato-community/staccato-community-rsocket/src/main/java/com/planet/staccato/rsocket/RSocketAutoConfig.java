@@ -1,8 +1,8 @@
 package com.planet.staccato.rsocket;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.service.ApiService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

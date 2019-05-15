@@ -22,6 +22,10 @@
             <groupId>com.planet.staccato</groupId>
             <artifactId>staccato-commons</artifactId>
         </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

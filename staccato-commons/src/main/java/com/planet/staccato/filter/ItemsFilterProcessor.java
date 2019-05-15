@@ -38,7 +38,7 @@ public class ItemsFilterProcessor {
     private List<ItemSearchFilter> searchFilters = new ArrayList<>();
 
     private Function<Item, Item> indexItemFunction = (item) ->  {
-        String collection = item.getProperties().getCollection();
+        String collection = item.getCollection();
         for (ItemIndexFilter filter : indexFilters) {
             if (filter.types().contains(collection) || filter.types().contains("*")) {
                 log.debug("Executing index query for " + collection);
@@ -49,7 +49,7 @@ public class ItemsFilterProcessor {
     };
 
     private Function<Item, Item> updateItemFunction = (item) ->  {
-        String collection = item.getProperties().getCollection();
+        String collection = item.getCollection();
         for (ItemUpdateFilter filter : updateFilters) {
             if (filter.types().contains(collection) || filter.types().contains("*")) {
                 log.debug("Executing update query for " + collection);
@@ -60,7 +60,7 @@ public class ItemsFilterProcessor {
     };
 
     private BiFunction<Item, SearchRequest, Item> searchItemFunction = (item, request) ->  {
-        String collection = item.getProperties().getCollection();
+        String collection = item.getCollection();
         for (ItemSearchFilter filter : searchFilters) {
             if (filter.types().contains(collection) || filter.types().contains("*")) {
                 log.debug("Executing api query for " + collection);

@@ -34,7 +34,7 @@ public class PropertiesExclusionFilter implements ItemSearchFilter {
                 if (propertyName.startsWith("properties.")) {
                     propertiesRequested = true;
                 }
-                if (propertyName.equalsIgnoreCase("properties.collection")) {
+                if (propertyName.equalsIgnoreCase("collection")) {
                     collectionRequested = true;
                 }
 
@@ -43,7 +43,7 @@ public class PropertiesExclusionFilter implements ItemSearchFilter {
                 return item.properties(null);
             }
             if (!collectionRequested) {
-                item.getProperties().setCollection(null);
+                item.setCollection(null);
             }
 
         }

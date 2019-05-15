@@ -11,8 +11,9 @@ message ApiRequest {
     string search = 3;
     int32 page = 4;
     int32 limit = 5;
-    repeated string propertyname = 6;
-    string collection = 7;
+    repeated string ids = 6;
+    repeated string collections = 7;
+    repeated string propertyname = 8;
 }
 
 message ApiIdRequest {

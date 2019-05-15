@@ -1,6 +1,5 @@
 package com.planet.staccato.model;
 
-import com.planet.staccato.extension.Collection;
 import lombok.Data;
 
 import java.util.Map;
@@ -11,7 +10,7 @@ import java.util.Set;
  * Item
  */
 @Data
-public class Item<T extends Collection & MandatoryProperties> {
+public class Item<T extends MandatoryProperties> {
 
     private String id;
     private Bbox bbox;
@@ -23,47 +22,51 @@ public class Item<T extends Collection & MandatoryProperties> {
     private Set<Link> links;
     protected Map<String, Asset> assets;
 
-    public Item assets(Map<String, Asset> assets) {
+    public Item<T> assets(Map<String, Asset> assets) {
         setAssets(assets);
         return this;
     }
 
-    public Item id(String id) {
+    public Item<T> id(String id) {
         setId(id);
         return this;
     }
 
-    public Item collection(String collection) {
+    public Item<T> collection(String collection) {
         setCollection(collection);
         return this;
     }
 
-    public Item bbox(Bbox bbox) {
+    public Item<T> bbox(Bbox bbox) {
         setBbox(bbox);
         return this;
     }
 
-    public Item geometry(Object geometry) {
+    public Item<T> geometry(Object geometry) {
         setGeometry(geometry);
         return this;
     }
 
-    public Item centroid(Centroid centroid) {
+    public Item<T> centroid(Centroid centroid) {
         setCentroid(centroid);
         return this;
     }
 
-    public Item type(TypeEnum type) {
+    public Item<T> type(TypeEnum type) {
         setType(type);
         return this;
     }
 
-    public Item properties(T properties) {
+    public Item<T> properties(T properties) {
         setProperties(properties);
         return this;
     }
 
-    public Item links(Set<Link> links) {
+    public T getProperties() {
+        return properties;
+    }
+
+    public Item<T> links(Set<Link> links) {
         setLinks(links);
         return this;
     }

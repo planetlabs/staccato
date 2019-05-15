@@ -1,12 +1,12 @@
 package com.planet.staccato.es.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.staccato.FieldName;
 import com.planet.staccato.dto.StacTransactionResponse;
 import com.planet.staccato.es.ScrollWrapper;
 import com.planet.staccato.es.exception.ItemException;
 import com.planet.staccato.model.Item;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.DocWriteResponse;
@@ -27,10 +27,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class provides the logic for methods that would be expected to be found in a repository service for performing
@@ -97,7 +94,7 @@ public class ElasticsearchRepository {
      * @param type The Elasticsearch type
      * @return The constructed api request
      */
-    private SearchRequest buildSearchRequest(SearchSourceBuilder builder, List<String> indices, String type) {
+    private SearchRequest buildSearchRequest(SearchSourceBuilder builder, Collection<String> indices, String type) {
         return new SearchRequest()
                 .types(type)
                 .source(builder)
@@ -115,7 +112,7 @@ public class ElasticsearchRepository {
      * @return A Flux of items
      */
     public Flux<Item> searchItemFlux(
-            List<String> indices, String type, QueryBuilder queryBuilder, Integer limit, Integer offset,
+            Collection<String> indices, String type, QueryBuilder queryBuilder, Integer limit, Integer offset,
             Set<String> includeFields) {
 
         SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(queryBuilder, limit, offset);

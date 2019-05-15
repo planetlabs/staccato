@@ -1,5 +1,6 @@
 package com.planet.staccato.es.initializer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.planet.staccato.StacInitializer;
 import com.planet.staccato.collection.CatalogType;
 import com.planet.staccato.collection.CollectionMetadata;
@@ -7,7 +8,6 @@ import com.planet.staccato.collection.Subcatalog;
 import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
 import com.planet.staccato.es.config.ElasticsearchConfigProps;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.admin.indices.alias.Alias;

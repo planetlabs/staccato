@@ -1,8 +1,8 @@
 package com.planet.staccato.grpc.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.staccato.grpc.generated.ReactorCatalogServiceGrpc;
 import com.planet.staccato.service.CatalogService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.salesforce.grpc.contrib.spring.GrpcService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

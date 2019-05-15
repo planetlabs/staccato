@@ -33,13 +33,15 @@ public class ApiController implements ApiApi {
 
 
     @Override
-    public Mono<ItemCollection> getItems(double[] bbox, String time, String query, Integer limit, Integer page, String[] propertyname) {
-        return service.getItems(bbox, time, query, limit, page, propertyname, null).name("getItems");
+    public Mono<ItemCollection> getItems(double[] bbox, String time, String query, Integer limit, Integer page,
+                                         String[] ids, String[] collections, String[] propertyname) {
+        return service.getItems(bbox, time, query, limit, page, ids, collections, propertyname).name("getItems");
     }
 
     @Override
-    public Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, Integer page, String[] propertyname) {
-        return service.getItemsFlux(bbox, time, query, limit, page, propertyname, null);
+    public Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, Integer page,
+                                     String[] ids, String[] collections, String[] propertyname) {
+        return service.getItemsFlux(bbox, time, query, limit, page, ids, collections, propertyname);
     }
 
 }

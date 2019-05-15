@@ -1,12 +1,12 @@
 package com.planet.staccato.kafka;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.staccato.SerializationUtils;
 import com.planet.staccato.StacInitializer;
 import com.planet.staccato.exception.SerializationException;
 import com.planet.staccato.kafka.config.KafkaConfigProps;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.service.TransactionService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -80,7 +80,7 @@ public class KafkaItemListener implements StacInitializer {
 
             try {
                 Item item = SerializationUtils.deserializeItemFromString(record.value(), mapper);
-                transactionService.putItems(Flux.just(item), item.getProperties().getCollection()).subscribe();
+                transactionService.putItems(Flux.just(item), item.getCollection()).subscribe();
             } catch (Exception e) {
                 log.error("Error deserializing Item received from Kafka. ", e);
                 throw new SerializationException("Error deserializing Item received from Kafka.");

@@ -1,9 +1,9 @@
 package com.planet.staccato.kafka.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.staccato.kafka.KafkaItemListener;
 import com.planet.staccato.kafka.TestProducer;
 import com.planet.staccato.service.TransactionService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

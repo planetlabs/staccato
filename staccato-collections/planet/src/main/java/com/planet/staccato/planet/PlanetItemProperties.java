@@ -1,11 +1,10 @@
 package com.planet.staccato.planet;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
-import com.planet.staccato.extension.Collection;
 import com.planet.staccato.extension.EO;
 import com.planet.staccato.model.MandatoryProperties;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 
 import java.util.List;
@@ -16,13 +15,13 @@ import java.util.List;
  */
 @Data
 @JsonTypeName("pl")
-public class PlanetItemProperties implements MandatoryProperties, EO, Planet, Collection {
+public class PlanetItemProperties implements MandatoryProperties, EO, Planet {
 
     // MandatoryProperties
     private String datetime;
 
     // Collection field as part of the commons extension (merged from the collection metadata)
-    private String collection = PlanetCollectionMetadata.ID;
+    //private String collection = PlanetCollectionMetadata.ID;
 
     // EO
     private String platform;

@@ -26,9 +26,12 @@ public interface ApiApi {
                                   @RequestParam(value = "query", required = false) String query,
                                   @RequestParam(value = "limit", required = false) Integer limit,
                                   @RequestParam(value = "page", required = false) Integer page,
+                                  @RequestParam(value = "ids", required = false) String[] ids,
+                                  @RequestParam(value = "collections", required = false) String[] collections,
                                   @RequestParam(value = "propertyname", required = false) String[] propertyname);
 
     @GetMapping(path = "/search", produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})
-    Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, Integer page, String[] propertyname);
+    Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, Integer page, String[] ids,
+                              String[] collections, String[] propertyname);
 
 }

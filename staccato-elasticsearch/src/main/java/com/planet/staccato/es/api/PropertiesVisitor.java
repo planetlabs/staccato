@@ -19,21 +19,6 @@ public class PropertiesVisitor implements Visitor {
     public static final String PROPERTIES_PREFIX = "properties.";
 
     @Override
-    public void visit(SortedQuery node) {
-
-    }
-
-    @Override
-    public void visit(Query node) {
-
-    }
-
-    @Override
-    public void visit(PrefixAssignment node) {
-
-    }
-
-    @Override
     public void visit(ScopedClause node) {
         if (node.getScopedClause() != null) {
             visit(node.getScopedClause());
@@ -41,7 +26,8 @@ public class PropertiesVisitor implements Visitor {
 
         Index index = node.getSearchClause().getIndex();
 
-        if (index.getName().toLowerCase().startsWith(PROPERTIES_PREFIX)) {
+        // if the clause already starts with "properties", just continue
+        if (index.getContext() != null && index.getContext().equalsIgnoreCase("properties")) {
             return;
         }
 
@@ -55,57 +41,44 @@ public class PropertiesVisitor implements Visitor {
     }
 
     @Override
-    public void visit(BooleanGroup node) {
-
-    }
+    public void visit(SortedQuery node) {}
 
     @Override
-    public void visit(SearchClause node) {
-
-    }
+    public void visit(Query node) {}
 
     @Override
-    public void visit(Relation node) {
-
-    }
+    public void visit(PrefixAssignment node) {}
 
     @Override
-    public void visit(Modifier node) {
-
-    }
+    public void visit(BooleanGroup node) {}
 
     @Override
-    public void visit(ModifierList node) {
-
-    }
+    public void visit(SearchClause node) {}
 
     @Override
-    public void visit(Term node) {
-
-    }
+    public void visit(Relation node) {}
 
     @Override
-    public void visit(Identifier node) {
-
-    }
+    public void visit(Modifier node) {}
 
     @Override
-    public void visit(Index node) {
-
-    }
+    public void visit(ModifierList node) {}
 
     @Override
-    public void visit(SimpleName node) {
-
-    }
+    public void visit(Term node) {}
 
     @Override
-    public void visit(SortSpec node) {
-
-    }
+    public void visit(Identifier node) {}
 
     @Override
-    public void visit(SingleSpec node) {
+    public void visit(Index node) {}
 
-    }
+    @Override
+    public void visit(SimpleName node) {}
+
+    @Override
+    public void visit(SortSpec node) {}
+
+    @Override
+    public void visit(SingleSpec node) {}
 }

@@ -16,7 +16,9 @@ public interface QueryBuilderService {
 
     Optional<QueryBuilder> timeBuilder(String time);
 
-    Optional<QueryBuilder> searchBuilder(String filter);
+    Optional<QueryBuilder> queryBuilder(String filter);
+
+    Optional<QueryBuilder> idsBuilder(String[] ids);
 
     int getLimit(Integer limit);
 

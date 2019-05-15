@@ -43,7 +43,7 @@ public class ElasticsearchApiService implements ApiService {
     private static String LINK_BASE;
 
     /**
-     *  Generates the base string for links
+     * Generates the base string for links
      */
     @PostConstruct
     public void init() {
@@ -58,7 +58,7 @@ public class ElasticsearchApiService implements ApiService {
     /**
      * Fetches a single item.
      *
-     * @param id The ID of the item to retrieve
+     * @param id           The ID of the item to retrieve
      * @param collectionId The collection of the item to retrieve
      * @return The item wrapped in a mono
      */
@@ -73,30 +73,30 @@ public class ElasticsearchApiService implements ApiService {
      * Fetches multiple items that match the provided api request.
      *
      * @param request The {@link SearchRequest SearchRequest} object containing all api parameters
-     * @param collectionId The collection of the item to retrieve
      * @return A flux of items
      */
     @Override
-    public Flux<Item> getItemsFlux(SearchRequest request, String collectionId) {
+    public Flux<Item> getItemsFlux(SearchRequest request) {
         return getItemsFlux(request.getBbox(), request.getTime(), request.getQuery(), request.getLimit(),
-                request.getPage(), request.getPropertyname(), collectionId);
+                request.getPage(), request.getIds(), request.getCollections(), request.getPropertyname());
     }
 
     /**
      * Fetches multiple items that match the provided api request parameters.
      *
-     * @param bbox The bbox parameter provided in the api request
-     * @param time The time parameter provided in the api request
-     * @param filter The query parameter provided in the api request
-     * @param limit The limit parameter provided in the api request
-     * @param page The page parameter provided in the api request
+     * @param bbox         The bbox parameter provided in the api request
+     * @param time         The time parameter provided in the api request
+     * @param query        The query parameter provided in the api request
+     * @param limit        The limit parameter provided in the api request
+     * @param page         The page parameter provided in the api request
+     * @param ids          A list of IDs to match
+     * @param collections  A list of collections to match
      * @param propertyname The propertyname parameter provided in the api request
-     * @param collectionId The ID of the collection to api.  If null, all collections will be searched.
      * @return A flux of items
      */
     @Override
-    public Flux<Item> getItemsFlux(double[] bbox, String time, String filter, Integer limit, Integer page,
-                                   String[] propertyname, String collectionId) {
+    public Flux<Item> getItemsFlux(double[] bbox, String time, String query, Integer limit, Integer page,
+                                   String[] ids, String[] collections, String[] propertyname) {
         Set<String> includeFields = (null != propertyname && propertyname.length > 0) ?
                 new HashSet(Arrays.asList(propertyname)) : null;
 
@@ -104,64 +104,59 @@ public class ElasticsearchApiService implements ApiService {
 
         limit = queryBuilderService.getLimit(limit);
 
-
-        /**
-         * Get QueryBuilder for bbox
-         */
-        if (null != bbox && bbox.length == 4) {
-            Optional<QueryBuilder> queryBuilder = queryBuilderService.bboxBuilder(bbox);
-            if (queryBuilder.isPresent()) {
-                boolQueryBuilder.must(queryBuilder.get());
-            }
+        Optional<QueryBuilder> bboxBuilder = queryBuilderService.bboxBuilder(bbox);
+        if (bboxBuilder.isPresent()) {
+            boolQueryBuilder.must(bboxBuilder.get());
         }
 
-        /**
-         * Get QueryBuilder for time
-         */
-        if (null != time) {
-            Optional<QueryBuilder> queryBuilder = queryBuilderService.timeBuilder(time);
-            if (queryBuilder.isPresent()) {
-                boolQueryBuilder.must(queryBuilder.get());
-            }
+        Optional<QueryBuilder> timeBuilder = queryBuilderService.timeBuilder(time);
+        if (timeBuilder.isPresent()) {
+            boolQueryBuilder.must(timeBuilder.get());
         }
 
-        /**
-         * Get QueryBuilder for query
-         */
-        if (null != filter && !filter.isEmpty()) {
-            Optional<QueryBuilder> queryBuilder = queryBuilderService.searchBuilder(filter);
-            if (queryBuilder.isPresent()) {
-                boolQueryBuilder.must(queryBuilder.get());
-            }
+        Optional<QueryBuilder> queryBuilder = queryBuilderService.queryBuilder(query);
+        if (queryBuilder.isPresent()) {
+            boolQueryBuilder.must(queryBuilder.get());
         }
 
-        List<String> indices = (collectionId == null) ? aliasLookup.getReadAliases() : Arrays.asList(collectionId);
+        Optional<QueryBuilder> idsBuilder = queryBuilderService.idsBuilder(ids);
+        if (idsBuilder.isPresent()) {
+            boolQueryBuilder.must(idsBuilder.get());
+        }
+
+        Set<String> indices = new HashSet<>();
+        if (null != collections) {
+            for (String collection : collections) {
+                indices.add(aliasLookup.getReadAlias(collection));
+            }
+        } else {
+            indices.addAll(aliasLookup.getReadAliases());
+        }
 
         Flux<Item> itemFlux = repository.searchItemFlux(indices, configProps.getEs().getType(),
                 boolQueryBuilder, limit, page, includeFields);
         return processor.searchItemFlux(
-                itemFlux, SearchRequestUtils.generateSearchRequest(bbox, time, filter, limit, page, propertyname));
+                itemFlux, SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, propertyname));
     }
 
     /**
      * Fetches multiple items that match the provided api request parameters.
      *
-     * @param bbox The bbox parameter provided in the api request
-     * @param time The time parameter provided in the api request
-     * @param filter The query parameter provided in the api request
-     * @param limit The limit parameter provided in the api request
-     * @param page The page parameter provided in the api request
+     * @param bbox         The bbox parameter provided in the api request
+     * @param time         The time parameter provided in the api request
+     * @param query        The query parameter provided in the api request
+     * @param limit        The limit parameter provided in the api request
+     * @param page         The page parameter provided in the api request
      * @param propertyname The propertyname parameter provided in the api request
-     * @param collectionId The ID of the collection to api.  If null, all collections will be searched.
      * @return A collection of items wrapped in a mono
      */
     @Override
-    public Mono<ItemCollection> getItems(double[] bbox, String time, String filter, Integer limit, Integer page,
-                                         String[] propertyname, String collectionId) {
+    public Mono<ItemCollection> getItems(double[] bbox, String time, String query, Integer limit, Integer page,
+                                         String[] ids, String[] collections, String[] propertyname) {
         final int nextPage = (null == page) ? 1 : page + 1;
         int finalLimit = queryBuilderService.getLimit(limit);
 
-        return getItemsFlux(bbox, time, filter, limit, page, propertyname, collectionId)
+        return getItemsFlux(bbox, time, query, limit, page, ids, collections, propertyname)
                 .collectList()
                 // take the api list build an item collection from it
                 .map(itemList -> {
@@ -178,7 +173,7 @@ public class ElasticsearchApiService implements ApiService {
                     }
 
                     link += time == null ? Strings.EMPTY : "&time=" + time;
-                    link += filter == null ? Strings.EMPTY : "&query=" + filter;
+                    link += query == null ? Strings.EMPTY : "&query=" + query;
                     link += propertyname == null ? Strings.EMPTY : "&propertyname=" + propertyname;
 
                     itemCollection.addLink(new Link()
@@ -191,7 +186,6 @@ public class ElasticsearchApiService implements ApiService {
                                 .href(link + "&page=" + nextPage)
                                 .rel("page"));
                     }
-
 
 
                     return itemCollection;

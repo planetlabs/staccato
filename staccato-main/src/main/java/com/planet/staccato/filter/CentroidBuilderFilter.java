@@ -1,8 +1,8 @@
 package com.planet.staccato.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.staccato.model.Centroid;
 import com.planet.staccato.model.Item;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.locationtech.spatial4j.context.jts.JtsSpatialContext;
 import org.locationtech.spatial4j.context.jts.JtsSpatialContextFactory;

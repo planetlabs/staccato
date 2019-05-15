@@ -1,9 +1,9 @@
 package com.planet.staccato.schema;
 
-import com.planet.staccato.collection.CollectionMetadata;
-import com.planet.staccato.service.SchemaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
+import com.planet.staccato.collection.CollectionMetadata;
+import com.planet.staccato.service.SchemaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;

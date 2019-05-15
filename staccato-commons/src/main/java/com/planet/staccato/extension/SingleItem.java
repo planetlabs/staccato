@@ -1,9 +1,9 @@
 package com.planet.staccato.extension;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
 import com.planet.staccato.model.Provider;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 

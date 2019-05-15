@@ -1,8 +1,8 @@
 package com.planet.staccato;
 
-import com.planet.staccato.config.StacConfigProps;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.planet.staccato.config.StacConfigProps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;

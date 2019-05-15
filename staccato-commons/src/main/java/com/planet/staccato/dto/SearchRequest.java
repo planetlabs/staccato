@@ -16,5 +16,7 @@ public class SearchRequest {
     private String query;
     private Integer limit;
     private Integer page;
+    private String[] ids;
+    private String[] collections;
     private String[] propertyname;
 }

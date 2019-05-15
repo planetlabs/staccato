@@ -42,7 +42,7 @@ public class Landsat8AutoConfig {
     }
 
     @Bean
-    public CollectionMetadata landsat8atalog() {
+    public CollectionMetadata landsat8Catalog() {
         Landsat8CollectionMetadata metadata = new Landsat8CollectionMetadata();
         List<Link> links = new ArrayList<>();
         links.add(Link.build()

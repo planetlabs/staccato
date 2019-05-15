@@ -1,12 +1,11 @@
 package com.planet.staccato.collection;
 
-import com.planet.staccato.extension.Collection;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.planet.staccato.model.Extent;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.model.MandatoryProperties;
 import com.planet.staccato.model.Provider;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +16,7 @@ import java.util.Set;
  * @author joshfix
  * Created on 10/23/18
  */
-public interface CollectionMetadata<T extends Collection & MandatoryProperties> {
+public interface CollectionMetadata<T extends MandatoryProperties> {
 
     @JsonProperty("stac_version")
     String getStacVersion();
