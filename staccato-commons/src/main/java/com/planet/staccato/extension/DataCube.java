@@ -16,6 +16,7 @@ public interface DataCube {
 
     String EXTENSION_PREFIX = "cube";
 
+    @JsonProperty(EXTENSION_PREFIX + ":dimensions")
     Map<String, ? extends Dimension> getDimensions();
     void setDimensions(Map<String, ? extends Dimension> dimensions);
 
