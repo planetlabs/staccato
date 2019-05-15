@@ -6,7 +6,7 @@
 ## About
 
 Staccato is a server that enables browsing and search of geospatial assets like satellite imagery. It implements the 
-SpatioTemporal Asset Catalog (STAC) standard and is backed by [ElasticSearch](https://www.elastic.co/products/elasticsearch).
+SpatioTemporal Asset Catalog (STAC) v0.7.0 standard and is backed by [ElasticSearch](https://www.elastic.co/products/elasticsearch).
 In addition to the core STAC catalog browsing and search functionality, it includes support for transactions, statistics,
 auto-generated schemas, [gRPC](https://grpc.io/) endpoints and [Kafka](https://kafka.apache.org/) ingestion.
 
