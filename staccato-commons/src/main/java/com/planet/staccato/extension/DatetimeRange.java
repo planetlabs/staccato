@@ -1,6 +1,8 @@
 package com.planet.staccato.extension;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.planet.staccato.elasticsearch.annotation.Mapping;
+import com.planet.staccato.elasticsearch.annotation.MappingType;
 
 /**
  * Defines the fields and Jackson property values for fields in the datetime range extension.
@@ -10,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public interface DatetimeRange {
 
+    @Mapping(type = MappingType.DATE)
     @JsonProperty("dtr:start_datetime")
     String getStartDatetime();
     void setStartDatetime(String startDatetime);
