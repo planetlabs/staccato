@@ -194,13 +194,5 @@ public class ElasticsearchApiService implements ApiService {
                 });
     }
 
-    public static void main(String... args) {
-        String[] t1 = new String[]{"hi"};
-        String[] t2 = new String[]{"hi","bye"};
-
-        System.out.println(String.join(",", t1));
-        System.out.println(String.join(",", t2));
-    }
-
 }
 
