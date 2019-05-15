@@ -40,7 +40,7 @@ Additionally the docker image can be built from the [staccato-main](./staccato-m
 `mvn dockerfile:build`
 
 ### Running 
-- Requires Java 8.x, Elasticsearch 6.x 
+- Requires Java 11, Elasticsearch 6.6 
 
 An Elasticsearch instance must be available.  To run locally in a docker container, use:
 

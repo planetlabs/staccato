@@ -1,5 +1,5 @@
-FROM quay.io/boundlessgeo/java-alpine:8-jre-alpine
-MAINTAINER jfix@boundlessgeo.com
+FROM amazoncorretto:11.0.2
+MAINTAINER josh@federal.planet.com
 
 ARG JAR_NAME
 ENV JAR_NAME $JAR_NAME

@@ -184,6 +184,13 @@
                         <JAR_NAME>staccato-${project.version}.jar</JAR_NAME>
                     </buildArgs>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>javax.activation-api</artifactId>
+                        <version>1.2.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
