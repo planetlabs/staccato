@@ -14,7 +14,6 @@ Staccato is built using the latest versions of [Spring Boot](https://docs.spring
 and [Spring WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html). The 
 application is reactive, utilizing the [Project Reactor](https://projectreactor.io) library. 
 
-
 ## About the STAC Spec
 
 <img src="https://github.com/radiantearth/stac-site/raw/master/images/logo/stac-030-long.png" alt="stac-logo" width="300"/>   
@@ -95,11 +94,21 @@ Any of the following methods are acceptable ways of running Staccato
 
 ### Query Parameters (all optional)
 - **limit** the maximum number of items to return, example limit=100
-- **next** to paginate, example next=2 (for the second page of results)
+- **page** to paginate, example page=2 (for the second page of results)
 - **time** implicit range query, example time=1995-01-01T00:00:2005-01-01T00:00:00
 - **bbox** implicit intersects query, example bbox=-180,-90,180,90
-- **search** a Common Query Language text string to query properties of the catalog entry (see below for examples)
+- **query** a Common Query Language text string to query properties of the catalog entry (see below for examples)
+- **ids** a list of comma separated IDs to be returned
+- **collections** a list of comma separated collection IDs on which to filter the results
 - **propertyname** a comma separated list of json field names to include in the result
+
+Examples:
+
+- <https://stac.boundlessgeo.io/stac/search?propertyname=id>
+- <https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105%20AND%20landsat:wrs_row=83>
+- <https://stac.boundlessgeo.io/stac/search?ids=LC81050832019135LGN00,LC81050822019135LGN00&collections=landsat-8-l1>
+- <https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover%3C.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z>
+
 
 ## Configuartion
 
