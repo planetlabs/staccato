@@ -12,12 +12,14 @@ import com.planet.staccato.elasticsearch.annotation.MappingType;
  */
 public interface DatetimeRange {
 
+    String EXTENSION_PREFIX = "dtr";
+
     @Mapping(type = MappingType.DATE)
-    @JsonProperty("dtr:start_datetime")
+    @JsonProperty(EXTENSION_PREFIX + ":start_datetime")
     String getStartDatetime();
     void setStartDatetime(String startDatetime);
 
-    @JsonProperty("dtr:end_datetime")
+    @JsonProperty(EXTENSION_PREFIX + ":end_datetime")
     String getEndDatetime();
     void setEndDatetime(String endDatetime);
 

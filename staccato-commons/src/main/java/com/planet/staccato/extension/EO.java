@@ -15,51 +15,53 @@ import java.util.List;
  */
 public interface EO {
 
+    String EXTENSION_PREFIX = "eo";
+
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty("eo:constellation")
+    @JsonProperty(EXTENSION_PREFIX + ":constellation")
     String getConstellation();
     void setConstellation(String constellation);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty("eo:platform")
+    @JsonProperty(EXTENSION_PREFIX + ":platform")
     String getPlatform();
     void setPlatform(String platform);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty("eo:instrument")
+    @JsonProperty(EXTENSION_PREFIX + ":instrument")
     String getInstrument();
     void setInstrument(String instrument);
 
-    @JsonProperty("eo:gsd")
+    @JsonProperty(EXTENSION_PREFIX + ":gsd")
     Double getGsd();
     void setGsd(Double gsd);
 
-    @JsonProperty("eo:cloud_cover")
+    @JsonProperty(EXTENSION_PREFIX + ":cloud_cover")
     Double getCloudCover();
     void setCloudCover(Double cloudCover);
 
-    @JsonProperty("eo:off_nadir")
+    @JsonProperty(EXTENSION_PREFIX + ":off_nadir")
     Integer getOffNadir();
     void setOffNadir(Integer offNadir);
 
-    @JsonProperty("eo:azimuth")
+    @JsonProperty(EXTENSION_PREFIX + ":azimuth")
     Double getAzimuth();
     void setAzimuth(Double azimuth);
 
-    @JsonProperty("eo:sun_azimuth")
+    @JsonProperty(EXTENSION_PREFIX + ":sun_azimuth")
     Double getSunAzimuth();
     void setSunAzimuth(Double sunAzimuth);
 
-    @JsonProperty("eo:sun_elevation")
+    @JsonProperty(EXTENSION_PREFIX + ":sun_elevation")
     Double getSunElevation();
     void setSunElevation(Double sunElevation);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty("eo:epsg")
+    @JsonProperty(EXTENSION_PREFIX + ":epsg")
     String getEpsg();
     void setEpsg(String epsg);
 
-    @JsonProperty("eo:bands")
+    @JsonProperty(EXTENSION_PREFIX + ":bands")
     List<Band> getBands();
     void setBands(List<Band> bands);
 

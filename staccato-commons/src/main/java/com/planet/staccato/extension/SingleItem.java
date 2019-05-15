@@ -15,12 +15,14 @@ import java.util.Collection;
  */
 public interface SingleItem {
 
+    String EXTENSION_PREFIX = "item";
+
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty("item:license")
+    @JsonProperty(EXTENSION_PREFIX + ":license")
     String getLicense();
     void setLicense(String license);
 
-    @JsonProperty("item:providers")
+    @JsonProperty(EXTENSION_PREFIX + ":providers")
     Collection<Provider> getProviders();
     void setProviders(Collection<Provider> providers);
 

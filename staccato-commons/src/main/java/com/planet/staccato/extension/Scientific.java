@@ -13,15 +13,17 @@ import java.util.Collection;
  */
 public interface Scientific {
 
-    @JsonProperty("sci:doi")
+    String EXTENSION_PREFIX = "sci";
+
+    @JsonProperty(EXTENSION_PREFIX + ":doi")
     String getDoi();
     void setDoi(String doi);
 
-    @JsonProperty("sci:citation")
+    @JsonProperty(EXTENSION_PREFIX + ":citation")
     String getCitation();
     void setCitation(String citation);
 
-    @JsonProperty("sci:publications")
+    @JsonProperty(EXTENSION_PREFIX + ":publications")
     Collection<Publication> getPublications();
     void setPublications(Collection<Publication> publications);
 
