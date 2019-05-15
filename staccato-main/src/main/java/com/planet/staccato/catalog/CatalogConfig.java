@@ -40,6 +40,11 @@ public class CatalogConfig {
         catalog.getLinks().add(Link.build()
                 .rel("self")
                 .href(LinksConfigProps.LINK_PREFIX + "/stac"));
+
+        catalog.getLinks().add(Link.build()
+                .rel("search")
+                .href(LinksConfigProps.LINK_PREFIX + "/stac/search"));
+
         return catalog;
     }
 
