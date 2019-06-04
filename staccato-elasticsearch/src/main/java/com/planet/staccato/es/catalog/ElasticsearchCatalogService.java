@@ -127,9 +127,11 @@ public class ElasticsearchCatalogService implements CatalogService {
                 sb.append(" AND ");
             }
         }
-
-        return searchService.getItems(null, null, sb.toString(), 10, null, null,
-                new String[]{collectionId}, null, null);
+        com.planet.staccato.dto.SearchRequest searchRequest = new com.planet.staccato.dto.SearchRequest();
+        searchRequest.setQuery(sb.toString());
+        searchRequest.setLimit(10);
+        searchRequest.setCollections(new String[]{collectionId});
+        return searchService.getItems(searchRequest);
     }
 
 }

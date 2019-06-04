@@ -39,7 +39,6 @@ public class ElasticStatsService implements AggregationService {
 
     private final RestHighLevelClient restClient;
     private final Scheduler scheduler;
-    private final QueryBuilderHelper queryBuilderHelper;
 
     /**
      * Creates a non-blocking reactive method for the {@link #getExtent(String, Map) getExtent}  method

@@ -1,6 +1,7 @@
 package com.planet.staccato.catalog;
 
 import com.planet.staccato.collection.CollectionMetadata;
+import com.planet.staccato.dto.SearchRequest;
 import com.planet.staccato.es.api.ElasticsearchApiService;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
@@ -88,7 +89,13 @@ public class RequestHandler {
                         filterBuilder.append(" AND ");
                     }
                 }
-                return searchService.getItemsFlux(null, null, filterBuilder.toString(), 10000, null, null, new String[]{collectionId}, new String[]{"id"})
+                SearchRequest searchRequest = new SearchRequest()
+                        .query(filterBuilder.toString())
+                        .limit(10000)
+                        .collections(new String[]{collectionId})
+                        .propertyname(new String[]{"id"});
+
+                return searchService.getItemsFlux(searchRequest)
                         .map(item -> item.getId())
                         .map(id -> linkGenerator.buildItemLink(collectionId, id))
                         .map(link -> collection.getLinks().add(link))
