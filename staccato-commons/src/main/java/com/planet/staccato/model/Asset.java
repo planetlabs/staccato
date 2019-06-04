@@ -55,6 +55,7 @@ public class Asset {
         sb.append("    href: ").append(toIndentedString(href)).append("\n");
         sb.append("    roles: ").append(toIndentedString(type)).append("\n");
         sb.append("    filetype: ").append(toIndentedString(filetype)).append("\n");
+        sb.append("    bands: ").append(String.join(",", bands)).append("\n");
         sb.append("}");
         return sb.toString();
     }

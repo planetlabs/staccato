@@ -1,5 +1,6 @@
 package com.planet.staccato.api;
 
+import com.planet.staccato.dto.SearchRequest;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.service.ApiService;
@@ -39,9 +40,23 @@ public class ApiController implements ApiApi {
     }
 
     @Override
+    public Mono<ItemCollection> getItemsPost(SearchRequest searchRequest) {
+        return service.getItems(searchRequest.getBbox(), searchRequest.getTime(), searchRequest.getQuery(),
+                searchRequest.getLimit(), searchRequest.getPage(), searchRequest.getIds(),
+                searchRequest.getCollections(), searchRequest.getPropertyname()).name("getItemsPost");
+    }
+
+    @Override
     public Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, Integer page,
                                      String[] ids, String[] collections, String[] propertyname) {
         return service.getItemsFlux(bbox, time, query, limit, page, ids, collections, propertyname);
+    }
+
+    @Override
+    public Flux<Item> getItemsPostStream(SearchRequest searchRequest) {
+        return service.getItemsFlux(searchRequest.getBbox(), searchRequest.getTime(), searchRequest.getQuery(),
+                searchRequest.getLimit(), searchRequest.getPage(), searchRequest.getIds(),
+                searchRequest.getCollections(), searchRequest.getPropertyname());
     }
 
 }

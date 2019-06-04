@@ -1,11 +1,10 @@
 package com.planet.staccato.api;
 
+import com.planet.staccato.dto.SearchRequest;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -30,8 +29,15 @@ public interface ApiApi {
                                   @RequestParam(value = "collections", required = false) String[] collections,
                                   @RequestParam(value = "propertyname", required = false) String[] propertyname);
 
+    @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
+    Mono<ItemCollection> getItemsPost(@RequestBody SearchRequest searchRequest);
+
     @GetMapping(path = "/search", produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})
     Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, Integer page, String[] ids,
                               String[] collections, String[] propertyname);
+
+    @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})
+    Flux<Item> getItemsPostStream(@RequestBody SearchRequest searchRequest);
 
 }
