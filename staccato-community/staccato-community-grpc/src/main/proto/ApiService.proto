@@ -14,6 +14,7 @@ message ApiRequest {
     repeated string ids = 6;
     repeated string collections = 7;
     repeated string propertyname = 8;
+    string intersects = 9;
 }
 
 message ApiIdRequest {

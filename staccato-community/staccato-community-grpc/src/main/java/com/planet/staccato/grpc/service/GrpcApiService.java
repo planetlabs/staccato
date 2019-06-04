@@ -3,6 +3,7 @@ package com.planet.staccato.grpc.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.primitives.Doubles;
 import com.google.protobuf.ByteString;
+import com.planet.staccato.SearchRequestUtils;
 import com.planet.staccato.SerializationUtils;
 import com.planet.staccato.grpc.generated.ApiIdRequest;
 import com.planet.staccato.grpc.generated.ApiItemBytes;
@@ -33,11 +34,12 @@ public class GrpcApiService extends ReactorApiServiceGrpc.ApiServiceImplBase {
     public Flux<ApiItemBytes> search(Mono<ApiRequest> request) {
         log.debug("Incoming gRPC api request.");
         return request
-                .flatMapMany(r -> apiService.getItemsFlux(Doubles.toArray(r.getBboxList()),
+                .flatMapMany(r -> apiService.getItemsFlux(SearchRequestUtils.generateSearchRequest(Doubles.toArray(r.getBboxList()),
                         r.getTime(), r.getSearch(), r.getLimit(), r.getPage(),
                         r.getIdsList().toArray(new String[r.getIdsCount()]),
                         r.getCollectionsList().toArray(new String[r.getCollectionsCount()]),
-                        r.getPropertynameList().toArray(new String[r.getPropertynameCount()]))
+                        r.getPropertynameList().toArray(new String[r.getPropertynameCount()]),
+                        r.getIntersects()))
                         .map(item -> SerializationUtils.serializeItem(item, mapper))
                         .map(item -> ApiItemBytes.newBuilder().setItem(ByteString.copyFrom(item)).build())
                 );
