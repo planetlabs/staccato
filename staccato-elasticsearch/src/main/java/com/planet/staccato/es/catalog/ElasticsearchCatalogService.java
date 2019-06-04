@@ -129,7 +129,7 @@ public class ElasticsearchCatalogService implements CatalogService {
         }
 
         return searchService.getItems(null, null, sb.toString(), 10, null, null,
-                new String[]{collectionId}, null);
+                new String[]{collectionId}, null, null);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.planet.staccato.es;
+package com.planet.staccato;
 
 import com.planet.staccato.dto.SearchRequest;
 
@@ -22,7 +22,7 @@ public class SearchRequestUtils {
      * @return The {@link SearchRequest SearchRequest} object
      */
     public static SearchRequest generateSearchRequest(
-            double[] bbox, String time, String filter, Integer limit, Integer page, String[] propertyname) {
+            double[] bbox, String time, String filter, Integer limit, Integer page, String[] propertyname, String[] ids, String[] collections, Object intersects) {
         SearchRequest request = new SearchRequest();
         request.setBbox(bbox);
         request.setTime(time);
@@ -30,6 +30,9 @@ public class SearchRequestUtils {
         request.setLimit(limit);
         request.setPage(page);
         request.setPropertyname(propertyname);
+        request.setIds(ids);
+        request.setCollections(collections);
+        request.setIntersects(intersects);
         return request;
     }
 

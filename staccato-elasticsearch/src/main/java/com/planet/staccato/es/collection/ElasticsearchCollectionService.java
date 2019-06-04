@@ -3,6 +3,7 @@ package com.planet.staccato.es.collection;
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.es.ScrollWrapper;
 import com.planet.staccato.es.repository.ElasticsearchRepository;
 import com.planet.staccato.es.stats.ElasticStatsService;
@@ -12,6 +13,7 @@ import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.service.CollectionService;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.planet.staccato.es.SearchRequestUtils.generateSearchRequest;
+import static com.planet.staccato.SearchRequestUtils.generateSearchRequest;
 
 /**
  * Service class implementing logic required to support the collection API.
@@ -60,15 +62,22 @@ public class ElasticsearchCollectionService implements CollectionService {
     /**
      * Retrieves the first page of a set of paginated item results
      *
-     * @param collectionId The ID of the collection to query
-     * @param limit The maximum number of items that should be returned in the query
+     * @param searchRequest The API search request
      * @return The collection of items wrapped in a Mono
      */
     @Override
-    public Mono<ItemCollection> getItemsInitialScroll(String collectionId, Integer limit) {
-        ScrollWrapper wrapper = repository.initialScroll(collectionId, limit);
+    public Mono<ItemCollection> getItemsInitialScroll(SearchRequest searchRequest) {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilderHelper.buildQuery(searchRequest);
+
+        if (searchRequest.getCollections() == null || searchRequest.getCollections().length != 1) {
+            throw new RuntimeException("Unable to determine collection type.");
+        }
+        String collectionId = searchRequest.getCollections()[0];
+        ScrollWrapper wrapper =
+                repository.initialScroll(collectionId, searchRequest.getLimit(), boolQueryBuilder);
+
         return processor.searchItemFlux(
-                wrapper.getItemFlux(), generateSearchRequest(null, null, null, limit, null, null))
+                wrapper.getItemFlux(), searchRequest)
                 .collectList()
                 .map(itemList -> {
                     ItemCollection itemCollection = new ItemCollection()
@@ -86,16 +95,19 @@ public class ElasticsearchCollectionService implements CollectionService {
     /**
      * Retreives the page page of item results using the Elasticsearch scroll API
      *
-     * @param collectionId The ID of the collection to query
-     * @param page The page number
+     * @param searchRequest The API search request
      * @return The collection of items wrapped in a Mono
      */
     @Override
-    public Mono<ItemCollection> getItemsScroll(String collectionId, Integer page) {
-        Flux<Item> itemFlux = repository.scroll(page);
+    public Mono<ItemCollection> getItemsScroll(SearchRequest searchRequest) {
+        Flux<Item> itemFlux = repository.scroll(searchRequest.getPage());
 
-        SearchRequest sr = generateSearchRequest(null, null, null, 0, page, null);
-        return processor.searchItemFlux(itemFlux, sr)
+        if (searchRequest.getCollections() == null || searchRequest.getCollections().length != 1) {
+            throw new RuntimeException("Unable to determine collection type.");
+        }
+        String collectionId = searchRequest.getCollections()[0];
+
+        return processor.searchItemFlux(itemFlux, searchRequest)
                 .collectList()
                 // take the api list build an item collection from it
                 .map(itemList -> {
@@ -104,7 +116,7 @@ public class ElasticsearchCollectionService implements CollectionService {
                             .type(ItemCollection.TypeEnum.FEATURECOLLECTION);
                     if (!itemList.isEmpty()) {
                         itemCollection.addLink(new Link()
-                                .href(LINK_BASE + collectionId + "/items?page=" + page)
+                                .href(LINK_BASE + collectionId + "/items?page=" + searchRequest.getPage())
                                 .rel("page"));
                     }
                     return itemCollection;

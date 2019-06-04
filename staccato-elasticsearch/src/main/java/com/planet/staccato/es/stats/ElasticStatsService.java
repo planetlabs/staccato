@@ -2,7 +2,7 @@ package com.planet.staccato.es.stats;
 
 import com.planet.staccato.FieldName;
 import com.planet.staccato.dto.ItemStatisticsResponse;
-import com.planet.staccato.es.api.DefaultQueryBuilderService;
+import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.model.Extent;
 import com.planet.staccato.service.AggregationService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class ElasticStatsService implements AggregationService {
 
     private final RestHighLevelClient restClient;
     private final Scheduler scheduler;
-    private final DefaultQueryBuilderService queryBuilder;
+    private final QueryBuilderHelper queryBuilderHelper;
 
     /**
      * Creates a non-blocking reactive method for the {@link #getExtent(String, Map) getExtent}  method
@@ -75,7 +75,7 @@ public class ElasticStatsService implements AggregationService {
             }
         }
 
-        Optional<QueryBuilder> filter = queryBuilder.queryBuilder(sb.toString());
+        Optional<QueryBuilder> filter = QueryBuilderHelper.queryBuilder(sb.toString());
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         if (filter.isPresent()) {

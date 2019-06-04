@@ -1,14 +1,14 @@
-package com.planet.staccato.es.api;
+package com.planet.staccato.es;
 
 import com.planet.staccato.FieldName;
+import com.planet.staccato.SearchRequestUtils;
+import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.es.api.PropertiesVisitor;
 import com.planet.staccato.es.exception.FilterException;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.geo.ShapeRelation;
 import org.elasticsearch.common.geo.builders.EnvelopeBuilder;
-import org.elasticsearch.index.query.GeoShapeQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.stereotype.Service;
 import org.xbib.cql.CQLParser;
@@ -20,7 +20,6 @@ import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
-
 /**
  * This service builds Elasticsearch queries from the api parameters passed to the STAC API.
  *
@@ -29,7 +28,7 @@ import java.util.Optional;
  */
 @Slf4j
 @Service
-public class DefaultQueryBuilderService implements QueryBuilderService {
+public class QueryBuilderHelper {//implements QueryBuilder {
 
     private static final int WEST = 0;
     private static final int SOUTH = 1;
@@ -37,14 +36,51 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
     private static final int NORTH = 3;
     private static final int DEFAULT_LIMIT = 10;
 
+    public static BoolQueryBuilder buildQuery(double[] bbox, String time, String query, Integer limit, Integer page,
+                                              String[] ids, String[] collections, String[] propertyname, Object intersects) {
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, propertyname, ids, collections, intersects);
+        return buildQuery(searchRequest);
+    }
+
+    public static BoolQueryBuilder buildQuery(SearchRequest searchRequest) {
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+
+        Optional<QueryBuilder> bboxBuilder = QueryBuilderHelper.bboxBuilder(searchRequest.getBbox());
+        if (bboxBuilder.isPresent()) {
+            boolQueryBuilder.must(bboxBuilder.get());
+        }
+
+        Optional<QueryBuilder> timeBuilder = QueryBuilderHelper.timeBuilder(searchRequest.getTime());
+        if (timeBuilder.isPresent()) {
+            boolQueryBuilder.must(timeBuilder.get());
+        }
+
+        Optional<QueryBuilder> queryBuilder = QueryBuilderHelper.queryBuilder(searchRequest.getQuery());
+        if (queryBuilder.isPresent()) {
+            boolQueryBuilder.must(queryBuilder.get());
+        }
+
+        Optional<QueryBuilder> idsBuilder = QueryBuilderHelper.idsBuilder(searchRequest.getIds());
+        if (idsBuilder.isPresent()) {
+            boolQueryBuilder.must(idsBuilder.get());
+        }
+
+        Optional<QueryBuilder> intersectsBuilder = QueryBuilderHelper.intersectsBuilder(searchRequest.getIntersects());
+        if (intersectsBuilder.isPresent()) {
+            boolQueryBuilder.must(intersectsBuilder.get());
+        }
+
+        return boolQueryBuilder;
+    }
+
     /**
      * Builds an Elasticsearch bbox query
      *
      * @param bbox The bbox values passed in the api request
      * @return The Elasticsearch query builder
      */
-    @Override
-    public Optional<QueryBuilder> bboxBuilder(double[] bbox) {
+
+    public static Optional<QueryBuilder> bboxBuilder(double[] bbox) {
         if (null == bbox || bbox.length != 4) {
             return Optional.empty();
         }
@@ -62,8 +98,8 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
      * @param time The time values passed in the api request
      * @return The Elasticsearch query builder
      */
-    @Override
-    public Optional<QueryBuilder> timeBuilder(String time) {
+
+    public static Optional<QueryBuilder> timeBuilder(String time) {
         if (null == time || time.isBlank()) {
             return Optional.empty();
         }
@@ -103,14 +139,20 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
         return Optional.of(rangeQueryBuilder);
     }
 
+    public static Optional<QueryBuilder> intersectsBuilder(Object intersects) {
+        if (intersects == null) {
+            return Optional.empty();
+        }
+        return Optional.empty();
+    }
+
     /**
      * Builds an Elasticsearch query
      *
      * @param query The query values passed in the api request
      * @return The Elasticsearch query builder
      */
-    @Override
-    public Optional<QueryBuilder> queryBuilder(String query) {
+    public static Optional<QueryBuilder> queryBuilder(String query) {
         if (query == null || query.isEmpty()) {
             return Optional.empty();
         }
@@ -118,7 +160,7 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
             CQLParser parser = new CQLParser(query);
             parser.parse();
             ElasticsearchQueryGenerator generator = new ElasticsearchQueryGenerator();
-            SortedQuery sq  = parser.getCQLQuery();
+            SortedQuery sq = parser.getCQLQuery();
             sq.getQuery().getScopedClause().accept(new PropertiesVisitor());
             sq.accept(generator);
             QueryBuilder builder = QueryBuilders.wrapperQuery(generator.getQueryResult());
@@ -128,8 +170,7 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
         }
     }
 
-    @Override
-    public Optional<QueryBuilder> idsBuilder(String[] ids) {
+    public static Optional<QueryBuilder> idsBuilder(String[] ids) {
         if (null == ids || ids.length == 0) {
             return Optional.empty();
         }
@@ -142,8 +183,7 @@ public class DefaultQueryBuilderService implements QueryBuilderService {
      * @param limit The maximum number of items passed in the request
      * @return The final maximum number of items that will be returned in the api response
      */
-    @Override
-    public int getLimit(Integer limit) {
+    public static int getLimit(Integer limit) {
         return (null == limit || limit <= 0) ? DEFAULT_LIMIT : limit;
     }
 

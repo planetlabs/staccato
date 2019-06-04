@@ -147,10 +147,9 @@ public class ElasticsearchRepository {
      * @param limit The maximum number of items that should be returned in the query
      * @return A {@link ScrollWrapper wrapper} object containing a flux of items and scroll ID
      */
-    public ScrollWrapper initialScroll(String collectionId, int limit) {
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    public ScrollWrapper initialScroll(String collectionId, int limit, QueryBuilder queryBuilder) {
+        SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(queryBuilder, limit, null);
         searchSourceBuilder
-                .size(limit)
                 .sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC));
 
         SearchRequest searchRequest = new SearchRequest()

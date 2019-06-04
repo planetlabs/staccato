@@ -1,5 +1,7 @@
 package com.planet.staccato.collection;
 
+import com.planet.staccato.SearchRequestUtils;
+import com.planet.staccato.dto.SearchRequest;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.service.ApiService;
@@ -12,10 +14,10 @@ import reactor.core.publisher.Mono;
 
 /**
  * Controller implementation for the STAC collection specification.
- * @see <a href="https://github.com/radiantearth/stac-spec/tree/master/collection-spec">collection-spec</a>
  *
  * @author joshfix
  * Created on 10/15/18
+ * @see <a href="https://github.com/radiantearth/stac-spec/tree/master/collection-spec">collection-spec</a>
  */
 @RestController
 @RequiredArgsConstructor
@@ -31,14 +33,32 @@ public class CollectionController implements CollectionApi {
 
     @Override
     public Mono<ItemCollection> getCollectionItems(@PathVariable("collectionId") String collectionId,
-                                                   @RequestParam(name = "limit", defaultValue = "10") Integer limit) {
-        return collectionService.getItemsInitialScroll(collectionId, limit);
+                                                   double[] bbox,
+                                                   String time,
+                                                   String query,
+                                                   Integer limit,
+                                                   Integer page,
+                                                   String[] ids,
+                                                   String[] collections,
+                                                   String[] propertyname,
+                                                   Object intersects) {
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, propertyname, ids, new String[]{collectionId}, intersects);
+        return collectionService.getItemsInitialScroll(searchRequest);
     }
 
     @Override
     public Mono<ItemCollection> getCollectionItemsScroll(@PathVariable("collectionId") String collectionId,
-                                                  @RequestParam("page") Integer page) {
-        return collectionService.getItemsScroll(collectionId, page);
+                                                         double[] bbox,
+                                                         String time,
+                                                         String query,
+                                                         Integer limit,
+                                                         Integer page,
+                                                         String[] ids,
+                                                         String[] collections,
+                                                         String[] propertyname,
+                                                         Object intersects) {
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, propertyname, ids, new String[]{collectionId}, intersects);
+        return collectionService.getItemsScroll(searchRequest);
     }
 
     @Override

@@ -19,4 +19,5 @@ public class SearchRequest {
     private String[] ids;
     private String[] collections;
     private String[] propertyname;
+    private Object intersects;
 }
