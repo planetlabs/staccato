@@ -7,7 +7,7 @@ import com.planet.staccato.es.api.PropertiesVisitor;
 import com.planet.staccato.es.exception.FilterException;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.common.geo.ShapeRelation;
-import org.elasticsearch.common.geo.builders.EnvelopeBuilder;
+import org.elasticsearch.common.geo.builders.*;
 import org.elasticsearch.index.query.*;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,9 @@ import org.xbib.cql.elasticsearch.ElasticsearchQueryGenerator;
 import java.time.Instant;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -143,7 +146,45 @@ public class QueryBuilderHelper {//implements QueryBuilder {
         if (intersects == null) {
             return Optional.empty();
         }
-        return Optional.empty();
+        Map<String, Object> intersectsMap = (Map<String, Object>) intersects;
+        String type = (String) intersectsMap.get("type");
+
+        ShapeBuilder shapeBuilder = null;
+        switch (type) {
+            case "Point":
+                double[] pointCoords = (double[]) intersectsMap.get("coordinates");
+                shapeBuilder = new PointBuilder(pointCoords[0], pointCoords[1]);
+                break;
+            case "Polygon":
+                List polygonCoords = (List) intersectsMap.get("coordinates");
+                CoordinatesBuilder polygonCoordsBuilder = new CoordinatesBuilder();
+                // TODO this needs to be more robust
+                for (Object o : (List) polygonCoords.get(0)) {
+                    List innerCoords = (List) o;
+                    polygonCoordsBuilder.coordinate((double)innerCoords.get(0), (double)innerCoords.get(1));
+                }
+                shapeBuilder = new PolygonBuilder(polygonCoordsBuilder);
+                break;
+            case "LineString":
+                List lineStringCoords = (List) intersectsMap.get("coordinates");
+                CoordinatesBuilder lineStringCoordsBuilder = new CoordinatesBuilder();
+                for (Object o : lineStringCoords) {
+                    List innerCoords = (List) o;
+                    lineStringCoordsBuilder.coordinate((double)innerCoords.get(0), (double)innerCoords.get(1));
+                }
+                shapeBuilder = new LineStringBuilder(lineStringCoordsBuilder);
+                break;
+                // TODO implement the rest
+            case "MultiPoint":
+            case "MultiLineString":
+            case "MultiPolygon":
+        }
+
+        if (null == shapeBuilder) {
+            return Optional.empty();
+        }
+        return Optional.of(
+                new GeoShapeQueryBuilder(FieldName.GEOMETRY, shapeBuilder).relation(ShapeRelation.INTERSECTS));
     }
 
     /**

@@ -36,7 +36,6 @@ public class ElasticsearchApiService implements ApiService {
 
     private final ElasticsearchConfigProps configProps;
     private final ElasticsearchRepository repository;
-    //private final QueryBuilder QueryBuilder;
     private final ItemsFilterProcessor processor;
     private final IndexAliasLookup aliasLookup;
     private final LinksConfigProps linksConfigProperties;
