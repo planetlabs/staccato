@@ -10,8 +10,9 @@ import java.util.Objects;
 public class ItemCollection {
 
     private TypeEnum type;
+    private Meta meta;
     private List<Item> features = new ArrayList<>();
-    private String nextPageToken;
+    //private String nextPageToken;
     private List<Link> links;
     //private ItemCollectionLinks links;
 
@@ -86,24 +87,6 @@ public class ItemCollection {
         this.features = features;
     }
 
-    public ItemCollection nextPageToken(String nextPageToken) {
-        this.nextPageToken = nextPageToken;
-        return this;
-    }
-
-    /**
-     * A token to obtain the page paginated data set
-     *
-     * @return nextPageToken
-     **/
-    public String getNextPageToken() {
-        return nextPageToken;
-    }
-
-    public void setNextPageToken(String nextPageToken) {
-        this.nextPageToken = nextPageToken;
-    }
-
     public void setLinks(List<Link> links) {
         this.links = links;
     }
@@ -150,13 +133,13 @@ public class ItemCollection {
         ItemCollection itemCollection = (ItemCollection) o;
         return Objects.equals(this.type, itemCollection.type) &&
                 Objects.equals(this.features, itemCollection.features) &&
-                Objects.equals(this.nextPageToken, itemCollection.nextPageToken);// &&
+                Objects.equals(this.meta, itemCollection.meta);
         // Objects.equals(this.links, itemCollection.links);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, features, nextPageToken/*, links*/);
+        return Objects.hash(type, features);
     }
 
 
@@ -167,7 +150,7 @@ public class ItemCollection {
 
         sb.append("    roles: ").append(toIndentedString(type)).append("\n");
         sb.append("    api: ").append(toIndentedString(features)).append("\n");
-        sb.append("    nextPageToken: ").append(toIndentedString(nextPageToken)).append("\n");
+        sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
         // sb.append("    links: ").append(toIndentedString(links)).append("\n");
         sb.append("}");
         return sb.toString();
