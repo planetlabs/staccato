@@ -73,8 +73,9 @@ public class ElasticsearchCollectionService implements CollectionService {
             throw new RuntimeException("Unable to determine collection type.");
         }
         String collectionId = searchRequest.getCollections()[0];
+        int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
         ScrollWrapper wrapper =
-                repository.initialScroll(collectionId, searchRequest.getLimit(), boolQueryBuilder);
+                repository.initialScroll(collectionId, limit, boolQueryBuilder);
 
         return processor.searchItemFlux(
                 wrapper.getItemFlux(), searchRequest)
