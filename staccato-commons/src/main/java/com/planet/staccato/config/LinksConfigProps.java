@@ -21,6 +21,7 @@ public class LinksConfigProps {
     private Thumbnails thumbnails = new Thumbnails();
 
     public static String LINK_PREFIX;
+    public static String LINK_BASE;
 
     @PostConstruct
     public void init() {
@@ -30,6 +31,8 @@ public class LinksConfigProps {
         if (getSelf().getPort() != 80) {
             LINK_PREFIX += ":" + getSelf().getPort();
         }
+
+        LINK_BASE = LINK_PREFIX + "/stac/api"; // generate the base string for links
     }
 
     @Data

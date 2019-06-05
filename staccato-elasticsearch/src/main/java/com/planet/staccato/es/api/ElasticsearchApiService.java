@@ -107,6 +107,27 @@ public class ElasticsearchApiService implements ApiService {
      */
     @Override
     public Mono<ItemCollection> getItems(SearchRequest searchRequest) {
+        String[] propertyname = searchRequest.getPropertyname();
+        Set<String> includeFields = (null != propertyname && propertyname.length > 0) ?
+                new HashSet(Arrays.asList(propertyname)) : null;
+
+        String[] collections = searchRequest.getCollections();
+        Set<String> indices = new HashSet<>();
+        if (null != collections) {
+            for (String collection : collections) {
+                indices.add(aliasLookup.getReadAlias(collection));
+            }
+        } else {
+            indices.addAll(aliasLookup.getReadAliases());
+        }
+
+        int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
+        BoolQueryBuilder boolQueryBuilder = QueryBuilderHelper.buildQuery(searchRequest);
+
+        Mono<ItemCollection> itemCollection = repository.searchItemCollection(indices, configProps.getEs().getType(),
+                boolQueryBuilder, limit, searchRequest.getPage(), includeFields, searchRequest);
+        return processor.searchItemCollectionMono(itemCollection, searchRequest);
+        /*
         Integer page = searchRequest.getPage();
         final int nextPage = (null == page) ? 1 : page + 1;
         int finalLimit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
@@ -147,6 +168,7 @@ public class ElasticsearchApiService implements ApiService {
 
                     return itemCollection;
                 });
+                */
     }
 
 }

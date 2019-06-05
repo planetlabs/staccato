@@ -3,10 +3,17 @@ package com.planet.staccato.es.repository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.staccato.FieldName;
+import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.dto.StacTransactionResponse;
+import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.es.ScrollWrapper;
+import com.planet.staccato.es.api.ElasticsearchApiService;
 import com.planet.staccato.es.exception.ItemException;
 import com.planet.staccato.model.Item;
+import com.planet.staccato.model.ItemCollection;
+import com.planet.staccato.model.Link;
+import com.planet.staccato.model.Meta;
+import joptsimple.internal.Strings;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.DocWriteResponse;
@@ -73,8 +80,8 @@ public class ElasticsearchRepository {
      * Helper method to construct SearchSourceBuilder objects.
      *
      * @param queryBuilder The builder object for the query
-     * @param limit The max number of items to return in the result
-     * @param offset The item offset to retrieve results from
+     * @param limit        The max number of items to return in the result
+     * @param offset       The item offset to retrieve results from
      * @return The builder for the api source
      */
     private SearchSourceBuilder buildSearchSourceBuilder(QueryBuilder queryBuilder, Integer limit, Integer offset) {
@@ -91,7 +98,7 @@ public class ElasticsearchRepository {
      *
      * @param builder The builder for the seach source
      * @param indices The list of indices to api
-     * @param type The Elasticsearch type
+     * @param type    The Elasticsearch type
      * @return The constructed api request
      */
     private SearchRequest buildSearchRequest(SearchSourceBuilder builder, Collection<String> indices, String type) {
@@ -101,14 +108,91 @@ public class ElasticsearchRepository {
                 .indices(indices.toArray(new String[indices.size()]));
     }
 
+
+    public Mono<ItemCollection> searchItemCollection(Collection<String> indices, String type, QueryBuilder queryBuilder,
+                                                     Integer limit, Integer page, Set<String> includeFields,
+                                                     final com.planet.staccato.dto.SearchRequest searchRequest) {
+        SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(queryBuilder, limit, page);
+
+        // if include fields were provided, make sure properties.providers is present because it's needed for Jackson
+        // deserialization to the proper ItemProperties subtype.  then set the includeFields on the api.
+        if (null != includeFields && !includeFields.isEmpty()) {
+            includeFields.add("properties.collection");
+            searchSourceBuilder.fetchSource(includeFields.toArray(new String[includeFields.size()]), null);
+        }
+
+        SearchRequest esSearchRequest = buildSearchRequest(searchSourceBuilder, indices, type);
+        String searchString = esSearchRequest.source().toString();
+
+        log.debug("Searching ES indices '" + indices.toString() + "' with the following request: \n" + searchString);
+
+        final Meta meta = new Meta();
+
+        return client.searchNoScroll(searchString, indices)
+                // build a flux from the hits
+                .flatMapIterable(response -> {
+                    meta.found(response.getHits().getTotalHits())
+                            .returned(response.getHits().getHits().length)
+                            .limit(limit)
+                            .page((null == page) ? 1 : page);
+                    return Arrays.asList(response.getHits().getHits());
+                })
+                // process all the hits in parallel -- will use all CPU cores by default
+                .parallel().runOn(Schedulers.parallel())
+                // map each hit to it's source bytes
+                .map(hit -> deserializeItem(hit.getSourceRef().toBytesRef().bytes))
+                // revert to sequential processing
+                .sequential()
+                .collectList()
+                // take the api list build an item collection from it
+                .map(itemList -> {
+                    ItemCollection itemCollection = new ItemCollection()
+                            .features(itemList)
+                            .type(ItemCollection.TypeEnum.FEATURECOLLECTION)
+                            .meta(meta);
+
+                    final int nextPage = (null == page) ? 1 : page + 1;
+                    int finalLimit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
+
+                    // rebuild the original request link
+                    double[] bbox = searchRequest.getBbox();
+                    String link = LinksConfigProps.LINK_BASE + "?limit=" + finalLimit;
+                    if (null != bbox && bbox.length == 4) {
+
+                        link += bbox == null ? Strings.EMPTY : "&bbox=" + bbox[0] + "," + bbox[1] + "," + bbox[2] + "," + bbox[3];
+                    }
+
+                    link += searchRequest.getTime() == null ? Strings.EMPTY : "&time=" + searchRequest.getTime();
+                    link += searchRequest.getQuery() == null ? Strings.EMPTY : "&query=" + searchRequest.getQuery();
+                    link += searchRequest.getIds() == null ? Strings.EMPTY : "&ids=" + String.join(",", searchRequest.getIds());
+                    link += searchRequest.getCollections() == null ? Strings.EMPTY : "&collections=" + String.join(",", searchRequest.getCollections());
+                    link += searchRequest.getPropertyname() == null ? Strings.EMPTY : "&propertyname=" + String.join(",", searchRequest.getPropertyname());
+
+                    itemCollection.addLink(new Link()
+                            .href(link)
+                            .rel("self"));
+
+                    // if the number of api in the collection is less than or equal to the limit, do not provide a page page token
+                    if (itemCollection.getFeatures().size() >= finalLimit) {
+                        itemCollection.addLink(new Link()
+                                .href(link + "&page=" + nextPage)
+                                .rel("page"));
+                    }
+
+
+                    return itemCollection;
+                });
+    }
+
+
     /**
      * Code to build the ES api request, reactively submit it to ES and deserialize the results.
      *
-     * @param indices The indices to api
-     * @param type The Elasticsearch type
+     * @param indices      The indices to api
+     * @param type         The Elasticsearch type
      * @param queryBuilder The builder for the query
-     * @param limit The max number of items to return in the result
-     * @param offset The item offset to retrieve results from
+     * @param limit        The max number of items to return in the result
+     * @param offset       The item offset to retrieve results from
      * @return A Flux of items
      */
     public Flux<Item> searchItemFlux(
@@ -144,7 +228,7 @@ public class ElasticsearchRepository {
      * Retrieves the first page of a set of paginated item results
      *
      * @param collectionId The ID of the collection to query
-     * @param limit The maximum number of items that should be returned in the query
+     * @param limit        The maximum number of items that should be returned in the query
      * @return A {@link ScrollWrapper wrapper} object containing a flux of items and scroll ID
      */
     public ScrollWrapper initialScroll(String collectionId, int limit, QueryBuilder queryBuilder) {
@@ -210,8 +294,8 @@ public class ElasticsearchRepository {
      * Adds a new Item to the provided Elasticsearch index.
      *
      * @param index The Elasticsearch index to add the item to
-     * @param type The Elasticsearch type
-     * @param item The item to be added
+     * @param type  The Elasticsearch type
+     * @param item  The item to be added
      * @return The {@link StacTransactionResponse response} of the operation wrapped in a mono
      */
     public Mono<StacTransactionResponse> createItem(String index, String type, Item item) {
@@ -246,9 +330,9 @@ public class ElasticsearchRepository {
     /**
      * Updates an existing item in Elasticsearch.
      *
-     * @param itemMono The item to be updated, wrapped in a mono
-     * @param type The Elasticsearch type
-     * @param body The updated item body sent in the request.  This should just be the item JSON.
+     * @param itemMono     The item to be updated, wrapped in a mono
+     * @param type         The Elasticsearch type
+     * @param body         The updated item body sent in the request.  This should just be the item JSON.
      * @param collectionId The collection ID the item belongs to
      * @return The {@link StacTransactionResponse response} of the operation wrapped in a mono
      */
@@ -269,8 +353,8 @@ public class ElasticsearchRepository {
     /**
      * Deletes an item in Elasticsearch.
      *
-     * @param itemMono The item to be updated, wrapped in a mono
-     * @param type The Elasticsearch type
+     * @param itemMono     The item to be updated, wrapped in a mono
+     * @param type         The Elasticsearch type
      * @param collectionId The collection ID the item belongs to
      * @return The {@link StacTransactionResponse response} of the operation wrapped in a mono
      */

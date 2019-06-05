@@ -107,6 +107,19 @@ public class ItemCollection {
         links.add(link);
         return this;
     }
+
+    public void setMeta(Meta meta) {
+        this.meta = meta;
+    }
+
+    public Meta getMeta() {
+        return meta;
+    }
+
+    public ItemCollection meta(Meta meta) {
+        setMeta(meta);
+        return this;
+    }
 /*
   public ItemCollection links(ItemCollectionLinks links) {
     this.links = links;

@@ -8,27 +8,27 @@ import lombok.Data;
  */
 @Data
 public class Meta {
-    private int page;
-    private int limit;
-    private int found;
-    private int returned;
+    private long page;
+    private long limit;
+    private long found;
+    private long returned;
 
-    public Meta page(int page) {
+    public Meta page(long page) {
         setPage(page);
         return this;
     }
 
-    public Meta limit(int limit) {
+    public Meta limit(long limit) {
         setLimit(limit);
         return this;
     }
 
-    public Meta found(int found) {
+    public Meta found(long found) {
         setFound(found);
         return this;
     }
 
-    public Meta returned(int returned) {
+    public Meta returned(long returned) {
         setReturned(returned);
         return this;
     }
