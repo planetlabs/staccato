@@ -99,6 +99,7 @@ Any of the following methods are acceptable ways of running Staccato
 - **page** to paginate, example page=2 (for the second page of results)
 - **time** implicit range query, example time=1995-01-01T00:00:2005-01-01T00:00:00
 - **bbox** implicit intersects query, example bbox=-180,-90,180,90
+- **intersects** a valid GeoJSON geometry 
 - **query** a Common Query Language text string to query properties of the catalog entry (see below for examples)
 - **ids** a list of comma separated IDs to be returned
 - **collections** a list of comma separated collection IDs on which to filter the results
