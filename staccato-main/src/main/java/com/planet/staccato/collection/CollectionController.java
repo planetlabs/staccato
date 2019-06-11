@@ -1,14 +1,13 @@
 package com.planet.staccato.collection;
 
 import com.planet.staccato.SearchRequestUtils;
-import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.service.ApiService;
 import com.planet.staccato.service.CollectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -39,10 +38,10 @@ public class CollectionController implements CollectionApi {
                                                    Integer limit,
                                                    Integer page,
                                                    String[] ids,
-                                                   String[] collections,
-                                                   String[] propertyname,
+                                                   String[] fields,
                                                    Object intersects) {
-        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, propertyname, ids, new String[]{collectionId}, intersects);
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, fields,
+                ids, new String[]{collectionId}, intersects);
         return collectionService.getItemsInitialScroll(searchRequest);
     }
 
@@ -54,10 +53,10 @@ public class CollectionController implements CollectionApi {
                                                          Integer limit,
                                                          Integer page,
                                                          String[] ids,
-                                                         String[] collections,
-                                                         String[] propertyname,
+                                                         String[] fields,
                                                          Object intersects) {
-        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, propertyname, ids, new String[]{collectionId}, intersects);
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, fields,
+                ids, new String[]{collectionId}, intersects);
         return collectionService.getItemsScroll(searchRequest);
     }
 

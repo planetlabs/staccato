@@ -1,7 +1,7 @@
 package com.planet.staccato.catalog;
 
 import com.planet.staccato.collection.CollectionMetadata;
-import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.es.api.ElasticsearchApiService;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
@@ -93,7 +93,7 @@ public class RequestHandler {
                         .query(filterBuilder.toString())
                         .limit(10000)
                         .collections(new String[]{collectionId})
-                        .propertyname(new String[]{"id"});
+                        .fields(new String[]{"id"});
 
                 return searchService.getItemsFlux(searchRequest)
                         .map(item -> item.getId())

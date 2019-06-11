@@ -1,6 +1,6 @@
 package com.planet.staccato.api;
 
-import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import org.springframework.http.MediaType;
@@ -27,7 +27,7 @@ public interface ApiApi {
                                   @RequestParam(value = "page", required = false) Integer page,
                                   @RequestParam(value = "ids", required = false) String[] ids,
                                   @RequestParam(value = "collections", required = false) String[] collections,
-                                  @RequestParam(value = "propertyname", required = false) String[] propertyname,
+                                  @RequestParam(value = "fields", required = false) String[] fields,
                                   @RequestParam(value = "intersects", required = false) Object intersects);
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -35,7 +35,7 @@ public interface ApiApi {
 
     @GetMapping(path = "/search", produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})
     Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, Integer page, String[] ids,
-                              String[] collections, String[] propertyname, Object intersects);
+                              String[] collections, String[] fields, Object intersects);
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})

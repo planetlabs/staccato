@@ -1,6 +1,6 @@
 package com.planet.staccato.filter;
 
-import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Item;
 import org.springframework.stereotype.Component;
 

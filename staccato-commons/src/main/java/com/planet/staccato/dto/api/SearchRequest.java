@@ -1,4 +1,4 @@
-package com.planet.staccato.dto;
+package com.planet.staccato.dto.api;
 
 import lombok.Data;
 
@@ -15,10 +15,10 @@ public class SearchRequest {
     private String time;
     private String query;
     private Integer limit;
-    private Integer page;
+    private Integer page = 1;
     private String[] ids;
     private String[] collections;
-    private String[] propertyname;
+    private String[] fields;
     private Object intersects;
 
     public SearchRequest bbox(double[] bbox) {
@@ -56,8 +56,8 @@ public class SearchRequest {
         return this;
     }
 
-    public SearchRequest propertyname(String[] propertyname) {
-        setPropertyname(propertyname);
+    public SearchRequest fields(String[] fields) {
+        setFields(fields);
         return this;
     }
 

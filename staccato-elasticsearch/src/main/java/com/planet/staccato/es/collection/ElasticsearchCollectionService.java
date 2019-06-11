@@ -2,7 +2,7 @@ package com.planet.staccato.es.collection;
 
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.config.LinksConfigProps;
-import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.es.ScrollWrapper;
 import com.planet.staccato.es.repository.ElasticsearchRepository;
@@ -21,8 +21,6 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.planet.staccato.SearchRequestUtils.generateSearchRequest;
 
 /**
  * Service class implementing logic required to support the collection API.
@@ -87,7 +85,7 @@ public class ElasticsearchCollectionService implements CollectionService {
                     if (!itemList.isEmpty() && null != wrapper.getScrollId()) {
                         itemCollection.addLink(new Link()
                                 .href(LINK_BASE + collectionId + "/items?page=" + wrapper.getScrollId())
-                                .rel("page"));
+                                .rel("next"));
                     }
                     return itemCollection;
                 });
@@ -118,7 +116,7 @@ public class ElasticsearchCollectionService implements CollectionService {
                     if (!itemList.isEmpty()) {
                         itemCollection.addLink(new Link()
                                 .href(LINK_BASE + collectionId + "/items?page=" + searchRequest.getPage())
-                                .rel("page"));
+                                .rel("next"));
                     }
                     return itemCollection;
                 });

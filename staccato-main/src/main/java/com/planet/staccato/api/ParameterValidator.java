@@ -19,7 +19,7 @@ import java.util.List;
  * Created on 2/28/19
  */
 @Slf4j
-@Component
+//@Component
 public class ParameterValidator implements WebFilter {
 
     private List<String> apiParameters;

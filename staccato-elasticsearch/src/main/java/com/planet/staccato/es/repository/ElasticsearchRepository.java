@@ -7,7 +7,6 @@ import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.dto.StacTransactionResponse;
 import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.es.ScrollWrapper;
-import com.planet.staccato.es.api.ElasticsearchApiService;
 import com.planet.staccato.es.exception.ItemException;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
@@ -90,7 +89,7 @@ public class ElasticsearchRepository {
                 .size(limit)
                 .sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC));
 
-        return (null == limit || null == offset) ? searchSourceBuilder : searchSourceBuilder.from(offset * limit);
+        return (null == limit || offset > 1) ? searchSourceBuilder : searchSourceBuilder.from((offset - 1) * limit);
     }
 
     /**
@@ -111,7 +110,7 @@ public class ElasticsearchRepository {
 
     public Mono<ItemCollection> searchItemCollection(Collection<String> indices, String type, QueryBuilder queryBuilder,
                                                      Integer limit, Integer page, Set<String> includeFields,
-                                                     final com.planet.staccato.dto.SearchRequest searchRequest) {
+                                                     final com.planet.staccato.dto.api.SearchRequest searchRequest) {
         SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(queryBuilder, limit, page);
 
         // if include fields were provided, make sure properties.providers is present because it's needed for Jackson
@@ -166,7 +165,7 @@ public class ElasticsearchRepository {
                     link += searchRequest.getQuery() == null ? Strings.EMPTY : "&query=" + searchRequest.getQuery();
                     link += searchRequest.getIds() == null ? Strings.EMPTY : "&ids=" + String.join(",", searchRequest.getIds());
                     link += searchRequest.getCollections() == null ? Strings.EMPTY : "&collections=" + String.join(",", searchRequest.getCollections());
-                    link += searchRequest.getPropertyname() == null ? Strings.EMPTY : "&propertyname=" + String.join(",", searchRequest.getPropertyname());
+                    link += searchRequest.getFields() == null ? Strings.EMPTY : "&fields=" + String.join(",", searchRequest.getFields());
 
                     itemCollection.addLink(new Link()
                             .href(link)
@@ -176,7 +175,7 @@ public class ElasticsearchRepository {
                     if (itemCollection.getFeatures().size() >= finalLimit) {
                         itemCollection.addLink(new Link()
                                 .href(link + "&page=" + nextPage)
-                                .rel("page"));
+                                .rel("next"));
                     }
 
 

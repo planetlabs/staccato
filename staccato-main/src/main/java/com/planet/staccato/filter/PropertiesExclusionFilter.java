@@ -1,6 +1,6 @@
 package com.planet.staccato.filter;
 
-import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Item;
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Removes properties from the item before returning the api response if the search request used the propertynames
+ * Removes properties from the item before returning the api response if the search request used the fields
  * parameter and did not include the properties fields.
  *
  * @author joshfix
@@ -27,14 +27,14 @@ public class PropertiesExclusionFilter implements ItemSearchFilter {
 
     @Override
     public Item doFilter(Item item, SearchRequest request) {
-        if (null != request.getPropertyname() && request.getPropertyname().length > 0) {
+        if (null != request.getFields() && request.getFields().length > 0) {
             boolean propertiesRequested = false;
             boolean collectionRequested = false;
-            for (String propertyName : request.getPropertyname()) {
-                if (propertyName.startsWith("properties.")) {
+            for (String field : request.getFields()) {
+                if (field.startsWith("properties.")) {
                     propertiesRequested = true;
                 }
-                if (propertyName.equalsIgnoreCase("collection")) {
+                if (field.equalsIgnoreCase("collection")) {
                     collectionRequested = true;
                 }
 

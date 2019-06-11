@@ -38,7 +38,7 @@ public class GrpcApiService extends ReactorApiServiceGrpc.ApiServiceImplBase {
                         r.getTime(), r.getSearch(), r.getLimit(), r.getPage(),
                         r.getIdsList().toArray(new String[r.getIdsCount()]),
                         r.getCollectionsList().toArray(new String[r.getCollectionsCount()]),
-                        r.getPropertynameList().toArray(new String[r.getPropertynameCount()]),
+                        r.getFieldsList().toArray(new String[r.getFieldsCount()]),
                         r.getIntersects()))
                         .map(item -> SerializationUtils.serializeItem(item, mapper))
                         .map(item -> ApiItemBytes.newBuilder().setItem(ByteString.copyFrom(item)).build())

@@ -28,8 +28,7 @@ public interface CollectionApi {
                                             @RequestParam(value = "limit", required = false) Integer limit,
                                             @RequestParam(value = "page", required = false) Integer page,
                                             @RequestParam(value = "ids", required = false) String[] ids,
-                                            @RequestParam(value = "collections", required = false) String[] collections,
-                                            @RequestParam(value = "propertyname", required = false) String[] propertyname,
+                                            @RequestParam(value = "fields", required = false) String[] fields,
                                             @RequestParam(value = "intersects", required = false) Object geometry);
 
     @GetMapping(value = "/collections/{collectionId}/items", params = "page", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -40,8 +39,7 @@ public interface CollectionApi {
                                                   @RequestParam(value = "limit", required = false) Integer limit,
                                                   @RequestParam(value = "page", required = false) Integer page,
                                                   @RequestParam(value = "ids", required = false) String[] ids,
-                                                  @RequestParam(value = "collections", required = false) String[] collections,
-                                                  @RequestParam(value = "propertyname", required = false) String[] propertyname,
+                                                  @RequestParam(value = "fields", required = false) String[] fields,
                                                   @RequestParam(value = "intersects", required = false) Object geometry);
 
     @GetMapping(value = "/collections/{collectionId}/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -2,7 +2,7 @@ package com.planet.staccato.filter;
 
 import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.config.StacConfigProps;
-import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.Link;
 import org.springframework.stereotype.Component;
@@ -108,21 +108,21 @@ public class LinkBuilderFilter implements ItemSearchFilter {
     }
 
     private boolean shouldFilter(SearchRequest request) {
-        Object o = request.getPropertyname();
-        List<String> propertyname = null;
+        Object o = request.getFields();
+        List<String> fields = null;
 
         if (null != o && o instanceof String[]) {
-            propertyname = Arrays.asList((String[]) o);
+            fields = Arrays.asList((String[]) o);
         } else {
             // no specific propertynames were requested -- proceed with adding links
             return true;
         }
 
-        if (!propertyname.contains("links")) {
-            // if propertynames were requested but did not contain links, do not add links
+        if (!fields.contains("links")) {
+            // if fields were requested but did not contain links, do not add links
             return false;
         }
-        // propertynames were present and did contain links, proceed with adding links
+        // fields were present and did contain links, proceed with adding links
         return true;
     }
 }

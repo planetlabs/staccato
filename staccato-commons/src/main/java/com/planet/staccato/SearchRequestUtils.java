@@ -1,6 +1,6 @@
 package com.planet.staccato;
 
-import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.dto.api.SearchRequest;
 
 /**
  * Utility class for creating {@link SearchRequest SearchRequest} objects.
@@ -15,24 +15,42 @@ public class SearchRequestUtils {
      *
      * @param bbox The bbox api request parameter
      * @param time The time api request parameter
-     * @param filter The query api request parameter
+     * @param query The query api request parameter
      * @param limit The limit api request parameter
      * @param page The page api request parameter
-     * @param propertyname The propertyname api request parameter
+     * @param fields The fields api request parameter
      * @return The {@link SearchRequest SearchRequest} object
      */
     public static SearchRequest generateSearchRequest(
-            double[] bbox, String time, String filter, Integer limit, Integer page, String[] propertyname, String[] ids, String[] collections, Object intersects) {
+            double[] bbox, String time, String query, Integer limit, Integer page, String[] fields, String[] ids, String[] collections, Object intersects) {
         SearchRequest request = new SearchRequest();
-        request.setBbox(bbox);
-        request.setTime(time);
-        request.setQuery(filter);
-        request.setLimit(limit);
-        request.setPage(page);
-        request.setPropertyname(propertyname);
-        request.setIds(ids);
-        request.setCollections(collections);
-        request.setIntersects(intersects);
+        if (null != bbox && bbox.length == 4) {
+            request.setBbox(bbox);
+        }
+        if (null != time && !time.isBlank()) {
+            request.setTime(time);
+        }
+        if (null != query && !query.isBlank()) {
+            request.setQuery(query);
+        }
+        if (null != limit) {
+            request.setLimit(limit);
+        }
+        if (null != page) {
+            request.setPage(page);
+        }
+        if (null != fields) {
+            request.setFields(fields);
+        }
+        if (null != ids && ids.length > 0) {
+            request.setIds(ids);
+        }
+        if (null != collections && collections.length > 0) {
+            request.setCollections(collections);
+        }
+        if (null != intersects) {
+            request.setIntersects(intersects);
+        }
         return request;
     }
 

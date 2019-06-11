@@ -1,18 +1,15 @@
 package com.planet.staccato.es.api;
 
 import com.planet.staccato.config.LinksConfigProps;
-import com.planet.staccato.dto.SearchRequest;
+import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.es.IndexAliasLookup;
 import com.planet.staccato.es.QueryBuilderHelper;
-import com.planet.staccato.SearchRequestUtils;
 import com.planet.staccato.es.config.ElasticsearchConfigProps;
 import com.planet.staccato.es.repository.ElasticsearchRepository;
 import com.planet.staccato.filter.ItemsFilterProcessor;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
-import com.planet.staccato.model.Link;
 import com.planet.staccato.service.ApiService;
-import joptsimple.internal.Strings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -76,9 +73,9 @@ public class ElasticsearchApiService implements ApiService {
      */
     @Override
     public Flux<Item> getItemsFlux(SearchRequest searchRequest) {
-        String[] propertyname = searchRequest.getPropertyname();
-        Set<String> includeFields = (null != propertyname && propertyname.length > 0) ?
-                new HashSet(Arrays.asList(propertyname)) : null;
+        String[] fields = searchRequest.getFields();
+        Set<String> includeFields = (null != fields && fields.length > 0) ?
+                new HashSet(Arrays.asList(fields)) : null;
 
         String[] collections = searchRequest.getCollections();
         Set<String> indices = new HashSet<>();
@@ -107,9 +104,9 @@ public class ElasticsearchApiService implements ApiService {
      */
     @Override
     public Mono<ItemCollection> getItems(SearchRequest searchRequest) {
-        String[] propertyname = searchRequest.getPropertyname();
-        Set<String> includeFields = (null != propertyname && propertyname.length > 0) ?
-                new HashSet(Arrays.asList(propertyname)) : null;
+        String[] fields = searchRequest.getFields();
+        Set<String> includeFields = (null != fields && fields.length > 0) ?
+                new HashSet(Arrays.asList(fields)) : null;
 
         String[] collections = searchRequest.getCollections();
         Set<String> indices = new HashSet<>();
@@ -152,7 +149,7 @@ public class ElasticsearchApiService implements ApiService {
                     link += searchRequest.getQuery() == null ? Strings.EMPTY : "&query=" + searchRequest.getQuery();
                     link += searchRequest.getIds() == null ? Strings.EMPTY : "&ids=" + String.join(",", searchRequest.getIds());
                     link += searchRequest.getCollections() == null ? Strings.EMPTY : "&collections=" + String.join(",", searchRequest.getCollections());
-                    link += searchRequest.getPropertyname() == null ? Strings.EMPTY : "&propertyname=" + String.join(",", searchRequest.getPropertyname());
+                    link += searchRequest.getFields() == null ? Strings.EMPTY : "&fields=" + String.join(",", searchRequest.getFields());
 
                     itemCollection.addLink(new Link()
                             .href(link)

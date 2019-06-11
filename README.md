@@ -103,11 +103,11 @@ Any of the following methods are acceptable ways of running Staccato
 - **query** a Common Query Language text string to query properties of the catalog entry (see below for examples)
 - **ids** a list of comma separated IDs to be returned
 - **collections** a list of comma separated collection IDs on which to filter the results
-- **propertyname** a comma separated list of json field names to include in the result
+- **fields** a comma separated list of json field names to include in the result
 
 Examples:
 
-- <https://stac.boundlessgeo.io/stac/search?propertyname=id,bbox>
+- <https://stac.boundlessgeo.io/stac/search?fields=id,bbox>
 - [https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105 AND landsat:wrs_row=83](https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105%20AND%20landsat:wrs_row=83)
 - <https://stac.boundlessgeo.io/stac/search?ids=LC81050832019135LGN00,LC81050822019135LGN00&collections=landsat-8-l1>
 - [https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover<0.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z](https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover%3C.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z)
