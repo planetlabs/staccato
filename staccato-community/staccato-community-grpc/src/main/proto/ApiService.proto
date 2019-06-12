@@ -13,7 +13,7 @@ message ApiRequest {
     int32 limit = 5;
     repeated string ids = 6;
     repeated string collections = 7;
-    repeated string fields = 8;
+    string fields = 8;
     string intersects = 9;
 }
 

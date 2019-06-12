@@ -1,13 +1,15 @@
 package com.planet.staccato.api;
 
-import com.planet.staccato.SearchRequestUtils;
 import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.service.ApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -34,9 +36,7 @@ public class ApiController implements ApiApi {
 
 
     @Override
-    public Mono<ItemCollection> getItems(double[] bbox, String time, String query, Integer limit, Integer page,
-                                         String[] ids, String[] collections, String[] fields, Object intersects) {
-        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, fields, ids, collections, intersects);
+    public Mono<ItemCollection> getItems(SearchRequest searchRequest) {
         return service.getItems(searchRequest).name("getItems");
     }
 
@@ -46,9 +46,12 @@ public class ApiController implements ApiApi {
     }
 
     @Override
-    public Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, Integer page,
-                                     String[] ids, String[] collections, String[] fields, Object intersects) {
-        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, fields, ids, collections, intersects);
+    public Mono<ItemCollection> getItemsFormPost(@ModelAttribute SearchRequest searchRequest) {
+        return service.getItems(searchRequest).name("getItemsFormPost");
+    }
+
+    @Override
+    public Flux<Item> getItemsStream(SearchRequest searchRequest) {
         return service.getItemsFlux(searchRequest);
     }
 

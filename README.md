@@ -103,11 +103,11 @@ Any of the following methods are acceptable ways of running Staccato
 - **query** a Common Query Language text string to query properties of the catalog entry (see below for examples)
 - **ids** a list of comma separated IDs to be returned
 - **collections** a list of comma separated collection IDs on which to filter the results
-- **fields** a comma separated list of json field names to include in the result
+- **fieldsExtension** a comma separated list of json field names to include in the result
 
 Examples:
 
-- <https://stac.boundlessgeo.io/stac/search?fields=id,bbox>
+- <https://stac.boundlessgeo.io/stac/search?fieldsExtension=id,bbox>
 - [https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105 AND landsat:wrs_row=83](https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105%20AND%20landsat:wrs_row=83)
 - <https://stac.boundlessgeo.io/stac/search?ids=LC81050832019135LGN00,LC81050822019135LGN00&collections=landsat-8-l1>
 - [https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover<0.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z](https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover%3C.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z)
@@ -122,7 +122,7 @@ are available for configuration.
 
 Property | Default Value | Description
 ---------|---------------|------------
-staccato.include-null-fields | false | Determines whether fields with null values should be serialized or excluded
+staccato.include-null-fieldsExtension | false | Determines whether fieldsExtension with null values should be serialized or excluded
 staccato.generate-self-links | true | Determines whether self links are automatically generated for items
 staccato.generate-thumbnail-links | true | Determines whether thumbnail links are automatically generated for items
 staccato.async-bridge-thread-pool.max-threads | 200 | The size of the threadpool to be used for blocking async requests using the Elasticsearch REST client
@@ -226,7 +226,7 @@ originally designed for internal use at Boundless Spatial and was intended to on
 collections. As such, it is not currently capable of providing a way to dynamically add or define collections. Adding
 such a capability may be a good idea for the future.
 
-For each extension that has currently been proposed, the `properties` fields defined by the extension are described in 
+For each extension that has currently been proposed, the `properties` fieldsExtension defined by the extension are described in 
 interfaces in the [commons extension package](./staccato-commons/src/main/java/com/planet/staccato/extension).
 The extensions are defined as interfaces so that a mix of multiple extensions can be combined to create a set of
 heterogeneous properties for a collection. 
@@ -257,12 +257,12 @@ subcatalogs). It is important that when creating the collection bean, you set
 uses this module as a dependency where to find the auto configuration class, even if component scanning isn't configured 
 to scan your extension package path. 
 
-Notes on the `CollectionMetadata` class: The `properties` section in the collection endpoint can contain fields/values
+Notes on the `CollectionMetadata` class: The `properties` section in the collection endpoint can contain fieldsExtension/values
 that are shared amongst all items in your collection to avoid duplicating the data in every single item.
 
 It is also important to note that this implementation currently relies on implementing the commons extension to provide
 the `collection` field in every item. Because each collection will have a different properties implementation that may
-implement several different extension interfaces or custom fields, Jackson cannot deserialize Item classes without
+implement several different extension interfaces or custom fieldsExtension, Jackson cannot deserialize Item classes without
 more information on which properties class to deserialize to. Having the "collections" field in each item provides an
 extremely convenient 1:1 relationship between the item and it's properties implementation.  The Jackson configuration 
 for this can be found [here](./staccato-main/src/main/java/com/planet/staccato/config/ExtensionConfig.java). 
@@ -282,7 +282,7 @@ The `@Subcatalog` annotation, when applied to a `getter` interface method, will 
 automatically subcataloged via the `/stac/{catalog}` endpoint.  The 
 [catalog spec implementation](./staccato-main/src/main/java/com/planet/staccato/catalog) will automatically detect 
 methods with this annotation and build a subcatalog link containing the field name.  That subcatalog will build links 
-containing all unique values in Elasticsearch for that field.  After all eligible subcatalog fields have been 
+containing all unique values in Elasticsearch for that field.  After all eligible subcatalog fieldsExtension have been 
 traversed, the links section will be populated with links to all items that match the selected subcatalog values.
 
 

@@ -4,7 +4,6 @@ import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.es.IndexAliasLookup;
 import com.planet.staccato.es.QueryBuilderHelper;
-import com.planet.staccato.es.config.ElasticsearchConfigProps;
 import com.planet.staccato.es.repository.ElasticsearchRepository;
 import com.planet.staccato.filter.ItemsFilterProcessor;
 import com.planet.staccato.model.Item;
@@ -18,7 +17,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Service class implementing logic required to support the STAC api API.
@@ -31,7 +33,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ElasticsearchApiService implements ApiService {
 
-    private final ElasticsearchConfigProps configProps;
     private final ElasticsearchRepository repository;
     private final ItemsFilterProcessor processor;
     private final IndexAliasLookup aliasLookup;
@@ -61,7 +62,7 @@ public class ElasticsearchApiService implements ApiService {
     @Override
     public Mono<Item> getItem(String id, String collectionId) {
         List<String> indices = (collectionId == null) ? aliasLookup.getReadAliases() : Arrays.asList(collectionId);
-        Mono<Item> itemMono = repository.searchById(indices, configProps.getEs().getType(), id);
+        Mono<Item> itemMono = repository.searchById(indices, id);
         return processor.searchItemMono(itemMono, new SearchRequest());
     }
 
@@ -73,25 +74,10 @@ public class ElasticsearchApiService implements ApiService {
      */
     @Override
     public Flux<Item> getItemsFlux(SearchRequest searchRequest) {
-        String[] fields = searchRequest.getFields();
-        Set<String> includeFields = (null != fields && fields.length > 0) ?
-                new HashSet(Arrays.asList(fields)) : null;
-
-        String[] collections = searchRequest.getCollections();
-        Set<String> indices = new HashSet<>();
-        if (null != collections) {
-            for (String collection : collections) {
-                indices.add(aliasLookup.getReadAlias(collection));
-            }
-        } else {
-            indices.addAll(aliasLookup.getReadAliases());
-        }
-
-        int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
+        Set<String> indices = getIndices(searchRequest);
         BoolQueryBuilder boolQueryBuilder = QueryBuilderHelper.buildQuery(searchRequest);
 
-        Flux<Item> itemFlux = repository.searchItemFlux(indices, configProps.getEs().getType(),
-                boolQueryBuilder, limit, searchRequest.getPage(), includeFields);
+        Flux<Item> itemFlux = repository.searchItemFlux(indices, boolQueryBuilder, searchRequest);
         return processor.searchItemFlux(
                 itemFlux, searchRequest);
     }
@@ -104,10 +90,14 @@ public class ElasticsearchApiService implements ApiService {
      */
     @Override
     public Mono<ItemCollection> getItems(SearchRequest searchRequest) {
-        String[] fields = searchRequest.getFields();
-        Set<String> includeFields = (null != fields && fields.length > 0) ?
-                new HashSet(Arrays.asList(fields)) : null;
+        Set<String> indices = getIndices(searchRequest);
+        BoolQueryBuilder boolQueryBuilder = QueryBuilderHelper.buildQuery(searchRequest);
 
+        Mono<ItemCollection> itemCollection = repository.searchItemCollection(indices, boolQueryBuilder, searchRequest);
+        return processor.searchItemCollectionMono(itemCollection, searchRequest);
+    }
+
+    private Set<String> getIndices(SearchRequest searchRequest) {
         String[] collections = searchRequest.getCollections();
         Set<String> indices = new HashSet<>();
         if (null != collections) {
@@ -117,55 +107,7 @@ public class ElasticsearchApiService implements ApiService {
         } else {
             indices.addAll(aliasLookup.getReadAliases());
         }
-
-        int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
-        BoolQueryBuilder boolQueryBuilder = QueryBuilderHelper.buildQuery(searchRequest);
-
-        Mono<ItemCollection> itemCollection = repository.searchItemCollection(indices, configProps.getEs().getType(),
-                boolQueryBuilder, limit, searchRequest.getPage(), includeFields, searchRequest);
-        return processor.searchItemCollectionMono(itemCollection, searchRequest);
-        /*
-        Integer page = searchRequest.getPage();
-        final int nextPage = (null == page) ? 1 : page + 1;
-        int finalLimit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
-
-        return getItemsFlux(searchRequest)
-                .collectList()
-                // take the api list build an item collection from it
-                .map(itemList -> {
-                    ItemCollection itemCollection = new ItemCollection()
-                            .features(itemList)
-                            .type(ItemCollection.TypeEnum.FEATURECOLLECTION);
-
-                    // rebuild the original request link
-                    double[] bbox = searchRequest.getBbox();
-                    String link = LINK_BASE + "?limit=" + finalLimit;
-                    if (null != bbox && bbox.length == 4) {
-
-                        link += bbox == null ? Strings.EMPTY : "&bbox=" + bbox[0] + "," + bbox[1] + "," + bbox[2] + "," + bbox[3];
-                    }
-
-                    link += searchRequest.getTime() == null ? Strings.EMPTY : "&time=" + searchRequest.getTime();
-                    link += searchRequest.getQuery() == null ? Strings.EMPTY : "&query=" + searchRequest.getQuery();
-                    link += searchRequest.getIds() == null ? Strings.EMPTY : "&ids=" + String.join(",", searchRequest.getIds());
-                    link += searchRequest.getCollections() == null ? Strings.EMPTY : "&collections=" + String.join(",", searchRequest.getCollections());
-                    link += searchRequest.getFields() == null ? Strings.EMPTY : "&fields=" + String.join(",", searchRequest.getFields());
-
-                    itemCollection.addLink(new Link()
-                            .href(link)
-                            .rel("self"));
-
-                    // if the number of api in the collection is less than or equal to the limit, do not provide a page page token
-                    if (itemCollection.getFeatures().size() >= finalLimit) {
-                        itemCollection.addLink(new Link()
-                                .href(link + "&page=" + nextPage)
-                                .rel("page"));
-                    }
-
-
-                    return itemCollection;
-                });
-                */
+        return indices;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.planet.staccato.collection;
 
+import com.planet.staccato.dto.api.extensions.FieldsExtension;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import org.springframework.http.MediaType;
@@ -28,7 +29,7 @@ public interface CollectionApi {
                                             @RequestParam(value = "limit", required = false) Integer limit,
                                             @RequestParam(value = "page", required = false) Integer page,
                                             @RequestParam(value = "ids", required = false) String[] ids,
-                                            @RequestParam(value = "fields", required = false) String[] fields,
+                                            @RequestParam(value = "fields", required = false) FieldsExtension fields,
                                             @RequestParam(value = "intersects", required = false) Object geometry);
 
     @GetMapping(value = "/collections/{collectionId}/items", params = "page", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -39,7 +40,7 @@ public interface CollectionApi {
                                                   @RequestParam(value = "limit", required = false) Integer limit,
                                                   @RequestParam(value = "page", required = false) Integer page,
                                                   @RequestParam(value = "ids", required = false) String[] ids,
-                                                  @RequestParam(value = "fields", required = false) String[] fields,
+                                                  @RequestParam(value = "fields", required = false) FieldsExtension fields,
                                                   @RequestParam(value = "intersects", required = false) Object geometry);
 
     @GetMapping(value = "/collections/{collectionId}/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -13,8 +13,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * Responsible for discovering all properties fields in each collection that are annotated with {@link Subcatalog}
- * and providing the ability to determine which subcatalogable fields are still available given a request path.
+ * Responsible for discovering all properties fieldsExtension in each collection that are annotated with {@link Subcatalog}
+ * and providing the ability to determine which subcatalogable fieldsExtension are still available given a request path.
  *
  * @author joshfix
  * Created on 10/24/18
@@ -70,11 +70,11 @@ public class SubcatalogPropertiesService {
     }
 
     /**
-     * Determines which remaining fields are eligible to be subcataloged given the current request path.
+     * Determines which remaining fieldsExtension are eligible to be subcataloged given the current request path.
      *
      * @param collectionId The id of the collection
      * @param path         The request path
-     * @return A list of remaining eligible property fields
+     * @return A list of remaining eligible property fieldsExtension
      */
     public List<PropertyField> getRemainingProperties(String collectionId, String path) {
         if (!collectionsProperties.containsKey(collectionId)) {
@@ -110,12 +110,12 @@ public class SubcatalogPropertiesService {
     }
 
     /**
-     * Builds a map of subcataloged property fields to the unique value of that field.  Eg, if the user accesses
+     * Builds a map of subcataloged property fieldsExtension to the unique value of that field.  Eg, if the user accesses
      * /stac/my_collection/path/10, the map will be populated with `path -> 10`.
      *
      * @param collectionId The id of the collection
      * @param path         The request path
-     * @return A map of subcataloged property fields to field value
+     * @return A map of subcataloged property fieldsExtension to field value
      */
     public Map<String, String> createSubcatalogPathParamMap(String collectionId, String path) {
         List<String> pathList = new ArrayList<>(parsePath(path));

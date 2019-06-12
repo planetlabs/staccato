@@ -2,6 +2,7 @@ package com.planet.staccato.collection;
 
 import com.planet.staccato.SearchRequestUtils;
 import com.planet.staccato.dto.api.SearchRequest;
+import com.planet.staccato.dto.api.extensions.FieldsExtension;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.service.ApiService;
@@ -38,7 +39,7 @@ public class CollectionController implements CollectionApi {
                                                    Integer limit,
                                                    Integer page,
                                                    String[] ids,
-                                                   String[] fields,
+                                                   FieldsExtension fields,
                                                    Object intersects) {
         SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, fields,
                 ids, new String[]{collectionId}, intersects);
@@ -53,7 +54,7 @@ public class CollectionController implements CollectionApi {
                                                          Integer limit,
                                                          Integer page,
                                                          String[] ids,
-                                                         String[] fields,
+                                                         FieldsExtension fields,
                                                          Object intersects) {
         SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, fields,
                 ids, new String[]{collectionId}, intersects);

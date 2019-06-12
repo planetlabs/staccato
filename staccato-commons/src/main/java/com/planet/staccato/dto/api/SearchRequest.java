@@ -1,5 +1,6 @@
 package com.planet.staccato.dto.api;
 
+import com.planet.staccato.dto.api.extensions.FieldsExtension;
 import lombok.Data;
 
 /**
@@ -11,15 +12,19 @@ import lombok.Data;
 @Data
 public class SearchRequest {
 
+    // core fieldsExtension
     private double[] bbox;
+    private Object intersects;
     private String time;
-    private String query;
-    private Integer limit;
+    private Integer limit = 10;
     private Integer page = 1;
     private String[] ids;
     private String[] collections;
-    private String[] fields;
-    private Object intersects;
+
+    // fields extension
+    private FieldsExtension fields;
+    private String query;
+
 
     public SearchRequest bbox(double[] bbox) {
         setBbox(bbox);
@@ -56,7 +61,7 @@ public class SearchRequest {
         return this;
     }
 
-    public SearchRequest fields(String[] fields) {
+    public SearchRequest fields(FieldsExtension fields) {
         setFields(fields);
         return this;
     }

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * All fields required for collections.
+ * All fieldsExtension required for collections.
  *
  * @author joshfix
  * Created on 10/23/18

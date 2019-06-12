@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.planet.staccato</groupId>
         <artifactId>staccato-collections</artifactId>
-        <version>0.7.0.3</version>
+        <version>0.7.0.4</version>
     </parent>
 
     <properties>

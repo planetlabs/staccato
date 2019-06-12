@@ -56,7 +56,7 @@ public class ElasticsearchCatalogService implements CatalogService {
      * Produces a list of all unique values for a given field in a collection.
      *
      * @param collection The collection that will be queried.
-     * @param path The request path containing property fields and values for which to find unique values
+     * @param path The request path containing property fieldsExtension and values for which to find unique values
      * @return A list of unique values
      */
     @Override

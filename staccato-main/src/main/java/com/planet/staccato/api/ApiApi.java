@@ -20,22 +20,17 @@ public interface ApiApi {
     Mono<Item> getItem(@PathVariable("id") String id);
 
     @GetMapping(path = "/search")
-    Mono<ItemCollection> getItems(@RequestParam(value = "bbox", required = false) double[] bbox,
-                                  @RequestParam(value = "time", required = false) String time,
-                                  @RequestParam(value = "query", required = false) String query,
-                                  @RequestParam(value = "limit", required = false) Integer limit,
-                                  @RequestParam(value = "page", required = false) Integer page,
-                                  @RequestParam(value = "ids", required = false) String[] ids,
-                                  @RequestParam(value = "collections", required = false) String[] collections,
-                                  @RequestParam(value = "fields", required = false) String[] fields,
-                                  @RequestParam(value = "intersects", required = false) Object intersects);
+    Mono<ItemCollection> getItems(SearchRequest searchRequest);
+
+    @GetMapping(path = "/search", produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})
+    Flux<Item> getItemsStream(SearchRequest searchRequest);
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
     Mono<ItemCollection> getItemsPost(@RequestBody SearchRequest searchRequest);
 
-    @GetMapping(path = "/search", produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})
-    Flux<Item> getItemsStream(double[] bbox, String time, String query, Integer limit, Integer page, String[] ids,
-                              String[] collections, String[] fields, Object intersects);
+    @PostMapping(value = "/items", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    Mono<ItemCollection> getItemsFormPost(@ModelAttribute SearchRequest searchRequest);
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})

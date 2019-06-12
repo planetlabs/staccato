@@ -26,11 +26,11 @@ public class LinkGenerator {
     private static final Link ROOT = new Link().href(LinksConfigProps.LINK_PREFIX + "/stac").rel("root");
 
     /**
-     * Creates links to subcatalogs based on property fields that are eligible for being subcataloged.
+     * Creates links to subcatalogs based on property fieldsExtension that are eligible for being subcataloged.
      *
      * @param request The server request object
      * @param collection The collection metadata
-     * @param remainingProperties A list of property fields that are eligible for being subcataloged and have not yet
+     * @param remainingProperties A list of property fieldsExtension that are eligible for being subcataloged and have not yet
      *                            been used traversed by the client.
      */
     public void generatePropertyFieldLinks(ServerRequest request, CollectionMetadata collection, List<PropertyField> remainingProperties) {

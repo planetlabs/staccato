@@ -2,6 +2,7 @@ package com.planet.staccato.catalog;
 
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.dto.api.SearchRequest;
+import com.planet.staccato.dto.api.extensions.FieldsExtension;
 import com.planet.staccato.es.api.ElasticsearchApiService;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
@@ -13,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import reactor.core.publisher.Mono;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Responsible for processing any request for collections or subcatalogs.
@@ -89,11 +88,15 @@ public class RequestHandler {
                         filterBuilder.append(" AND ");
                     }
                 }
+                Set<String> idField = new HashSet<>();
+                idField.add("id");
+                FieldsExtension fields = new FieldsExtension().include(idField);
+
                 SearchRequest searchRequest = new SearchRequest()
                         .query(filterBuilder.toString())
                         .limit(10000)
                         .collections(new String[]{collectionId})
-                        .fields(new String[]{"id"});
+                        .fields(fields);
 
                 return searchService.getItemsFlux(searchRequest)
                         .map(item -> item.getId())

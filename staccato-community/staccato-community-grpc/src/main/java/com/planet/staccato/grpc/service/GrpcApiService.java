@@ -5,6 +5,7 @@ import com.google.common.primitives.Doubles;
 import com.google.protobuf.ByteString;
 import com.planet.staccato.SearchRequestUtils;
 import com.planet.staccato.SerializationUtils;
+import com.planet.staccato.dto.api.extensions.FieldsExtension;
 import com.planet.staccato.grpc.generated.ApiIdRequest;
 import com.planet.staccato.grpc.generated.ApiItemBytes;
 import com.planet.staccato.grpc.generated.ApiRequest;
@@ -16,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
 
 /**
  * @author joshfix
@@ -33,15 +36,23 @@ public class GrpcApiService extends ReactorApiServiceGrpc.ApiServiceImplBase {
     @Override
     public Flux<ApiItemBytes> search(Mono<ApiRequest> request) {
         log.debug("Incoming gRPC api request.");
+
         return request
-                .flatMapMany(r -> apiService.getItemsFlux(SearchRequestUtils.generateSearchRequest(Doubles.toArray(r.getBboxList()),
-                        r.getTime(), r.getSearch(), r.getLimit(), r.getPage(),
-                        r.getIdsList().toArray(new String[r.getIdsCount()]),
-                        r.getCollectionsList().toArray(new String[r.getCollectionsCount()]),
-                        r.getFieldsList().toArray(new String[r.getFieldsCount()]),
-                        r.getIntersects()))
-                        .map(item -> SerializationUtils.serializeItem(item, mapper))
-                        .map(item -> ApiItemBytes.newBuilder().setItem(ByteString.copyFrom(item)).build())
+                //double[] bbox, String time, String query, Integer limit, Integer page, FieldsExtension fields, String[] ids, String[] collections, Object intersects
+                .flatMapMany(r -> {
+                            try {
+                                return apiService.getItemsFlux(SearchRequestUtils.generateSearchRequest(Doubles.toArray(r.getBboxList()),
+                                        r.getTime(), r.getSearch(), r.getLimit(), r.getPage(),
+                                        mapper.readValue(r.getFields(), FieldsExtension.class),
+                                        r.getIdsList().toArray(new String[r.getIdsCount()]),
+                                        r.getCollectionsList().toArray(new String[r.getCollectionsCount()]),
+                                        r.getIntersects()))
+                                        .map(item -> SerializationUtils.serializeItem(item, mapper))
+                                        .map(item -> ApiItemBytes.newBuilder().setItem(ByteString.copyFrom(item)).build());
+                            } catch (IOException e) {
+                                return Mono.error(new RuntimeException("Error deserializing fields property.", e));
+                            }
+                        }
                 );
     }
 

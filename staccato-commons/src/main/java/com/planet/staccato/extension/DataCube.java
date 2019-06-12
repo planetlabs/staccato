@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Defines the fields and Jackson property values for fields in the data cube extension.
+ * Defines the fieldsExtension and Jackson property values for fieldsExtension in the data cube extension.
  * @see <a href="https://github.com/radiantearth/stac-spec/tree/master/extensions/datacube">Data Cube Extension</a>
  * @author joshfix
  * Created on 2019-05-15

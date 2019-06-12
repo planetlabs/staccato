@@ -1,5 +1,7 @@
 package com.planet.staccato.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Data;
 
 /**
@@ -8,10 +10,14 @@ import lombok.Data;
  */
 @Data
 public class Meta {
+
+    // limit is special because in the event that the value does not get set, the spec says it must return null
+    @JsonInclude(JsonInclude.Include.ALWAYS)
+    private Long limit;
     private long page;
-    private long limit;
     private long found;
     private long returned;
+    private String next;
 
     public Meta page(long page) {
         setPage(page);
@@ -30,6 +36,11 @@ public class Meta {
 
     public Meta returned(long returned) {
         setReturned(returned);
+        return this;
+    }
+
+    public Meta next(String next) {
+        setNext(next);
         return this;
     }
 

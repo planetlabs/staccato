@@ -3,7 +3,7 @@ package com.planet.staccato.model;
 import java.util.Objects;
 
 /**
- * provides the core metatdata fields plus extensions
+ * provides the core metatdata fieldsExtension plus extensions
  */
 public class ItemProperties {
 

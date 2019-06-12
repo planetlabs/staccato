@@ -7,6 +7,7 @@ import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.dto.StacTransactionResponse;
 import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.es.ScrollWrapper;
+import com.planet.staccato.es.config.ElasticsearchConfigProps;
 import com.planet.staccato.es.exception.ItemException;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
@@ -33,6 +34,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
@@ -51,8 +53,10 @@ public class ElasticsearchRepository {
     private final ObjectMapper mapper;
     private final Scheduler scheduler;
     private final ElasticsearchWebClient client;
+    private final ElasticsearchConfigProps configProps;
 
     private static final StacTransactionResponse ITEM_NOT_FOUND;
+    private static String TYPE;
 
     static {
         ITEM_NOT_FOUND = new StacTransactionResponse();
@@ -60,17 +64,24 @@ public class ElasticsearchRepository {
         ITEM_NOT_FOUND.setReason("Item not found.");
     }
 
+    @PostConstruct
+    public void init() {
+        TYPE = configProps.getEs().getType();
+    }
+
     /**
      * Retries a specific item by index, providers and Id.
      *
      * @param indices Elasticsearch index.
-     * @param type    Search providers query.
      * @param id      Id for the desired entity.
      * @return A Map representation of the Entity.
      */
-    public Mono<Item> searchById(List<String> indices, String type, String id) {
+    public Mono<Item> searchById(List<String> indices, String id) {
         QueryBuilder queryBuilder = QueryBuilders.termQuery(FieldName.ID, id);
-        return searchItemFlux(indices, type, queryBuilder, 1, 0, null)
+        com.planet.staccato.dto.api.SearchRequest searchRequest = new com.planet.staccato.dto.api.SearchRequest()
+                .limit(1)
+                .page(0);
+        return searchItemFlux(indices, queryBuilder, searchRequest)
                 .switchIfEmpty(Mono.error(new RuntimeException("Item with ID '" + id + "' not found.")))
                 .single();
     }
@@ -89,7 +100,7 @@ public class ElasticsearchRepository {
                 .size(limit)
                 .sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC));
 
-        return (null == limit || offset > 1) ? searchSourceBuilder : searchSourceBuilder.from((offset - 1) * limit);
+        return (null == limit || offset <= 1) ? searchSourceBuilder : searchSourceBuilder.from((offset - 1) * limit);
     }
 
     /**
@@ -97,43 +108,27 @@ public class ElasticsearchRepository {
      *
      * @param builder The builder for the seach source
      * @param indices The list of indices to api
-     * @param type    The Elasticsearch type
      * @return The constructed api request
      */
-    private SearchRequest buildSearchRequest(SearchSourceBuilder builder, Collection<String> indices, String type) {
+    private SearchRequest buildSearchRequest(SearchSourceBuilder builder, Collection<String> indices) {
         return new SearchRequest()
-                .types(type)
+                .types(TYPE)
                 .source(builder)
                 .indices(indices.toArray(new String[indices.size()]));
     }
 
 
-    public Mono<ItemCollection> searchItemCollection(Collection<String> indices, String type, QueryBuilder queryBuilder,
-                                                     Integer limit, Integer page, Set<String> includeFields,
+    public Mono<ItemCollection> searchItemCollection(Collection<String> indices, QueryBuilder queryBuilder,
                                                      final com.planet.staccato.dto.api.SearchRequest searchRequest) {
-        SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(queryBuilder, limit, page);
-
-        // if include fields were provided, make sure properties.providers is present because it's needed for Jackson
-        // deserialization to the proper ItemProperties subtype.  then set the includeFields on the api.
-        if (null != includeFields && !includeFields.isEmpty()) {
-            includeFields.add("properties.collection");
-            searchSourceBuilder.fetchSource(includeFields.toArray(new String[includeFields.size()]), null);
-        }
-
-        SearchRequest esSearchRequest = buildSearchRequest(searchSourceBuilder, indices, type);
-        String searchString = esSearchRequest.source().toString();
-
-        log.debug("Searching ES indices '" + indices.toString() + "' with the following request: \n" + searchString);
-
+        String searchString = buildEsSearchString(indices, queryBuilder, searchRequest);
         final Meta meta = new Meta();
-
         return client.searchNoScroll(searchString, indices)
                 // build a flux from the hits
                 .flatMapIterable(response -> {
                     meta.found(response.getHits().getTotalHits())
                             .returned(response.getHits().getHits().length)
-                            .limit(limit)
-                            .page((null == page) ? 1 : page);
+                            .limit(searchRequest.getLimit())
+                            .page((null == searchRequest.getPage()) ? 1 : searchRequest.getPage());
                     return Arrays.asList(response.getHits().getHits());
                 })
                 // process all the hits in parallel -- will use all CPU cores by default
@@ -150,28 +145,33 @@ public class ElasticsearchRepository {
                             .type(ItemCollection.TypeEnum.FEATURECOLLECTION)
                             .meta(meta);
 
-                    final int nextPage = (null == page) ? 1 : page + 1;
+                    final int nextPage = (null == searchRequest.getPage()) ? 1 : searchRequest.getPage() + 1;
                     int finalLimit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
 
                     // rebuild the original request link
                     double[] bbox = searchRequest.getBbox();
                     String link = LinksConfigProps.LINK_BASE + "?limit=" + finalLimit;
                     if (null != bbox && bbox.length == 4) {
-
                         link += bbox == null ? Strings.EMPTY : "&bbox=" + bbox[0] + "," + bbox[1] + "," + bbox[2] + "," + bbox[3];
                     }
-
                     link += searchRequest.getTime() == null ? Strings.EMPTY : "&time=" + searchRequest.getTime();
                     link += searchRequest.getQuery() == null ? Strings.EMPTY : "&query=" + searchRequest.getQuery();
-                    link += searchRequest.getIds() == null ? Strings.EMPTY : "&ids=" + String.join(",", searchRequest.getIds());
-                    link += searchRequest.getCollections() == null ? Strings.EMPTY : "&collections=" + String.join(",", searchRequest.getCollections());
-                    link += searchRequest.getFields() == null ? Strings.EMPTY : "&fields=" + String.join(",", searchRequest.getFields());
+                    link += searchRequest.getIds() == null ? Strings.EMPTY :
+                            "&ids=" + String.join(",", searchRequest.getIds());
+                    link += searchRequest.getCollections() == null ? Strings.EMPTY :
+                            "&collections=" + String.join(",", searchRequest.getCollections());
+                    if (null != searchRequest.getFields()) {
 
+                        link += searchRequest.getFields().getInclude() == null ? Strings.EMPTY :
+                                "&fields.include=" + String.join(",", searchRequest.getFields().getInclude());
+                        link += searchRequest.getFields().getExclude() == null ? Strings.EMPTY :
+                                "&fields.exclude=" + String.join(",", searchRequest.getFields().getExclude());
+                    }
                     itemCollection.addLink(new Link()
                             .href(link)
                             .rel("self"));
 
-                    // if the number of api in the collection is less than or equal to the limit, do not provide a page page token
+                    // if the number of api in the collection is less than or equal to the limit, do not provide a next token
                     if (itemCollection.getFeatures().size() >= finalLimit) {
                         itemCollection.addLink(new Link()
                                 .href(link + "&page=" + nextPage)
@@ -183,35 +183,62 @@ public class ElasticsearchRepository {
                 });
     }
 
+    private void setIncludeExcludeFields(SearchSourceBuilder searchSourceBuilder, com.planet.staccato.dto.api.SearchRequest searchRequest) {
+        // if include fieldsExtension were provided, make sure `collection` is present because it's needed for Jackson
+        // deserialization to the proper ItemProperties subtype.  then set the includeFields on the api.
+        if (null != searchRequest.getFields()) {
+
+            Set<String> includeSet = null;
+            if (searchRequest.getFields().getInclude() != null) {
+                // don't want to alter the original set as it can be used in filters before the response is returned
+                includeSet = new HashSet<>(searchRequest.getFields().getInclude());
+            }
+            Set<String> excludeSet = searchRequest.getFields().getExclude();
+            if ((includeSet != null && !includeSet.isEmpty()) || (excludeSet != null && !excludeSet.isEmpty())) {
+                // include fields takes preference, so remove any fields from the exclude set that are also in include
+                if (excludeSet != null && includeSet != null) {
+                    excludeSet = new HashSet<>(excludeSet);
+                    excludeSet.removeAll(includeSet);
+                }
+                String[] include = null;
+                String[] exclude = null;
+
+                if (includeSet != null && !includeSet.isEmpty()) {
+                    includeSet.add("collection");
+                    include = includeSet.toArray(new String[includeSet.size()]);
+                }
+                if (excludeSet != null && !excludeSet.isEmpty()) {
+                    exclude = excludeSet.toArray(new String[excludeSet.size()]);
+                }
+                searchSourceBuilder.fetchSource(include, exclude);
+            }
+        }
+    }
+
+    private String buildEsSearchString(Collection<String> indices, QueryBuilder queryBuilder,
+                                       com.planet.staccato.dto.api.SearchRequest searchRequest) {
+        int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
+        SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(queryBuilder, limit, searchRequest.getPage());
+        setIncludeExcludeFields(searchSourceBuilder, searchRequest);
+
+        SearchRequest esSearchRequest = buildSearchRequest(searchSourceBuilder, indices);
+        String searchString = esSearchRequest.source().toString();
+
+        log.debug("Searching ES indices '" + indices.toString() + "' with the following request: \n" + searchString);
+        return searchString;
+    }
 
     /**
      * Code to build the ES api request, reactively submit it to ES and deserialize the results.
      *
-     * @param indices      The indices to api
-     * @param type         The Elasticsearch type
-     * @param queryBuilder The builder for the query
-     * @param limit        The max number of items to return in the result
-     * @param offset       The item offset to retrieve results from
+     * @param indices       The indices to api
+     * @param queryBuilder  The builder for the query
+     * @param searchRequest The original search request
      * @return A Flux of items
      */
-    public Flux<Item> searchItemFlux(
-            Collection<String> indices, String type, QueryBuilder queryBuilder, Integer limit, Integer offset,
-            Set<String> includeFields) {
-
-        SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(queryBuilder, limit, offset);
-
-        // if include fields were provided, make sure properties.providers is present because it's needed for Jackson
-        // deserialization to the proper ItemProperties subtype.  then set the includeFields on the api.
-        if (null != includeFields && !includeFields.isEmpty()) {
-            includeFields.add("properties.collection");
-            searchSourceBuilder.fetchSource(includeFields.toArray(new String[includeFields.size()]), null);
-        }
-
-        SearchRequest searchRequest = buildSearchRequest(searchSourceBuilder, indices, type);
-        String searchString = searchRequest.source().toString();
-
-        log.debug("Searching ES indices '" + indices.toString() + "' with the following request: \n" + searchString);
-
+    public Flux<Item> searchItemFlux(Collection<String> indices, QueryBuilder queryBuilder,
+                                     com.planet.staccato.dto.api.SearchRequest searchRequest) {
+        String searchString = buildEsSearchString(indices, queryBuilder, searchRequest);
         return client.searchNoScroll(searchString, indices)
                 // build a flux from the hits
                 .flatMapIterable(response -> Arrays.asList(response.getHits().getHits()))

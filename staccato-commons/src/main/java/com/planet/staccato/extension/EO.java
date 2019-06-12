@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * Defines the fields and Jackson property values for fields in the EO extension.
+ * Defines the fieldsExtension and Jackson property values for fieldsExtension in the EO extension.
  * @see <a href="https://github.com/radiantearth/stac-spec/tree/master/extensions/eo">EO Extension</a>
  * @author joshfix
  * Created on 4/18/18

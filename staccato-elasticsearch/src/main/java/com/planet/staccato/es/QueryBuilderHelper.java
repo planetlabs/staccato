@@ -3,6 +3,7 @@ package com.planet.staccato.es;
 import com.planet.staccato.FieldName;
 import com.planet.staccato.SearchRequestUtils;
 import com.planet.staccato.dto.api.SearchRequest;
+import com.planet.staccato.dto.api.extensions.FieldsExtension;
 import com.planet.staccato.es.api.PropertiesVisitor;
 import com.planet.staccato.es.exception.FilterException;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,7 @@ public class QueryBuilderHelper {//implements QueryBuilder {
     private static final int DEFAULT_LIMIT = 10;
 
     public static BoolQueryBuilder buildQuery(double[] bbox, String time, String query, Integer limit, Integer page,
-                                              String[] ids, String[] collections, String[] fields, Object intersects) {
+                                              String[] ids, String[] collections, FieldsExtension fields, Object intersects) {
         SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, fields, ids, collections, intersects);
         return buildQuery(searchRequest);
     }

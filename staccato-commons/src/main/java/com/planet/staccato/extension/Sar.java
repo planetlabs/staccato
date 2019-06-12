@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.Collection;
 
 /**
- * Defines the fields and Jackson property values for fields in the SAR extension.
+ * Defines the fieldsExtension and Jackson property values for fieldsExtension in the SAR extension.
  * @see <a href="https://github.com/radiantearth/stac-spec/tree/master/extensions/sar">SAR Extension</a>
  * @author joshfix
  * Created on 2019-05-15

@@ -5,7 +5,7 @@ import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
 
 /**
- * Defines the fields and Jackson property values for fields in the checksum extension.
+ * Defines the fieldsExtension and Jackson property values for fieldsExtension in the checksum extension.
  * @see <a href="https://github.com/radiantearth/stac-spec/tree/master/extensions/checksum">Checksum Extension</a>
  * @author joshfix
  * Created on 2019-05-15

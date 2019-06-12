@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -108,21 +107,23 @@ public class LinkBuilderFilter implements ItemSearchFilter {
     }
 
     private boolean shouldFilter(SearchRequest request) {
-        Object o = request.getFields();
-        List<String> fields = null;
-
-        if (null != o && o instanceof String[]) {
-            fields = Arrays.asList((String[]) o);
-        } else {
-            // no specific propertynames were requested -- proceed with adding links
+        // no special inclusions or exclusions
+        if (request.getFields() == null) {
             return true;
         }
 
-        if (!fields.contains("links")) {
-            // if fields were requested but did not contain links, do not add links
-            return false;
+        // if include fields were populated and links were requested, return true and build the links
+        Set<String> include = request.getFields().getInclude();
+        if (include != null && !include.isEmpty()) {
+            return include.contains("links");
         }
-        // fields were present and did contain links, proceed with adding links
+
+        // if exclude fields were populated and links were requested for exclusion, return false and don't build links
+        Set<String> exclude = request.getFields().getExclude();
+        if (exclude != null && !exclude.isEmpty()) {
+            return !exclude.contains("links");
+        }
+
         return true;
     }
 }

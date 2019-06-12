@@ -1,5 +1,7 @@
 package com.planet.staccato.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,11 +12,10 @@ import java.util.Objects;
 public class ItemCollection {
 
     private TypeEnum type;
+    @JsonProperty("search:meta")
     private Meta meta;
     private List<Item> features = new ArrayList<>();
-    //private String nextPageToken;
     private List<Link> links;
-    //private ItemCollectionLinks links;
 
 
     public enum TypeEnum {

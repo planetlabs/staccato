@@ -2,11 +2,12 @@ spring:
   main:
     web-application-type: reactive
   jackson:
+    default-property-inclusion: non_null
     serialization:
       write_enums_using_to_string: true
     deserialization:
       read_enums_using_to_string: true
-    default-property-inclusion: non_null
+      FAIL_ON_MISSING_EXTERNAL_TYPE_ID_PROPERTY: false
 
 management:
   health:

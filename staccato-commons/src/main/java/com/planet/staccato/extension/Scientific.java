@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Collection;
 
 /**
- * Defines the fields and Jackson property values for fields in the scientific extension.
+ * Defines the fieldsExtension and Jackson property values for fieldsExtension in the scientific extension.
  * @see <a href="https://github.com/radiantearth/stac-spec/tree/master/extensions/scientific">Scientific Extension</a>
  * @author joshfix
  * Created on 2/11/19
