@@ -1,6 +1,7 @@
 package com.planet.staccato.dto.api;
 
 import com.planet.staccato.dto.api.extensions.FieldsExtension;
+import com.planet.staccato.dto.api.extensions.SortExtension;
 import lombok.Data;
 
 /**
@@ -23,6 +24,9 @@ public class SearchRequest {
 
     // fields extension
     private FieldsExtension fields;
+
+    // sort extension
+    private SortExtension sort;
     private String query;
 
 
@@ -63,6 +67,11 @@ public class SearchRequest {
 
     public SearchRequest fields(FieldsExtension fields) {
         setFields(fields);
+        return this;
+    }
+
+    public SearchRequest sort(SortExtension sort) {
+        setSort(sort);
         return this;
     }
 

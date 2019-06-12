@@ -103,15 +103,61 @@ Any of the following methods are acceptable ways of running Staccato
 - **query** a Common Query Language text string to query properties of the catalog entry (see below for examples)
 - **ids** a list of comma separated IDs to be returned
 - **collections** a list of comma separated collection IDs on which to filter the results
-- **fieldsExtension** a comma separated list of json field names to include in the result
+- **fields.include** a comma separated list of json field names to include in the result
+- **fields.exclude** a comma separated list of json field names to exclude in the result
 
-Examples:
-
-- <https://stac.boundlessgeo.io/stac/search?fieldsExtension=id,bbox>
+Examples:  
+_GET_
+- <https://stac.boundlessgeo.io/stac/search?fields.include=id,bbox>
 - [https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105 AND landsat:wrs_row=83](https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105%20AND%20landsat:wrs_row=83)
 - <https://stac.boundlessgeo.io/stac/search?ids=LC81050832019135LGN00,LC81050822019135LGN00&collections=landsat-8-l1>
 - [https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover<0.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z](https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover%3C.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z)
 
+_POST_
+
+```json
+{
+    "fields": {
+        "include": ["id", "bbox"]
+    }
+}
+```
+```json
+{
+    "query": "landsat:wrs_path=105 AND landsat:wrs_row=83"
+}
+```
+```json
+{
+    "ids": ["LC81050832019135LGN00", "LC81050822019135LGN00"],
+    "collections": ["landsat-8-l1"]
+}
+```
+```json
+{
+    "limit": 2,
+    "query": "eo:cloud_cover<0.1",
+    "time": "2018-02-12T00:00:00Z/2019-06-12T00:00:00Z",
+    "intersects": {
+            "type": "Polygon",
+            "coordinates": [[
+                [-77.08248138427734, 38.788612962793636], [-77.01896667480469, 38.788612962793636],
+                [-77.01896667480469, 38.835161408189364], [-77.08248138427734, 38.835161408189364],
+                [-77.08248138427734, 38.788612962793636]
+            ]]
+        },
+    "sort": [
+        {
+            "field": "properties.eo:cloud_cover",
+            "direction": "desc"
+        },
+        {
+            "field": "landsat:image_quality_tirs",
+            "direction": "asc"
+        }
+    ]
+}
+```
 
 
 ## Configuartion

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.staccato.FieldName;
 import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.dto.StacTransactionResponse;
+import com.planet.staccato.dto.api.extensions.SortExtension;
 import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.es.ScrollWrapper;
 import com.planet.staccato.es.config.ElasticsearchConfigProps;
@@ -97,8 +98,8 @@ public class ElasticsearchRepository {
     private SearchSourceBuilder buildSearchSourceBuilder(QueryBuilder queryBuilder, Integer limit, Integer offset) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(queryBuilder)
-                .size(limit)
-                .sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC));
+                .size(limit);
+                //.sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC));
 
         return (null == limit || offset <= 1) ? searchSourceBuilder : searchSourceBuilder.from((offset - 1) * limit);
     }
@@ -219,6 +220,7 @@ public class ElasticsearchRepository {
                                        com.planet.staccato.dto.api.SearchRequest searchRequest) {
         int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
         SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(queryBuilder, limit, searchRequest.getPage());
+        configureSort(searchSourceBuilder, searchRequest.getSort());
         setIncludeExcludeFields(searchSourceBuilder, searchRequest);
 
         SearchRequest esSearchRequest = buildSearchRequest(searchSourceBuilder, indices);
@@ -226,6 +228,19 @@ public class ElasticsearchRepository {
 
         log.debug("Searching ES indices '" + indices.toString() + "' with the following request: \n" + searchString);
         return searchString;
+    }
+
+    private void configureSort(SearchSourceBuilder searchSourceBuilder, SortExtension sort) {
+        if (sort == null || sort.isEmpty()) {
+            searchSourceBuilder.sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC));
+            return;
+        }
+
+        for (SortExtension.SortTerm term : sort) {
+            SortOrder sortOrder = (term.getDirection() == SortExtension.SortTerm.SortDirection.DESC) ?
+                    SortOrder.DESC : SortOrder.ASC;
+            searchSourceBuilder.sort(new FieldSortBuilder(term.getField()).order(sortOrder));
+        }
     }
 
     /**
@@ -253,22 +268,24 @@ public class ElasticsearchRepository {
     /**
      * Retrieves the first page of a set of paginated item results
      *
-     * @param collectionId The ID of the collection to query
-     * @param limit        The maximum number of items that should be returned in the query
+     * @param collectionId  The ID of the collection to query
+     * @param queryBuilder  The elasticsearch query builder
+     * @param searchRequest The original search request
      * @return A {@link ScrollWrapper wrapper} object containing a flux of items and scroll ID
      */
-    public ScrollWrapper initialScroll(String collectionId, int limit, QueryBuilder queryBuilder) {
+    public ScrollWrapper initialScroll(String collectionId, QueryBuilder queryBuilder,
+                                       com.planet.staccato.dto.api.SearchRequest searchRequest) {
+        int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
         SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(queryBuilder, limit, null);
-        searchSourceBuilder
-                .sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC));
+        configureSort(searchSourceBuilder, searchRequest.getSort());
 
-        SearchRequest searchRequest = new SearchRequest()
-                .types("item")
+        SearchRequest esSearchRequest = new SearchRequest()
+                .types(TYPE)
                 .source(searchSourceBuilder)
                 //.scroll(TimeValue.timeValueMillis(300000))
                 .indices(collectionId);
 
-        String searchString = searchRequest.source().toString();
+        String searchString = esSearchRequest.source().toString();
 
         log.debug("Searching ES indices '" + collectionId + "' with the following request: \n" + searchString);
 
