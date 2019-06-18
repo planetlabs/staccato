@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -86,7 +87,7 @@ public class ElasticsearchCatalogService implements CatalogService {
 
         SearchResponse response;
         try {
-            response = client.search(request);
+            response = client.search(request, RequestOptions.DEFAULT);
         } catch (Exception ex) {
             log.error("Error getting aggregations.", ex);
             throw new RuntimeException("Error getting aggregations.", ex);
