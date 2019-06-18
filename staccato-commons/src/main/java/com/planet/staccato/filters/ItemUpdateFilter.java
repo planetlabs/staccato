@@ -1,4 +1,4 @@
-package com.planet.staccato.filter;
+package com.planet.staccato.filters;
 
 import com.planet.staccato.model.Item;
 

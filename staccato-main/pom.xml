@@ -48,7 +48,7 @@
             <artifactId>jackson-module-jsonSchema</artifactId>
         </dependency>
 
-        <!-- needed for centroid filter -->
+        <!-- needed for centroid filters -->
 
         <dependency>
             <groupId>com.vividsolutions</groupId>

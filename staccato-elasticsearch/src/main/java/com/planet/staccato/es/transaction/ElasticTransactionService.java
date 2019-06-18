@@ -7,7 +7,7 @@ import com.planet.staccato.es.IndexAliasLookup;
 import com.planet.staccato.es.api.ElasticsearchApiService;
 import com.planet.staccato.es.config.ElasticsearchConfigProps;
 import com.planet.staccato.es.repository.ElasticsearchRepository;
-import com.planet.staccato.filter.ItemsFilterProcessor;
+import com.planet.staccato.filters.ItemsFilterProcessor;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.service.TransactionService;
 import lombok.RequiredArgsConstructor;

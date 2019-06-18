@@ -7,7 +7,7 @@ import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.es.ScrollWrapper;
 import com.planet.staccato.es.repository.ElasticsearchRepository;
 import com.planet.staccato.es.stats.ElasticStatsService;
-import com.planet.staccato.filter.ItemsFilterProcessor;
+import com.planet.staccato.filters.ItemsFilterProcessor;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.model.Link;
