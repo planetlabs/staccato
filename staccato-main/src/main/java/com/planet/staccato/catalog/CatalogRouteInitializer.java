@@ -102,7 +102,7 @@ public class CatalogRouteInitializer {
      */
     private CollectionMetadata getNewInstance(CollectionMetadata collection) {
         try {
-            return CollectionMetadata.class.getDeclaredConstructor().newInstance(collection);
+            return collection.getClass().getConstructor().newInstance();
         } catch (Exception e) {
             log.error("Error creating new collection metadata instance.", e);
         }

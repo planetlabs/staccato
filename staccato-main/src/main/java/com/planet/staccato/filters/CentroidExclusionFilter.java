@@ -26,6 +26,6 @@ public class CentroidExclusionFilter implements ItemSearchFilter {
 
     @Override
     public Item doFilter(Item item, SearchRequest request) {
-        return item.centroid(null);
+        return item;//return item.centroid(null);
     }
 }
