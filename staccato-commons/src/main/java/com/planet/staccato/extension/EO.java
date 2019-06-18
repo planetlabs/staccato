@@ -69,7 +69,7 @@ public interface EO {
     class Band {
 
         @Mapping(type = MappingType.KEYWORD)
-        private String id;
+        private String name;
 
         @Mapping(type = MappingType.KEYWORD)
         @JsonProperty("common_name")
@@ -88,8 +88,8 @@ public interface EO {
         }
 
         @Mapping(type = MappingType.KEYWORD)
-        public Band id(String id) {
-            setId(id);
+        public Band name(String name) {
+            setName(name);
             return this;
         }
 

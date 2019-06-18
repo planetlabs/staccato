@@ -7,6 +7,7 @@ import com.planet.staccato.model.Catalog;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.model.Link;
+import com.planet.staccato.service.AggregationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.context.AnnotationConfigReactiveWebServerApplicationContext;
@@ -15,6 +16,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 import static org.springframework.web.reactive.function.BodyInserters.fromObject;
@@ -38,6 +40,7 @@ public class CatalogRouteInitializer {
     private final RequestHandler requestHandler;
     private final Catalog rootCatalog;
     private final SubcatalogPropertiesService subcatalogPropertiesService;
+    private final AggregationService aggregationService;
 
     /**
      * Loops through all discovered collection objects, registers appropriate routes, and adds links to root catalog.
@@ -50,7 +53,6 @@ public class CatalogRouteInitializer {
                 rootCatalog.getLinks().add(
                         Link.build().href(LinksConfigProps.LINK_PREFIX + "/stac/" + collection.getId()).rel("child"));
             } else {
-                registerCollectionEndpoints(collection);
                 rootCatalog.getLinks().add(
                         Link.build().href(LinksConfigProps.LINK_PREFIX + "/collections/" + collection.getId()).rel("child"));
             }
@@ -70,6 +72,7 @@ public class CatalogRouteInitializer {
                 route(GET("/stac/" + collection.getId()), (request) -> {
                     CollectionMetadata newCollection = getNewInstance(collection);
                     List<PropertyField> remainingProperties = subcatalogPropertiesService.getRemainingProperties(newCollection.getId(), request.path());
+                    newCollection.setExtent(aggregationService.getExtent(newCollection.getId(), null));
                     linkGenerator.generatePropertyFieldLinks(request, newCollection, remainingProperties);
                     return ServerResponse.ok().body(fromObject(newCollection));
                 });
@@ -80,25 +83,14 @@ public class CatalogRouteInitializer {
                 route(GET("/stac/" + collection.getId() + "/**"), (request) -> {
                     CollectionMetadata newCollection = getNewInstance(collection);
                     if (request.path().toLowerCase().endsWith("/items")) {
-                                return ServerResponse.ok().body(requestHandler.handleItemsRequest(newCollection, request), ItemCollection.class);
-                            }
-                            if (request.path().toLowerCase().contains("/items")) {
-                                return ServerResponse.ok().body(requestHandler.handleItemRequest(newCollection, request), Item.class);
-                            }
-                            return ServerResponse.ok().body(requestHandler.handleSubcatalogRequest(newCollection, request), CollectionMetadata.class);
-                        });
+                        return ServerResponse.ok().body(requestHandler.handleItemsRequest(newCollection, request), ItemCollection.class);
+                    }
+                    if (request.path().toLowerCase().contains("/items")) {
+                        return ServerResponse.ok().body(requestHandler.handleItemRequest(newCollection, request), Item.class);
+                    }
+                    return ServerResponse.ok().body(requestHandler.handleSubcatalogRequest(newCollection, request), CollectionMetadata.class);
+                });
         context.registerBean(collection.getId() + "SubcatalogChildRoute", RouterFunction.class, () -> subRoute);
-    }
-
-    /**
-     * Registers routes for collections.  Each collections only needs a single route for the collection name.
-     *
-     * @param collection The {@link CollectionMetadata}
-     */
-    public void registerCollectionEndpoints(CollectionMetadata collection) {
-        RouterFunction<ServerResponse> route =
-                route(GET("/collections/" + collection.getId()), (request) -> ServerResponse.ok().body(fromObject(collection)));
-        context.registerBean(collection.getId() + "CollectionRoute", RouterFunction.class, () -> route);
     }
 
     /**
@@ -110,11 +102,9 @@ public class CatalogRouteInitializer {
      */
     private CollectionMetadata getNewInstance(CollectionMetadata collection) {
         try {
-            return collection.getClass().newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            return CollectionMetadata.class.getDeclaredConstructor().newInstance(collection);
+        } catch (Exception e) {
+            log.error("Error creating new collection metadata instance.", e);
         }
         return null;
     }

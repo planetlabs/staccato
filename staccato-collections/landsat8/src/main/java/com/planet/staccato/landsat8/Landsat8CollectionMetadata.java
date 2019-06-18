@@ -76,7 +76,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
     private List<EO.Band> buildBands() {
         List<EO.Band> bands = new ArrayList<>();
         bands.add(EO.Band.build()
-                .id("B1")
+                .name("B1")
                 .commonName("coastal")
                 .gsd(30)
                 .centerWavelength(0.44d)
@@ -84,7 +84,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         );
 
         bands.add(EO.Band.build()
-                .id("B2")
+                .name("B2")
                 .commonName("blue")
                 .gsd(30)
                 .centerWavelength(0.48d)
@@ -92,7 +92,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         );
 
         bands.add(EO.Band.build()
-                .id("B3")
+                .name("B3")
                 .commonName("green")
                 .gsd(30)
                 .centerWavelength(0.56d)
@@ -100,7 +100,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         );
 
         bands.add(EO.Band.build()
-                .id("B4")
+                .name("B4")
                 .commonName("red")
                 .gsd(30)
                 .centerWavelength(0.65d)
@@ -108,7 +108,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         );
 
         bands.add(EO.Band.build()
-                .id("B5")
+                .name("B5")
                 .commonName("nir")
                 .gsd(30)
                 .centerWavelength(0.86d)
@@ -116,7 +116,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         );
 
         bands.add(EO.Band.build()
-                .id("B6")
+                .name("B6")
                 .commonName("swir16")
                 .gsd(30)
                 .centerWavelength(1.6d)
@@ -124,7 +124,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         );
 
         bands.add(EO.Band.build()
-                .id("B7")
+                .name("B7")
                 .commonName("swir22")
                 .gsd(30)
                 .centerWavelength(2.2d)
@@ -132,7 +132,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         );
 
         bands.add(EO.Band.build()
-                .id("B8")
+                .name("B8")
                 .commonName("pan")
                 .gsd(15)
                 .centerWavelength(0.59d)
@@ -140,7 +140,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         );
 
         bands.add(EO.Band.build()
-                .id("B9")
+                .name("B9")
                 .commonName("cirrus")
                 .gsd(30)
                 .centerWavelength(1.37d)
@@ -148,7 +148,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         );
 
         bands.add(EO.Band.build()
-                .id("B10")
+                .name("B10")
                 .commonName("lwir11")
                 .gsd(100)
                 .centerWavelength(10.9d)
@@ -156,7 +156,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         );
 
         bands.add(EO.Band.build()
-                .id("B11")
+                .name("B11")
                 .commonName("lwir12")
                 .gsd(100)
                 .centerWavelength(12.0d)

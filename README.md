@@ -152,7 +152,7 @@ _POST_
             "direction": "desc"
         },
         {
-            "field": "landsat:image_quality_tirs",
+            "field": "properties.landsat:image_quality_tirs",
             "direction": "asc"
         }
     ]

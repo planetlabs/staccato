@@ -101,7 +101,7 @@ public class ElasticsearchRepository {
                 .size(limit);
                 //.sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC));
 
-        return (null == limit || offset <= 1) ? searchSourceBuilder : searchSourceBuilder.from((offset - 1) * limit);
+        return (null == limit || null == offset || offset <= 1) ? searchSourceBuilder : searchSourceBuilder.from((offset - 1) * limit);
     }
 
     /**
