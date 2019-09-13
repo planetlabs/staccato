@@ -161,12 +161,23 @@ public class ElasticsearchRepository {
                             "&ids=" + String.join(",", searchRequest.getIds());
                     link += searchRequest.getCollections() == null ? Strings.EMPTY :
                             "&collections=" + String.join(",", searchRequest.getCollections());
-                    String fieldsValue = null;
+
+                    String fieldsValue = "";
                     if (null != searchRequest.getFields()) {
+                        // add include fields
                         fieldsValue += searchRequest.getFields().getInclude() == null ? Strings.EMPTY :
                                 String.join(",", searchRequest.getFields().getInclude());
-                        fieldsValue += searchRequest.getFields().getExclude() == null ? Strings.EMPTY :
-                                String.join(",", searchRequest.getFields().getExclude());
+
+                        // add exclude fields
+                        Set<String> excludeFields = searchRequest.getFields().getExclude();
+                        if (null != excludeFields) {
+                            // need to add the "-" prefix for the get parameter
+                            List<String> prefixedExcludeFields = new ArrayList<>();
+                            excludeFields.forEach(field -> prefixedExcludeFields.add("-" + field));
+                            String excludeFieldsString = String.join(",", prefixedExcludeFields);
+                            fieldsValue += fieldsValue.isBlank() ? excludeFieldsString : "," + excludeFieldsString;
+                        }
+
                     }
                     if (fieldsValue != null && !fieldsValue.isBlank()) {
                         link += "&fields=" + fieldsValue;
@@ -182,7 +193,6 @@ public class ElasticsearchRepository {
                                 .href(link + "&page=" + nextPage)
                                 .rel("next"));
                     }
-
 
                     return itemCollection;
                 });
