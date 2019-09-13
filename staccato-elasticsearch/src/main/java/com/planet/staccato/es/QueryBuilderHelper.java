@@ -40,8 +40,10 @@ public class QueryBuilderHelper {//implements QueryBuilder {
     private static final int DEFAULT_LIMIT = 10;
 
     public static BoolQueryBuilder buildQuery(double[] bbox, String time, String query, Integer limit, Integer page,
-                                              String[] ids, String[] collections, FieldsExtension fields, Object intersects) {
-        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, fields, ids, collections, intersects);
+                                              String[] ids, String[] collections, FieldsExtension fields,
+                                              Object intersects) {
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page,
+                fields, ids, collections, intersects, null);
         return buildQuery(searchRequest);
     }
 
@@ -53,7 +55,7 @@ public class QueryBuilderHelper {//implements QueryBuilder {
             boolQueryBuilder.must(bboxBuilder.get());
         }
 
-        Optional<QueryBuilder> timeBuilder = QueryBuilderHelper.timeBuilder(searchRequest.getTime());
+        Optional<QueryBuilder> timeBuilder = QueryBuilderHelper.timeBuilder(searchRequest.getDatetime());
         if (timeBuilder.isPresent()) {
             boolQueryBuilder.must(timeBuilder.get());
         }
@@ -98,7 +100,7 @@ public class QueryBuilderHelper {//implements QueryBuilder {
     /**
      * Builds an Elasticsearch temporal query
      *
-     * @param time The time values passed in the api request
+     * @param time The datetime values passed in the api request
      * @return The Elasticsearch query builder
      */
 
@@ -161,7 +163,7 @@ public class QueryBuilderHelper {//implements QueryBuilder {
                 // TODO this needs to be more robust
                 for (Object o : (List) polygonCoords.get(0)) {
                     List innerCoords = (List) o;
-                    polygonCoordsBuilder.coordinate((double)innerCoords.get(0), (double)innerCoords.get(1));
+                    polygonCoordsBuilder.coordinate((double) innerCoords.get(0), (double) innerCoords.get(1));
                 }
                 shapeBuilder = new PolygonBuilder(polygonCoordsBuilder);
                 break;
@@ -170,11 +172,11 @@ public class QueryBuilderHelper {//implements QueryBuilder {
                 CoordinatesBuilder lineStringCoordsBuilder = new CoordinatesBuilder();
                 for (Object o : lineStringCoords) {
                     List innerCoords = (List) o;
-                    lineStringCoordsBuilder.coordinate((double)innerCoords.get(0), (double)innerCoords.get(1));
+                    lineStringCoordsBuilder.coordinate((double) innerCoords.get(0), (double) innerCoords.get(1));
                 }
                 shapeBuilder = new LineStringBuilder(lineStringCoordsBuilder);
                 break;
-                // TODO implement the rest
+            // TODO implement the rest
             case "MultiPoint":
             case "MultiLineString":
             case "MultiPolygon":

@@ -13,10 +13,10 @@ import lombok.Data;
 @Data
 public class SearchRequest {
 
-    // core fieldsExtension
+    // core fields
     private double[] bbox;
     private Object intersects;
-    private String time;
+    private String datetime;
     private Integer limit = 10;
     private Integer page = 1;
     private String[] ids;
@@ -29,14 +29,13 @@ public class SearchRequest {
     private SortExtension sort;
     private String query;
 
-
     public SearchRequest bbox(double[] bbox) {
         setBbox(bbox);
         return this;
     }
 
-    public SearchRequest time(String time) {
-        setTime(time);
+    public SearchRequest datetime(String time) {
+        setDatetime(time);
         return this;
     }
 

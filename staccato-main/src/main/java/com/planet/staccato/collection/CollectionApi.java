@@ -24,7 +24,7 @@ public interface CollectionApi {
     @GetMapping(value = "/collections/{collectionId}/items", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<ItemCollection> getCollectionItems(@PathVariable("collectionId") String collectionId,
                                             @RequestParam(value = "bbox", required = false) double[] bbox,
-                                            @RequestParam(value = "time", required = false) String time,
+                                            @RequestParam(value = "datetime", required = false) String time,
                                             @RequestParam(value = "query", required = false) String query,
                                             @RequestParam(value = "limit", required = false) Integer limit,
                                             @RequestParam(value = "page", required = false) Integer page,
@@ -35,7 +35,7 @@ public interface CollectionApi {
     @GetMapping(value = "/collections/{collectionId}/items", params = "page", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<ItemCollection> getCollectionItemsScroll(@PathVariable("collectionId") String collectionId,
                                                   @RequestParam(value = "bbox", required = false) double[] bbox,
-                                                  @RequestParam(value = "time", required = false) String time,
+                                                  @RequestParam(value = "datetime", required = false) String time,
                                                   @RequestParam(value = "query", required = false) String query,
                                                   @RequestParam(value = "limit", required = false) Integer limit,
                                                   @RequestParam(value = "page", required = false) Integer page,

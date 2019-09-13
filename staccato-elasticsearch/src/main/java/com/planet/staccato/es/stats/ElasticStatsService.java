@@ -12,7 +12,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.metrics.geobounds.GeoBounds;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
@@ -26,6 +25,7 @@ import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Providers stats data from Elasticsearch.
@@ -104,33 +104,41 @@ public class ElasticStatsService implements AggregationService {
         GeoBounds bboxAggregation = resp.getAggregations().get("bbox");
 
         Extent extent = new Extent();
+        List<String> temporalExtent = new ArrayList<>(2);
 
-        String startValue = start.getValueAsString();
-        if (null != startValue && !startValue.toLowerCase().contains("infinity")) {
-            extent.getTemporal().add(startValue);
-        } else {
-            extent.getTemporal().add(null);
+        Consumer<String> temporalCheck = value -> {
+            if (null != value && !value.toLowerCase().contains("infinity")) {
+                temporalExtent.add(value);
+            } else {
+                temporalExtent.add(null);
+            }
+        };
+
+        temporalCheck.accept(start.getValueAsString());
+        temporalCheck.accept(end.getValueAsString());
+        extent.getTemporal().getInterval().add(temporalExtent);
+
+        List<Double> bbox = getBboxExtent(bboxAggregation);
+        if (bbox != null && bbox.size() == 4) {
+            extent.getSpatial().getBbox().add(bbox);
         }
 
-        String endValue = end.getValueAsString();
-        if (null != endValue && !endValue.toLowerCase().contains("infinity")) {
-            extent.getTemporal().add(endValue);
-        } else {
-            extent.getTemporal().add(null);
-        }
+        return extent;
+    }
 
-        List<Double> bbox = new ArrayList<>();
+    protected List<Double> getBboxExtent(GeoBounds bboxAggregation) {
+
         try {
+            List<Double> bbox = new ArrayList<>();
             bbox.add(bboxAggregation.topLeft().getLon());
             bbox.add(bboxAggregation.bottomRight().getLat());
             bbox.add(bboxAggregation.bottomRight().getLon());
             bbox.add(bboxAggregation.topLeft().getLat());
-            extent.setSpatial(bbox);
+            return bbox;
         } catch (Exception e) {
             // do nothing -- index is empty
         }
-
-        return extent;
+        return null;
     }
 
     /**
@@ -199,15 +207,9 @@ public class ElasticStatsService implements AggregationService {
             stats.setStart(startValue);
         }
 
-        try {
-            List<Double> bbox = new ArrayList<>();
-            bbox.add(bboxAggregation.topLeft().getLon());
-            bbox.add(bboxAggregation.bottomRight().getLat());
-            bbox.add(bboxAggregation.bottomRight().getLon());
-            bbox.add(bboxAggregation.topLeft().getLat());
+        List<Double> bbox = getBboxExtent(bboxAggregation);
+        if (bbox != null && bbox.size() == 4) {
             stats.setBounds(bbox);
-        } catch (Exception e) {
-            // do nothing -- index is empty
         }
 
         return stats;

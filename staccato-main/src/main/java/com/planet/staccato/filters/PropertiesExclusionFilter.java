@@ -32,8 +32,14 @@ public class PropertiesExclusionFilter implements ItemSearchFilter {
         if (request.getFields() == null) {
             return item;
         }
-        Set<String> include = request.getFields().getInclude();
-        Set<String> exclude = request.getFields().getExclude();
+        Set<String> include = null;
+        Set<String> exclude = null;
+
+        if (request.getFields() != null) {
+            include = request.getFields().getInclude();
+            exclude = request.getFields().getExclude();
+        }
+
         if ((include == null || include.isEmpty()) && (exclude == null || exclude.isEmpty())) {
             return item;
         }
@@ -52,7 +58,6 @@ public class PropertiesExclusionFilter implements ItemSearchFilter {
                     collectionRequested = true;
                     continue;
                 }
-
             }
 
             if (!propertiesRequested) {

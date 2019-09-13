@@ -99,7 +99,7 @@ public class ElasticsearchRepository {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder()
                 .query(queryBuilder)
                 .size(limit);
-                //.sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC));
+        //.sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC));
 
         return (null == limit || null == offset || offset <= 1) ? searchSourceBuilder : searchSourceBuilder.from((offset - 1) * limit);
     }
@@ -155,19 +155,23 @@ public class ElasticsearchRepository {
                     if (null != bbox && bbox.length == 4) {
                         link += bbox == null ? Strings.EMPTY : "&bbox=" + bbox[0] + "," + bbox[1] + "," + bbox[2] + "," + bbox[3];
                     }
-                    link += searchRequest.getTime() == null ? Strings.EMPTY : "&time=" + searchRequest.getTime();
+                    link += searchRequest.getDatetime() == null ? Strings.EMPTY : "&datetime=" + searchRequest.getDatetime();
                     link += searchRequest.getQuery() == null ? Strings.EMPTY : "&query=" + searchRequest.getQuery();
                     link += searchRequest.getIds() == null ? Strings.EMPTY :
                             "&ids=" + String.join(",", searchRequest.getIds());
                     link += searchRequest.getCollections() == null ? Strings.EMPTY :
                             "&collections=" + String.join(",", searchRequest.getCollections());
+                    String fieldsValue = null;
                     if (null != searchRequest.getFields()) {
-
-                        link += searchRequest.getFields().getInclude() == null ? Strings.EMPTY :
-                                "&fields.include=" + String.join(",", searchRequest.getFields().getInclude());
-                        link += searchRequest.getFields().getExclude() == null ? Strings.EMPTY :
-                                "&fields.exclude=" + String.join(",", searchRequest.getFields().getExclude());
+                        fieldsValue += searchRequest.getFields().getInclude() == null ? Strings.EMPTY :
+                                String.join(",", searchRequest.getFields().getInclude());
+                        fieldsValue += searchRequest.getFields().getExclude() == null ? Strings.EMPTY :
+                                String.join(",", searchRequest.getFields().getExclude());
                     }
+                    if (fieldsValue != null && !fieldsValue.isBlank()) {
+                        link += "&fields=" + fieldsValue;
+                    }
+
                     itemCollection.addLink(new Link()
                             .href(link)
                             .rel("self"));
@@ -187,33 +191,42 @@ public class ElasticsearchRepository {
     private void setIncludeExcludeFields(SearchSourceBuilder searchSourceBuilder, com.planet.staccato.dto.api.SearchRequest searchRequest) {
         // if include fieldsExtension were provided, make sure `collection` is present because it's needed for Jackson
         // deserialization to the proper ItemProperties subtype.  then set the includeFields on the api.
-        if (null != searchRequest.getFields()) {
 
-            Set<String> includeSet = null;
-            if (searchRequest.getFields().getInclude() != null) {
-                // don't want to alter the original set as it can be used in filters before the response is returned
-                includeSet = new HashSet<>(searchRequest.getFields().getInclude());
-            }
-            Set<String> excludeSet = searchRequest.getFields().getExclude();
-            if ((includeSet != null && !includeSet.isEmpty()) || (excludeSet != null && !excludeSet.isEmpty())) {
-                // include fields takes preference, so remove any fields from the exclude set that are also in include
-                if (excludeSet != null && includeSet != null) {
-                    excludeSet = new HashSet<>(excludeSet);
-                    excludeSet.removeAll(includeSet);
-                }
-                String[] include = null;
-                String[] exclude = null;
-
-                if (includeSet != null && !includeSet.isEmpty()) {
-                    includeSet.add("collection");
-                    include = includeSet.toArray(new String[includeSet.size()]);
-                }
-                if (excludeSet != null && !excludeSet.isEmpty()) {
-                    exclude = excludeSet.toArray(new String[excludeSet.size()]);
-                }
-                searchSourceBuilder.fetchSource(include, exclude);
-            }
+        if (searchRequest.getFields() == null) {
+            return;
         }
+
+        Set<String> includeSet = null;
+        Set<String> excludeSet = null;
+
+        if (searchRequest.getFields() != null && searchRequest.getFields().getInclude() != null) {
+            // don't want to alter the original set as it can be used in filters before the response is returned
+            includeSet = new HashSet<>(searchRequest.getFields().getInclude());
+        }
+
+        if (searchRequest.getFields() != null && searchRequest.getFields().getExclude() != null) {
+            excludeSet = searchRequest.getFields().getExclude();
+        }
+
+        if ((includeSet != null && !includeSet.isEmpty()) || (excludeSet != null && !excludeSet.isEmpty())) {
+            // include fields takes preference, so remove any fields from the exclude set that are also in include
+            if (excludeSet != null && includeSet != null) {
+                excludeSet = new HashSet<>(excludeSet);
+                excludeSet.removeAll(includeSet);
+            }
+            String[] include = null;
+            String[] exclude = null;
+
+            if (includeSet != null && !includeSet.isEmpty()) {
+                includeSet.add("collection");
+                include = includeSet.toArray(new String[includeSet.size()]);
+            }
+            if (excludeSet != null && !excludeSet.isEmpty()) {
+                exclude = excludeSet.toArray(new String[excludeSet.size()]);
+            }
+            searchSourceBuilder.fetchSource(include, exclude);
+        }
+
     }
 
     private String buildEsSearchString(Collection<String> indices, QueryBuilder queryBuilder,

@@ -41,8 +41,8 @@ public class CollectionController implements CollectionApi {
                                                    String[] ids,
                                                    FieldsExtension fields,
                                                    Object intersects) {
-        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, fields,
-                ids, new String[]{collectionId}, intersects);
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page,
+                fields, ids, new String[]{collectionId}, intersects, null);
         return collectionService.getItemsInitialScroll(searchRequest);
     }
 
@@ -56,8 +56,8 @@ public class CollectionController implements CollectionApi {
                                                          String[] ids,
                                                          FieldsExtension fields,
                                                          Object intersects) {
-        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page, fields,
-                ids, new String[]{collectionId}, intersects);
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page,
+                fields, ids, new String[]{collectionId}, intersects, null);
         return collectionService.getItemsScroll(searchRequest);
     }
 

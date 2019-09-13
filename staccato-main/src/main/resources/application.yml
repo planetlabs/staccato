@@ -31,7 +31,7 @@ logging:
     #io.rsocket: TRACE
     #io.netty: DEBUG
     #com.planet.staccato.rsocket: DEBUG
-    #com.planet: DEBUG
+    com.planet: DEBUG
     #org.springframework: DEBUG
     #com.fasterxml: DEBUG
     #com.planet.staccato.es.initializer: DEBUG

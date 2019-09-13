@@ -112,14 +112,20 @@ public class LinkBuilderFilter implements ItemSearchFilter {
             return true;
         }
 
+        Set<String> include = null;
+        Set<String> exclude = null;
+
+        if (request.getFields() != null) {
+            include = request.getFields().getInclude();
+            exclude = request.getFields().getExclude();
+        }
+
         // if include fields were populated and links were requested, return true and build the links
-        Set<String> include = request.getFields().getInclude();
         if (include != null && !include.isEmpty()) {
             return include.contains("links");
         }
 
         // if exclude fields were populated and links were requested for exclusion, return false and don't build links
-        Set<String> exclude = request.getFields().getExclude();
         if (exclude != null && !exclude.isEmpty()) {
             return !exclude.contains("links");
         }

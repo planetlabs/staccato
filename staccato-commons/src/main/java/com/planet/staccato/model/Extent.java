@@ -12,7 +12,16 @@ import java.util.List;
 @Data
 public class Extent {
 
-    private List<Double> spatial = new ArrayList<>(4);
-    private List<String> temporal = new ArrayList<>(2);
+    private Spatial spatial = new Spatial();
+    private Temporal temporal = new Temporal();
 
+    @Data
+    public static class Spatial {
+        List<List<Double>> bbox = new ArrayList<>();
+    }
+
+    @Data
+    public static class Temporal {
+        List<List<String>> interval = new ArrayList<>();
+    }
 }
