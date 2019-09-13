@@ -5,7 +5,7 @@ import com.google.common.primitives.Doubles;
 import com.google.protobuf.ByteString;
 import com.planet.staccato.SearchRequestUtils;
 import com.planet.staccato.SerializationUtils;
-import com.planet.staccato.dto.api.extensions.FieldsExtensionFull;
+import com.planet.staccato.dto.api.extensions.FieldsExtension;
 import com.planet.staccato.grpc.generated.ApiIdRequest;
 import com.planet.staccato.grpc.generated.ApiItemBytes;
 import com.planet.staccato.grpc.generated.ApiRequest;
@@ -38,15 +38,15 @@ public class GrpcApiService extends ReactorApiServiceGrpc.ApiServiceImplBase {
         log.debug("Incoming gRPC api request.");
 
         return request
-                //double[] bbox, String datetime, String query, Integer limit, Integer page, FieldsExtensionFull fields, String[] ids, String[] collections, Object intersects
+                //double[] bbox, String datetime, String query, Integer limit, Integer page, FieldsExtension fields, String[] ids, String[] collections, Object intersects
                 .flatMapMany(r -> {
                             try {
                                 return apiService.getItemsFlux(SearchRequestUtils.generateSearchRequest(Doubles.toArray(r.getBboxList()),
                                         r.getTime(), r.getSearch(), r.getLimit(), r.getPage(),
-                                        mapper.readValue(r.getFields(), FieldsExtensionFull.class),
+                                        mapper.readValue(r.getFields(), FieldsExtension.class),
                                         r.getIdsList().toArray(new String[r.getIdsCount()]),
                                         r.getCollectionsList().toArray(new String[r.getCollectionsCount()]),
-                                        r.getIntersects()))
+                                        r.getIntersects(), null))
                                         .map(item -> SerializationUtils.serializeItem(item, mapper))
                                         .map(item -> ApiItemBytes.newBuilder().setItem(ByteString.copyFrom(item)).build());
                             } catch (IOException e) {

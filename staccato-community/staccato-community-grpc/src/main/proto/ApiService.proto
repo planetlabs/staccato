@@ -15,6 +15,7 @@ message ApiRequest {
     repeated string collections = 7;
     string fields = 8;
     string intersects = 9;
+    string sort = 10;
 }
 
 message ApiIdRequest {
