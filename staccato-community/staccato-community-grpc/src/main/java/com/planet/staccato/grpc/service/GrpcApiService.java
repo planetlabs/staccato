@@ -38,7 +38,7 @@ public class GrpcApiService extends ReactorApiServiceGrpc.ApiServiceImplBase {
         log.debug("Incoming gRPC api request.");
 
         return request
-                //double[] bbox, String datetime, String query, Integer limit, Integer page, FieldsExtension fields, String[] ids, String[] collections, Object intersects
+                //double[] bbox, String datetime, String query, Integer limit, Integer next, FieldsExtension fields, String[] ids, String[] collections, Object intersects
                 .flatMapMany(r -> {
                             try {
                                 return apiService.getItemsFlux(SearchRequestUtils.generateSearchRequest(Doubles.toArray(r.getBboxList()),

@@ -1,5 +1,6 @@
 package com.planet.staccato.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Map;
@@ -10,8 +11,12 @@ import java.util.Set;
  * Item
  */
 @Data
-public class Item<T extends MandatoryProperties> {
+public class Item<T extends CoreProperties> {
 
+    @JsonProperty("stac_version")
+    private String stacVersion;
+    @JsonProperty("stac_extensions")
+    private Set<String> stacExtensions;
     private String id;
     private Bbox bbox;
     private Object geometry;
@@ -21,6 +26,16 @@ public class Item<T extends MandatoryProperties> {
     private T properties;
     private Set<Link> links;
     protected Map<String, Asset> assets;
+
+    public Item<T> stacVersion(String stacVersion) {
+        setStacVersion(stacVersion);
+        return this;
+    }
+
+    public Item<T> stacExtensions(Set<String> stacExtensions) {
+        setStacExtensions(stacExtensions);
+        return this;
+    }
 
     public Item<T> assets(Map<String, Asset> assets) {
         setAssets(assets);
@@ -73,7 +88,7 @@ public class Item<T extends MandatoryProperties> {
 
 
     /**
-     * The GeoJSON roles
+     * Item types
      */
     public enum TypeEnum {
         FEATURE("Feature");

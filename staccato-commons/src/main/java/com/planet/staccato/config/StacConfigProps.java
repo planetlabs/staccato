@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "staccato")
 public class StacConfigProps {
+
+    private String version;
     private boolean includeNullFields = false;
     private boolean generateSelfLinks = true;
     private boolean generateThumbnailLinks = true;

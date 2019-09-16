@@ -41,7 +41,6 @@ public class ItemsFilterProcessor {
         String collection = item.getCollection();
         for (ItemIndexFilter filter : indexFilters) {
             if (filter.types().contains(collection) || filter.types().contains("*")) {
-                log.debug("Executing index query for " + collection);
                 filter.doFilter(item);
             }
         }
@@ -52,7 +51,6 @@ public class ItemsFilterProcessor {
         String collection = item.getCollection();
         for (ItemUpdateFilter filter : updateFilters) {
             if (filter.types().contains(collection) || filter.types().contains("*")) {
-                log.debug("Executing update query for " + collection);
                 filter.doFilter(item);
             }
         }
@@ -63,14 +61,14 @@ public class ItemsFilterProcessor {
         String collection = item.getCollection();
         for (ItemSearchFilter filter : searchFilters) {
             if (filter.types().contains(collection) || filter.types().contains("*")) {
-                log.debug("Executing api query for " + collection);
                 filter.doFilter(item, request);
             }
         }
         return item;
     };
 
-    private BiFunction<ItemCollection, SearchRequest, ItemCollection> searchItemCollectionFunction = (itemCollection, request) -> {
+    private BiFunction<ItemCollection, SearchRequest, ItemCollection> searchItemCollectionFunction =
+            (itemCollection, request) -> {
         for (Item item : itemCollection.getFeatures()) {
             searchItemFunction.apply(item, request);
         }
@@ -94,7 +92,8 @@ public class ItemsFilterProcessor {
     }
 
     public Mono<ItemCollection> searchItemCollectionMono(Mono<ItemCollection> itemCollectionMono, SearchRequest request) {
-        return (null == searchFilters) ? itemCollectionMono : itemCollectionMono.map(ic -> searchItemCollectionFunction.apply(ic, request));
+        return (null == searchFilters) ? itemCollectionMono : itemCollectionMono.map(ic ->
+                searchItemCollectionFunction.apply(ic, request));
     }
 
 }

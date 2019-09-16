@@ -43,7 +43,7 @@ public class StaccatoApplicationInitializer implements ApplicationRunner {
 
         if (null != stacInitializers && !stacInitializers.isEmpty()) {
             for (StacInitializer stacInitializer : stacInitializers) {
-                log.info("Initializer found: " + stacInitializer.getName());
+                log.info("Initializer matched: " + stacInitializer.getName());
                 stacInitializer.init();
             }
         }

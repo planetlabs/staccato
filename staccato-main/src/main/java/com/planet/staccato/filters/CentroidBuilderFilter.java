@@ -1,6 +1,7 @@
 package com.planet.staccato.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Centroid;
 import com.planet.staccato.model.Item;
 import lombok.extern.slf4j.Slf4j;

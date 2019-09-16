@@ -18,7 +18,7 @@ public class SearchRequest {
     private Object intersects;
     private String datetime;
     private Integer limit = 10;
-    private Integer page = 1;
+    private String next = "1";
     private String[] ids;
     private String[] collections;
 
@@ -49,8 +49,8 @@ public class SearchRequest {
         return this;
     }
 
-    public SearchRequest page(int page) {
-        setPage(page);
+    public SearchRequest next(String next) {
+        setNext(next);
         return this;
     }
 

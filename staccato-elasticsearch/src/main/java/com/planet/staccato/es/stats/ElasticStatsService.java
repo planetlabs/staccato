@@ -45,7 +45,7 @@ public class ElasticStatsService implements AggregationService {
      * Creates a non-blocking reactive method for the {@link #getExtent(String, Map) getExtent}  method
      * @param index The Elasticsearch index to api
      * @param query The query that should be executed against the provided index
-     * @return The extent of the items found during the api wrapped in a Mono
+     * @return The extent of the items matched during the api wrapped in a Mono
      */
     @Override
     public Mono<Extent> getExtentMono(String index, Map<String, String> query) {
@@ -57,7 +57,7 @@ public class ElasticStatsService implements AggregationService {
      *
      * @param index The Elasticsearch index to api
      * @param query The query that should be executed against the provided index
-     * @return The extent of the items found during the api
+     * @return The extent of the items matched during the api
      */
     @Override
     public Extent getExtent(String index, Map<String, String> query) {
@@ -119,7 +119,7 @@ public class ElasticStatsService implements AggregationService {
         extent.getTemporal().getInterval().add(temporalExtent);
 
         List<Double> bbox = getBboxExtent(bboxAggregation);
-        if (bbox != null && bbox.size() == 4) {
+        if (bbox != null && (bbox.size() == 4 || bbox.size() == 6)) {
             extent.getSpatial().getBbox().add(bbox);
         }
 
@@ -208,7 +208,7 @@ public class ElasticStatsService implements AggregationService {
         }
 
         List<Double> bbox = getBboxExtent(bboxAggregation);
-        if (bbox != null && bbox.size() == 4) {
+        if (bbox != null && (bbox.size() == 4 || bbox.size() == 6)) {
             stats.setBounds(bbox);
         }
 

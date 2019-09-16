@@ -1,8 +1,10 @@
 package com.planet.staccato.catalog;
 
 import com.planet.staccato.config.LinksConfigProps;
+import com.planet.staccato.config.StacConfigProps;
 import com.planet.staccato.model.Catalog;
 import com.planet.staccato.model.Link;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -21,7 +23,10 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
  */
 @Component
 @Configuration
+@RequiredArgsConstructor
 public class CatalogConfig {
+
+    private final StacConfigProps configProps;
 
     /**
      * Creates the root catalog object.
@@ -34,8 +39,8 @@ public class CatalogConfig {
 
         catalog.setId("staccato");
         catalog.setTitle("Staccato");
-        catalog.setVersion("0.8.0");
-        catalog.setDescription("STAC v0.8.0 implementation by Planet Labs");
+        catalog.setVersion(configProps.getVersion());
+        catalog.setDescription("STAC v" + configProps.getVersion() + " implementation by Planet Labs");
 
         catalog.getLinks().add(Link.build()
                 .rel("self")

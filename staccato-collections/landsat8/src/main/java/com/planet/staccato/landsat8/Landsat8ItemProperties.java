@@ -3,10 +3,12 @@ package com.planet.staccato.landsat8;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.planet.staccato.extension.EO;
-import com.planet.staccato.model.MandatoryProperties;
+import com.planet.staccato.model.CoreProperties;
+import com.planet.staccato.model.Provider;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author joshfix
@@ -15,10 +17,15 @@ import java.util.List;
 @Data
 @JsonTypeName("landsat-8-l1")
 @JsonDeserialize(as = Landsat8ItemProperties.class)
-public class Landsat8ItemProperties implements MandatoryProperties, EO, Landsat8 {
+public class Landsat8ItemProperties implements CoreProperties, EO, Landsat8 {
 
-    // MandatoryProperties
+    // CoreProperties
     private String datetime;
+    private String created;
+    private String updated;
+    private String title;
+    private String license;
+    private Set<Provider> providers;
 
     // Collection field as part of the commons extension (merged from the collection metadata)
     //private String collection = Landsat8CollectionMetadata.ID;

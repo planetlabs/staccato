@@ -71,7 +71,7 @@ public class ElasticTransactionService implements TransactionService {
                 .flatMap(item -> {
                     String index = indexAliasLookup.getWriteAlias(collectionId);
                     log.debug("Found item providers '" + index + "'.");
-                    return repository.createItem(index, configProps.getEs().getType(), item);
+                    return repository.createItem(index, configProps.getType(), item);
                 })
                 .sequential()
                 .collectList()
@@ -106,7 +106,7 @@ public class ElasticTransactionService implements TransactionService {
      */
     @Override
     public Mono<StacTransactionResponse> deleteItem(String id, String collectionId) {
-        return repository.deleteItem(searchService.getItem(id, collectionId), configProps.getEs().getType(), collectionId);
+        return repository.deleteItem(searchService.getItem(id, collectionId), configProps.getType(), collectionId);
     }
 
     /**
@@ -132,7 +132,7 @@ public class ElasticTransactionService implements TransactionService {
     @Override
     public Mono<StacTransactionResponse> updateItem(String id, String body, String collectionId) {
         body = "{\"doc\":" + body + "}";
-        return repository.updateItem(searchService.getItem(id, collectionId), configProps.getEs().getType(), body, collectionId);
+        return repository.updateItem(searchService.getItem(id, collectionId), configProps.getType(), body, collectionId);
     }
 
     /**
@@ -162,7 +162,7 @@ public class ElasticTransactionService implements TransactionService {
                     updateRequest
                             .doc(SerializationUtils.serializeItem(item, mapper), XContentType.JSON)
                             .index(collectionId)
-                            .type(configProps.getEs().getType())
+                            .type(configProps.getType())
                             .id(item.getId());
                     return updateRequest;
                 })

@@ -58,7 +58,7 @@ public class ElasticsearchCollectionService implements CollectionService {
     }
 
     /**
-     * Retrieves the first page of a set of paginated item results
+     * Retrieves the first next of a set of paginated item results
      *
      * @param searchRequest The API search request
      * @return The collection of items wrapped in a Mono
@@ -84,7 +84,7 @@ public class ElasticsearchCollectionService implements CollectionService {
                             .type(ItemCollection.TypeEnum.FEATURECOLLECTION);
                     if (!itemList.isEmpty() && null != wrapper.getScrollId()) {
                         itemCollection.addLink(new Link()
-                                .href(LINK_BASE + collectionId + "/items?page=" + wrapper.getScrollId())
+                                .href(LINK_BASE + collectionId + "/items?next=" + wrapper.getScrollId())
                                 .rel("next"));
                     }
                     return itemCollection;
@@ -92,14 +92,14 @@ public class ElasticsearchCollectionService implements CollectionService {
     }
 
     /**
-     * Retreives the page page of item results using the Elasticsearch scroll API
+     * Retreives the next next of item results using the Elasticsearch scroll API
      *
      * @param searchRequest The API search request
      * @return The collection of items wrapped in a Mono
      */
     @Override
     public Mono<ItemCollection> getItemsScroll(SearchRequest searchRequest) {
-        Flux<Item> itemFlux = repository.scroll(searchRequest.getPage());
+        Flux<Item> itemFlux = repository.scroll(searchRequest.getNext());
 
         if (searchRequest.getCollections() == null || searchRequest.getCollections().length != 1) {
             throw new RuntimeException("Unable to determine collection type.");
@@ -115,7 +115,7 @@ public class ElasticsearchCollectionService implements CollectionService {
                             .type(ItemCollection.TypeEnum.FEATURECOLLECTION);
                     if (!itemList.isEmpty()) {
                         itemCollection.addLink(new Link()
-                                .href(LINK_BASE + collectionId + "/items?page=" + searchRequest.getPage())
+                                .href(LINK_BASE + collectionId + "/items?next=" + searchRequest.getNext())
                                 .rel("next"));
                     }
                     return itemCollection;

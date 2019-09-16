@@ -16,7 +16,6 @@ import java.util.List;
 @Data
 public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsat8ItemProperties> {
 
-    public static final String STAC_VERSION = "0.8.0";
     public static final String ID = "landsat-8-l1";
     public static final String TITLE = "Landsat 8 L1";
     public static final String DESCRIPTION = "Landsat 8 imagery radiometrically calibrated and orthorectified using "
@@ -24,19 +23,19 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
     public static final String VERSION = "0.0.0";
     public static final String LICENSE = "PDDL-1.0";
     public static final String[] KEYWORDS = {"landsat", "landsat8"};
+    public static final String CRS = "EPSG:4326";
 
 
     public Landsat8CollectionMetadata() {
         super();
 
-        setStacVersion(STAC_VERSION);
         setId(ID);
+        setCrs(CRS);
         setTitle(TITLE);
         setDescription(DESCRIPTION);
         setVersion(VERSION);
         setLicense(LICENSE);
         keywords.addAll(Arrays.asList(KEYWORDS));
-
         properties = new Landsat8ItemProperties();
 
         buildProperties();

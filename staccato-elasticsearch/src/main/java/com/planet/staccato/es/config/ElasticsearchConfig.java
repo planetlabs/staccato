@@ -41,16 +41,16 @@ public class ElasticsearchConfig {
      */
     @Bean
     public RestHighLevelClient restHighLevelClient() {
-        RestClientBuilder builder = RestClient.builder(new HttpHost(configProps.getEs().getHost(), configProps.getEs().getPort(), configProps.getEs().getScheme()));
+        RestClientBuilder builder = RestClient.builder(new HttpHost(configProps.getHost(), configProps.getPort(), configProps.getScheme()));
         RestClientBuilder.HttpClientConfigCallback httpClientConfigCallback = httpAsyncClientBuilder -> {
             httpAsyncClientBuilder
-                    .setMaxConnTotal(configProps.getEs().getRestClientMaxConnectionsTotal())
-                    .setMaxConnPerRoute(configProps.getEs().getRestClientMaxConnectionsPerRoute());
+                    .setMaxConnTotal(configProps.getRestClientMaxConnectionsTotal())
+                    .setMaxConnPerRoute(configProps.getRestClientMaxConnectionsPerRoute());
 
-            if (null != configProps.getEs().getUser() && !configProps.getEs().getUser().isEmpty()) {
+            if (null != configProps.getUser() && !configProps.getUser().isEmpty()) {
                 CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
                 credentialsProvider.setCredentials(AuthScope.ANY,
-                        new UsernamePasswordCredentials(configProps.getEs().getUser(), configProps.getEs().getPassword()));
+                        new UsernamePasswordCredentials(configProps.getUser(), configProps.getPassword()));
                 httpAsyncClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
             }
 
@@ -58,7 +58,7 @@ public class ElasticsearchConfig {
         };
 
         builder.setHttpClientConfigCallback(httpClientConfigCallback);
-        builder.setMaxRetryTimeoutMillis(configProps.getEs().getRestClientMaxRetryTimeoutMillis());
+        builder.setMaxRetryTimeoutMillis(configProps.getRestClientMaxRetryTimeoutMillis());
 
         //return new RestHighLevelClient(builder.build());
         return new RestHighLevelClient(builder);
@@ -72,7 +72,7 @@ public class ElasticsearchConfig {
     @Bean
     public Scheduler scheduler() {
         return Schedulers.newParallel("async-bridge",
-                configProps.getEs().getRestClientMaxConnectionsTotal(), configProps.getAsyncBridgeThreadPool().isDaemon());
+                configProps.getRestClientMaxConnectionsTotal(), configProps.getAsyncBridgeThreadPool().isDaemon());
     }
 
     @Bean

@@ -15,8 +15,8 @@ public class ItemCollectionLinks {
   }
 
    /**
-   * A URL to obtain the page paginated data set. If not present, the client should utilize the &#x60;nextPageToken&#x60;.
-   * @return page
+   * A URL to obtain the next paginated data set. If not present, the client should utilize the &#x60;nextPageToken&#x60;.
+   * @return next
   **/
   public String getNext() {
     return next;
@@ -50,7 +50,7 @@ public class ItemCollectionLinks {
     StringBuilder sb = new StringBuilder();
     sb.append("class ItemCollectionLinks {\n");
 
-    sb.append("    page: ").append(toIndentedString(next)).append("\n");
+    sb.append("    next: ").append(toIndentedString(next)).append("\n");
     sb.append("}");
     return sb.toString();
   }

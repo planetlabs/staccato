@@ -39,10 +39,10 @@ public class QueryBuilderHelper {//implements QueryBuilder {
     private static final int NORTH = 3;
     private static final int DEFAULT_LIMIT = 10;
 
-    public static BoolQueryBuilder buildQuery(double[] bbox, String time, String query, Integer limit, Integer page,
+    public static BoolQueryBuilder buildQuery(double[] bbox, String time, String query, Integer limit, String next,
                                               String[] ids, String[] collections, FieldsExtension fields,
                                               Object intersects) {
-        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page,
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, next,
                 fields, ids, collections, intersects, null);
         return buildQuery(searchRequest);
     }
@@ -86,7 +86,7 @@ public class QueryBuilderHelper {//implements QueryBuilder {
      */
 
     public static Optional<QueryBuilder> bboxBuilder(double[] bbox) {
-        if (null == bbox || bbox.length != 4) {
+        if (null == bbox || (!(bbox.length == 4 || bbox.length == 6))) {
             return Optional.empty();
         }
         Coordinate c1 = new Coordinate(bbox[WEST], bbox[NORTH]);

@@ -11,25 +11,19 @@ import lombok.Data;
 public class Meta {
 
     // limit is special because in the event that the value does not get set, the spec says it must return null
-    @JsonInclude(JsonInclude.Include.ALWAYS)
+    @JsonInclude
     private Long limit;
-    private long page;
-    private long found;
+    private long matched;
     private long returned;
     private String next;
-
-    public Meta page(long page) {
-        setPage(page);
-        return this;
-    }
 
     public Meta limit(long limit) {
         setLimit(limit);
         return this;
     }
 
-    public Meta found(long found) {
-        setFound(found);
+    public Meta matched(long matched) {
+        setMatched(matched);
         return this;
     }
 

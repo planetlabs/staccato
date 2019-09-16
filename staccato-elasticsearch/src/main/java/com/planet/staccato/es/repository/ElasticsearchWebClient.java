@@ -45,16 +45,16 @@ public class ElasticsearchWebClient {
      */
     public ElasticsearchWebClient(ElasticsearchConfigProps configProps) {
         String esEndpoint = new StringBuilder()
-                .append(configProps.getEs().getScheme())
+                .append(configProps.getScheme())
                 .append("://")
-                .append(configProps.getEs().getHost())
+                .append(configProps.getHost())
                 .append(":")
-                .append(configProps.getEs().getPort())
+                .append(configProps.getPort())
                 .toString();
         log.debug("Connecting to Elasticsearch at " + esEndpoint);
-        if (null != configProps.getEs().getUser() && !configProps.getEs().getUser().isEmpty()) {
+        if (null != configProps.getUser() && !configProps.getUser().isEmpty()) {
             client = WebClient.builder().baseUrl(esEndpoint).filter(
-                    ExchangeFilterFunctions.basicAuthentication(configProps.getEs().getUser(), configProps.getEs().getPassword()))
+                    ExchangeFilterFunctions.basicAuthentication(configProps.getUser(), configProps.getPassword()))
                     .build();
         } else {
             client = WebClient.create(esEndpoint);

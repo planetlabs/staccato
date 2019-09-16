@@ -56,7 +56,7 @@ public class LinkGenerator {
     }
 
     /**
-     * Creates links to subcatalogs based on unique values found in the database for the selected properties field.
+     * Creates links to subcatalogs based on unique values matched in the database for the selected properties field.
      *
      * @param request The server request object
      * @param collection The collection metadata

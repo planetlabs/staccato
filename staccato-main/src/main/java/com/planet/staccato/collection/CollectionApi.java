@@ -27,18 +27,18 @@ public interface CollectionApi {
                                             @RequestParam(value = "datetime", required = false) String time,
                                             @RequestParam(value = "query", required = false) String query,
                                             @RequestParam(value = "limit", required = false) Integer limit,
-                                            @RequestParam(value = "page", required = false) Integer page,
+                                            @RequestParam(value = "next", required = false) String next,
                                             @RequestParam(value = "ids", required = false) String[] ids,
                                             @RequestParam(value = "fields", required = false) FieldsExtension fields,
                                             @RequestParam(value = "intersects", required = false) Object geometry);
 
-    @GetMapping(value = "/collections/{collectionId}/items", params = "page", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/collections/{collectionId}/items", params = "next", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<ItemCollection> getCollectionItemsScroll(@PathVariable("collectionId") String collectionId,
                                                   @RequestParam(value = "bbox", required = false) double[] bbox,
                                                   @RequestParam(value = "datetime", required = false) String time,
                                                   @RequestParam(value = "query", required = false) String query,
                                                   @RequestParam(value = "limit", required = false) Integer limit,
-                                                  @RequestParam(value = "page", required = false) Integer page,
+                                                  @RequestParam(value = "next", required = false) String next,
                                                   @RequestParam(value = "ids", required = false) String[] ids,
                                                   @RequestParam(value = "fields", required = false) FieldsExtension fields,
                                                   @RequestParam(value = "intersects", required = false) Object geometry);

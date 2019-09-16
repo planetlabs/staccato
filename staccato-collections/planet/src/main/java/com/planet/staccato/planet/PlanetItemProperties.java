@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
 import com.planet.staccato.extension.EO;
-import com.planet.staccato.model.MandatoryProperties;
+import com.planet.staccato.model.CoreProperties;
+import com.planet.staccato.model.Provider;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author joshfix
@@ -15,10 +17,15 @@ import java.util.List;
  */
 @Data
 @JsonTypeName("pl")
-public class PlanetItemProperties implements MandatoryProperties, EO, Planet {
+public class PlanetItemProperties implements CoreProperties, EO, Planet {
 
-    // MandatoryProperties
+    // CoreProperties
     private String datetime;
+    private String created;
+    private String updated;
+    private String title;
+    private String license;
+    private Set<Provider> providers;
 
     // Collection field as part of the commons extension (merged from the collection metadata)
     //private String collection = PlanetCollectionMetadata.ID;
@@ -48,7 +55,7 @@ public class PlanetItemProperties implements MandatoryProperties, EO, Planet {
     @Mapping(type = MappingType.KEYWORD)
     private String stripId;
     @Mapping(type = MappingType.DATE)
-    private String updated;
+    private String plUpdated;
 
 }
 

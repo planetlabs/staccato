@@ -33,7 +33,7 @@ public class ElasticsearchAvailabilityChecker implements StacInitializer {
     @Override
     public void init() {
         int attempt = 0;
-        while (attempt < configProps.getEs().getMaxReconnectionAttempts()) {
+        while (attempt < configProps.getMaxReconnectionAttempts()) {
 
             try {
                 MainResponse response = client.info();
@@ -51,7 +51,7 @@ public class ElasticsearchAvailabilityChecker implements StacInitializer {
                         + " seconds before reattempting connection.");
                 TimeUnit.SECONDS.sleep(backoffPeriod);
             } catch (InterruptedException e) {
-                // do nothing -- just move on to page attempt
+                // do nothing -- just move on to next attempt
             }
         }
 
@@ -64,7 +64,7 @@ public class ElasticsearchAvailabilityChecker implements StacInitializer {
 
     private void shutdown() {
         log.error("Elasticsearch is not available. Max retry attempts ("
-                + configProps.getEs().getMaxReconnectionAttempts() + ") has been reached. Shutting down...");
+                + configProps.getMaxReconnectionAttempts() + ") has been reached. Shutting down...");
         SpringApplication.exit(appContext, () -> 1);
         System.exit(1);
     }

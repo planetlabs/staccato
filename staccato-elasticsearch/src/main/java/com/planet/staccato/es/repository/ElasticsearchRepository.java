@@ -39,7 +39,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
- * This class provides the logic for methods that would be expected to be found in a repository service for performing
+ * This class provides the logic for methods that would be expected to be matched in a repository service for performing
  * CRUD operations against Elasticsearch.
  *
  * @author joshfix
@@ -62,12 +62,12 @@ public class ElasticsearchRepository {
     static {
         ITEM_NOT_FOUND = new StacTransactionResponse();
         ITEM_NOT_FOUND.setSuccess(false);
-        ITEM_NOT_FOUND.setReason("Item not found.");
+        ITEM_NOT_FOUND.setReason("Item not matched.");
     }
 
     @PostConstruct
     public void init() {
-        TYPE = configProps.getEs().getType();
+        TYPE = configProps.getType();
     }
 
     /**
@@ -81,9 +81,9 @@ public class ElasticsearchRepository {
         QueryBuilder queryBuilder = QueryBuilders.termQuery(FieldName.ID, id);
         com.planet.staccato.dto.api.SearchRequest searchRequest = new com.planet.staccato.dto.api.SearchRequest()
                 .limit(1)
-                .page(0);
+                .next("0");
         return searchItemFlux(indices, queryBuilder, searchRequest)
-                .switchIfEmpty(Mono.error(new RuntimeException("Item with ID '" + id + "' not found.")))
+                .switchIfEmpty(Mono.error(new RuntimeException("Item with ID '" + id + "' not matched.")))
                 .single();
     }
 
@@ -126,10 +126,10 @@ public class ElasticsearchRepository {
         return client.searchNoScroll(searchString, indices)
                 // build a flux from the hits
                 .flatMapIterable(response -> {
-                    meta.found(response.getHits().getTotalHits())
+                    meta.matched(response.getHits().getTotalHits())
                             .returned(response.getHits().getHits().length)
                             .limit(searchRequest.getLimit())
-                            .page((null == searchRequest.getPage()) ? 1 : searchRequest.getPage());
+                            .next((null == searchRequest.getNext()) ? "1" : searchRequest.getNext());
                     return Arrays.asList(response.getHits().getHits());
                 })
                 // process all the hits in parallel -- will use all CPU cores by default
@@ -146,13 +146,14 @@ public class ElasticsearchRepository {
                             .type(ItemCollection.TypeEnum.FEATURECOLLECTION)
                             .meta(meta);
 
-                    final int nextPage = (null == searchRequest.getPage()) ? 1 : searchRequest.getPage() + 1;
+                    // TODO: implement search after
+                    //final int nextPage = (null == searchRequest.getNext()) ? 1 : searchRequest.getNext() + 1;
                     int finalLimit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
 
                     // rebuild the original request link
                     double[] bbox = searchRequest.getBbox();
                     String link = LinksConfigProps.LINK_BASE + "?limit=" + finalLimit;
-                    if (null != bbox && bbox.length == 4) {
+                    if (null != bbox && (bbox.length == 4 || bbox.length == 6)) {
                         link += bbox == null ? Strings.EMPTY : "&bbox=" + bbox[0] + "," + bbox[1] + "," + bbox[2] + "," + bbox[3];
                     }
                     link += searchRequest.getDatetime() == null ? Strings.EMPTY : "&datetime=" + searchRequest.getDatetime();
@@ -190,7 +191,8 @@ public class ElasticsearchRepository {
                     // if the number of api in the collection is less than or equal to the limit, do not provide a next token
                     if (itemCollection.getFeatures().size() >= finalLimit) {
                         itemCollection.addLink(new Link()
-                                .href(link + "&page=" + nextPage)
+                                // TODO implement search after
+                                //.href(link + "&next=" + nextPage)
                                 .rel("next"));
                     }
 
@@ -242,7 +244,8 @@ public class ElasticsearchRepository {
     private String buildEsSearchString(Collection<String> indices, QueryBuilder queryBuilder,
                                        com.planet.staccato.dto.api.SearchRequest searchRequest) {
         int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
-        SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(queryBuilder, limit, searchRequest.getPage());
+        SearchSourceBuilder searchSourceBuilder =
+                buildSearchSourceBuilder(queryBuilder, limit, Integer.parseInt(searchRequest.getNext()));
         configureSort(searchSourceBuilder, searchRequest.getSort());
         setIncludeExcludeFields(searchSourceBuilder, searchRequest);
 
@@ -289,7 +292,7 @@ public class ElasticsearchRepository {
     }
 
     /**
-     * Retrieves the first page of a set of paginated item results
+     * Retrieves the first next of a set of paginated item results
      *
      * @param collectionId  The ID of the collection to query
      * @param queryBuilder  The elasticsearch query builder
@@ -335,13 +338,13 @@ public class ElasticsearchRepository {
     /**
      * Uses the ES scroll API to retrieve a flux of items
      *
-     * @param page The scroll ID
+     * @param next The scroll ID
      * @return A flux of items
      */
-    public Flux<Item> scroll(Integer page) {
-        SearchScrollRequest scrollRequest = new SearchScrollRequest(String.valueOf(page));
+    public Flux<Item> scroll(String next) {
+        SearchScrollRequest scrollRequest = new SearchScrollRequest(next);
         scrollRequest.scroll(TimeValue.timeValueMillis(300000));
-        String searchString = "{\"scroll\":\"5m\",\"scroll_id\": \"" + page + "\"}";
+        String searchString = "{\"scroll\":\"5m\",\"scroll_id\": \"" + next + "\"}";
         //final ScrollWrapper wrapper = new ScrollWrapper();
         return client.searchScroll(searchString)
                 // build a flux from the hits

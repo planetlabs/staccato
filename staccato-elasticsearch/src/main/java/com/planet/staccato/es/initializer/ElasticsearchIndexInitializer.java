@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.planet.staccato.es.config.ElasticsearchConfigProps.Es.Mappings;
+import static com.planet.staccato.es.config.ElasticsearchConfigProps.Mappings;
 
 /**
  * @author joshfix
@@ -99,7 +99,7 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
             // template doesn't exist.  don't do anything for now, we'll add it
         }
 
-        log.debug("No template '" + indexTemplateName + "' found for collection '" + collection.getId() + "'");
+        log.debug("No template '" + indexTemplateName + "' matched for collection '" + collection.getId() + "'");
         return false;
     }
 
@@ -111,7 +111,7 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
             return true;
         }
 
-        log.debug("No index '" + initialIndexName + "' found for collection '" + collection.getId() + "'");
+        log.debug("No index '" + initialIndexName + "' matched for collection '" + collection.getId() + "'");
         return false;
     }
 
@@ -140,8 +140,8 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
         CreateIndexRequest request = new CreateIndexRequest(initialIndexName);
         request.alias(new Alias(writeAlias))
                 .settings(Settings.builder()
-                                .put("index.number_of_shards", configProps.getEs().getNumberOfShards())
-                                .put("index.number_of_replicas", configProps.getEs().getNumberOfReplicas()));
+                                .put("index.number_of_shards", configProps.getNumberOfShards())
+                                .put("index.number_of_replicas", configProps.getNumberOfReplicas()));
 
         client.indices().create(request, RequestOptions.DEFAULT);
         log.info("Index '" + initialIndexName + "' for collection '" + collection.getId() + "' initialized");
@@ -150,7 +150,7 @@ public class ElasticsearchIndexInitializer implements StacInitializer {
 
     // builds the ES JSON representation of mappings
     private Map<String, Object> buildMappings(CollectionMetadata collection) {
-        Mappings mappingConfig = configProps.getEs().getMappings();
+        Mappings mappingConfig = configProps.getMappings();
 
         Map<String, Object> docPropertiesPropertiesProperties = new HashMap<>();
         Map<String, Object> docPropertiesProperties = new HashMap<>();

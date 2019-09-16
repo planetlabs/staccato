@@ -14,44 +14,39 @@ import java.util.Map;
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "staccato")
+@ConfigurationProperties(prefix = "staccato.es")
 public class ElasticsearchConfigProps {
 
-    private Es es = new Es();
+    private String scheme = "http";
+    private String host = "localhost";
+    private int port = 9200;
+    private String user;
+    private String password;
+    private String type = "_doc";  // this will be deprecated and unnecessary in ES7
+    private int numberOfShards = 5;
+    private int numberOfReplicas = 1;
+    private int maxReconnectionAttempts = 10;
+    private int restClientMaxConnectionsTotal = 200;
+    private int restClientMaxConnectionsPerRoute = 200;
+    private int restClientMaxRetryTimeoutMillis = 60000;
+
+    private Mappings mappings = new Mappings();
     private AsyncBridgeThreadPool asyncBridgeThreadPool = new AsyncBridgeThreadPool();
 
     @Data
-    public static class Es {
-        private String scheme = "http";
-        private String host = "localhost";
-        private int port = 9200;
-        private String user;
-        private String password;
-        private String type = "_doc";  // this will be deprecated and unnecessary in ES7
-        private int numberOfShards = 5;
-        private int numberOfReplicas = 1;
-        private int maxReconnectionAttempts = 10;
-        private int restClientMaxConnectionsTotal = 200;
-        private int restClientMaxConnectionsPerRoute = 200;
-        private int restClientMaxRetryTimeoutMillis = 60000;
+    public static class Mappings {
 
-        private Mappings mappings = new Mappings();
+        private Map<String, MappingType> coreMappings = new HashMap<>();
+        private Map<String, MappingType> customMappings = new HashMap<>();
 
-        @Data
-        public static class Mappings {
+        public Mappings() {
+            coreMappings.put("id", MappingType.KEYWORD);
+            coreMappings.put("geometry", MappingType.GEO_SHAPE);
+            coreMappings.put("assets", MappingType.OBJECT);
+            coreMappings.put("properties.collection", MappingType.KEYWORD);
+            coreMappings.put("properties.datetime", MappingType.DATE);
+            coreMappings.put("centroid", MappingType.GEO_POINT);
 
-            private Map<String, MappingType> coreMappings = new HashMap<>();
-            private Map<String, MappingType> customMappings = new HashMap<>();
-
-            public Mappings() {
-                coreMappings.put("id", MappingType.KEYWORD);
-                coreMappings.put("geometry", MappingType.GEO_SHAPE);
-                coreMappings.put("assets", MappingType.OBJECT);
-                coreMappings.put("properties.collection", MappingType.KEYWORD);
-                coreMappings.put("properties.datetime", MappingType.DATE);
-                coreMappings.put("centroid", MappingType.GEO_POINT);
-
-            }
         }
     }
 
@@ -61,3 +56,4 @@ public class ElasticsearchConfigProps {
         private int maxThreads = 200;
     }
 }
+

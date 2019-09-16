@@ -37,11 +37,11 @@ public class CollectionController implements CollectionApi {
                                                    String time,
                                                    String query,
                                                    Integer limit,
-                                                   Integer page,
+                                                   String next,
                                                    String[] ids,
                                                    FieldsExtension fields,
                                                    Object intersects) {
-        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page,
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, next,
                 fields, ids, new String[]{collectionId}, intersects, null);
         return collectionService.getItemsInitialScroll(searchRequest);
     }
@@ -52,11 +52,11 @@ public class CollectionController implements CollectionApi {
                                                          String time,
                                                          String query,
                                                          Integer limit,
-                                                         Integer page,
+                                                         String next,
                                                          String[] ids,
                                                          FieldsExtension fields,
                                                          Object intersects) {
-        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, page,
+        SearchRequest searchRequest = SearchRequestUtils.generateSearchRequest(bbox, time, query, limit, next,
                 fields, ids, new String[]{collectionId}, intersects, null);
         return collectionService.getItemsScroll(searchRequest);
     }

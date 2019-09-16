@@ -19,15 +19,15 @@ public class SearchRequestUtils {
      * @param time   The datetime api request parameter
      * @param query  The query api request parameter
      * @param limit  The limit api request parameter
-     * @param page   The page api request parameter
+     * @param next   The next api request parameter
      * @param fields The fields extension api request parameter
      * @return The {@link SearchRequest SearchRequest} object
      */
     public static SearchRequest generateSearchRequest(
-            double[] bbox, String time, String query, Integer limit, Integer page, FieldsExtension fields,
+            double[] bbox, String time, String query, Integer limit, String next, FieldsExtension fields,
             String[] ids, String[] collections, Object intersects, SortExtension sort) {
         SearchRequest request = new SearchRequest();
-        if (null != bbox && bbox.length == 4) {
+        if (null != bbox && (bbox.length == 4 || bbox.length == 6)) {
             request.setBbox(bbox);
         }
         if (null != time && !time.isBlank()) {
@@ -39,8 +39,8 @@ public class SearchRequestUtils {
         if (null != limit) {
             request.setLimit(limit);
         }
-        if (null != page) {
-            request.setPage(page);
+        if (null != next) {
+            request.setNext(next);
         }
         if (null != fields) {
             request.setFields(fields);

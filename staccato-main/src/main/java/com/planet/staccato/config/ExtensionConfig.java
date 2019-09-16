@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.planet.staccato.collection.CollectionMetadata;
+import com.planet.staccato.model.CoreProperties;
 import com.planet.staccato.model.Item;
-import com.planet.staccato.model.MandatoryProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -27,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExtensionConfig {
 
+    private final StacConfigProps configProps;
     private final ObjectMapper mapper;
     private final List<CollectionMetadata> collectionMetadataList;
 
@@ -40,15 +41,16 @@ public class ExtensionConfig {
 
         mapper.addMixIn(Item.class, ItemMixin.class);
         collectionMetadataList.forEach(metadata -> {
-                NamedType namedType = new NamedType(metadata.getProperties().getClass(), metadata.getId());
-                mapper.registerSubtypes(namedType);
+            metadata.setVersion(configProps.getVersion());
+            NamedType namedType = new NamedType(metadata.getProperties().getClass(), metadata.getId());
+            mapper.registerSubtypes(namedType);
         });
 
         // TODO -- this isn't being set from the main initializer for some reason???
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-    private interface ItemMixin<T extends MandatoryProperties> {
+    private interface ItemMixin<T extends CoreProperties> {
 
         @JsonTypeInfo(
                 use = JsonTypeInfo.Id.NAME,

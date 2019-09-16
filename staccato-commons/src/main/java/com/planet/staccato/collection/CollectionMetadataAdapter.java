@@ -1,15 +1,13 @@
 package com.planet.staccato.collection;
 
+import com.planet.staccato.extension.Scientific;
+import com.planet.staccato.model.CoreProperties;
 import com.planet.staccato.model.Extent;
 import com.planet.staccato.model.Link;
-import com.planet.staccato.model.MandatoryProperties;
 import com.planet.staccato.model.Provider;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Simple extendable implementation of {@link CollectionMetadata}
@@ -18,25 +16,38 @@ import java.util.Set;
  * Created on 10/15/18
  */
 @Data
-public class CollectionMetadataAdapter<T extends MandatoryProperties> implements CollectionMetadata<T> {
+public class CollectionMetadataAdapter<T extends CoreProperties> implements CollectionMetadata<T>, Scientific {
 
     protected String stacVersion;
+    protected Set<String> stacExtensions;
     protected String id;
     protected String title;
     protected String description;
+    protected String crs;
+    protected String itemType;
     protected Set<String> keywords = new HashSet<>();
     protected String version;
     protected String license;
     protected Extent extent;
     protected List<Provider> providers = new ArrayList<>();
+    protected Map<String, Object> summaries;
     protected T properties;
-    //protected Class<T> propertiesClass;
     protected List<Link> links = new ArrayList<>();
     protected CatalogType catalogType;
+
+    protected String doi;
+    protected String citation;
+    protected Collection<Publication> publications;
 
     @Override
     public CollectionMetadata<T> stacVersion(String stacVersion) {
         setStacVersion(stacVersion);
+        return this;
+    }
+
+    @Override
+    public CollectionMetadata<T> stacExtensions(Set<String> stacExtensions) {
+        setStacExtensions(stacExtensions);
         return this;
     }
 
@@ -93,13 +104,13 @@ public class CollectionMetadataAdapter<T extends MandatoryProperties> implements
         setProperties(properties);
         return this;
     }
-/*
+
     @Override
-    public CollectionMetadata<T> propertiesClass(Class propertiesClass) {
-        setPropertiesClass(propertiesClass);
+    public CollectionMetadata<T> summaries(Map<String, Object> summaries) {
+        setSummaries(summaries);
         return this;
     }
-*/
+
     @Override
     public CollectionMetadata<T> links(List<Link> links) {
         setLinks(links);
@@ -109,6 +120,18 @@ public class CollectionMetadataAdapter<T extends MandatoryProperties> implements
     @Override
     public CollectionMetadata<T> catalogType(CatalogType catalogType) {
         setCatalogType(catalogType);
+        return this;
+    }
+
+    @Override
+    public CollectionMetadata<T> crs(String crs) {
+        setCrs(crs);
+        return this;
+    }
+
+    @Override
+    public CollectionMetadata<T> itemType(String itemType) {
+        setItemType(itemType);
         return this;
     }
 

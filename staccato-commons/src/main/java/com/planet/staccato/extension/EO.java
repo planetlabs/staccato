@@ -75,7 +75,11 @@ public interface EO {
         @JsonProperty("common_name")
         private String commmonName;
 
-        private Integer gsd;
+        private String description;
+
+        private Double gsd;
+
+        private Double accuracy;
 
         @JsonProperty("center_wavelength")
         private Double centerWavelength;
@@ -99,8 +103,18 @@ public interface EO {
             return this;
         }
 
-        public Band gsd(int gsd) {
+        public Band description(String description) {
+            setDescription(description);
+            return this;
+        }
+
+        public Band gsd(double gsd) {
             setGsd(gsd);
+            return this;
+        }
+
+        public Band accuracy(double accuracy) {
+            setAccuracy(accuracy);
             return this;
         }
 
