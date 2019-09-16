@@ -42,7 +42,7 @@ public class GrpcApiService extends ReactorApiServiceGrpc.ApiServiceImplBase {
                 .flatMapMany(r -> {
                             try {
                                 return apiService.getItemsFlux(SearchRequestUtils.generateSearchRequest(Doubles.toArray(r.getBboxList()),
-                                        r.getTime(), r.getSearch(), r.getLimit(), r.getPage(),
+                                        r.getTime(), r.getSearch(), r.getLimit(), r.getNext(),
                                         mapper.readValue(r.getFields(), FieldsExtension.class),
                                         r.getIdsList().toArray(new String[r.getIdsCount()]),
                                         r.getCollectionsList().toArray(new String[r.getCollectionsCount()]),

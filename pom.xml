@@ -26,7 +26,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <staccato.version>${project.version}</staccato.version>
         <lucene.version>7.1.0</lucene.version>
-        <elasticsearch.version>6.6.0</elasticsearch.version>
+        <elasticsearch.version>6.8.3</elasticsearch.version>
         <locationtech-jts.version>1.16.0</locationtech-jts.version>
         <locationtech-spatial4j.version>0.7</locationtech-spatial4j.version>
         <vividsolutions-jts.version>1.13</vividsolutions-jts.version>
