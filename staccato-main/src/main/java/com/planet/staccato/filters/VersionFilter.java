@@ -3,7 +3,6 @@ package com.planet.staccato.filters;
 import com.planet.staccato.config.StacConfigProps;
 import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Item;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

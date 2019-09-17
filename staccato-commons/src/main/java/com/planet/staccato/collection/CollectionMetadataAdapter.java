@@ -1,5 +1,6 @@
 package com.planet.staccato.collection;
 
+import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.extension.Scientific;
 import com.planet.staccato.model.CoreProperties;
 import com.planet.staccato.model.Extent;

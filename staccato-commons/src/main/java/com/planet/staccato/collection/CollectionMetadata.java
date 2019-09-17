@@ -2,7 +2,10 @@ package com.planet.staccato.collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.planet.staccato.model.*;
+import com.planet.staccato.model.CoreProperties;
+import com.planet.staccato.model.Extent;
+import com.planet.staccato.model.Link;
+import com.planet.staccato.model.Provider;
 
 import java.util.List;
 import java.util.Map;

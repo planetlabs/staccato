@@ -67,9 +67,11 @@ public class ElasticsearchWebClient {
      * @param body The JSON api request
      * @return The api response object
      */
+    /*
     public Mono<SearchResponse> searchScroll(String body) {
         return searchInternal(body, "/_search/scroll");
     }
+    */
 
     /**
      * Executes a api in Elasticsearch against one ore more indices using the scroll API.
@@ -79,9 +81,11 @@ public class ElasticsearchWebClient {
      * @param indices The indices to api
      * @return The api response object
      */
+    /*
     public Mono<SearchResponse> search(String body, Collection<String> indices) {
         return searchInternal(body, "/_search?scroll=5m&index=" + String.join(",", indices));
     }
+    */
 
     /**
      * Executes a standard api in Elasticsearch against one ore more indices.

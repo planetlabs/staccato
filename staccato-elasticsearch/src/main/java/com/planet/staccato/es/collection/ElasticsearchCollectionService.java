@@ -1,21 +1,11 @@
 package com.planet.staccato.es.collection;
 
+import com.planet.staccato.collection.CatalogType;
 import com.planet.staccato.collection.CollectionMetadata;
-import com.planet.staccato.config.LinksConfigProps;
-import com.planet.staccato.dto.api.SearchRequest;
-import com.planet.staccato.es.QueryBuilderHelper;
-import com.planet.staccato.es.ScrollWrapper;
-import com.planet.staccato.es.repository.ElasticsearchRepository;
 import com.planet.staccato.es.stats.ElasticStatsService;
-import com.planet.staccato.filters.ItemsFilterProcessor;
-import com.planet.staccato.model.Item;
-import com.planet.staccato.model.ItemCollection;
-import com.planet.staccato.model.Link;
 import com.planet.staccato.service.CollectionService;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
@@ -32,94 +22,19 @@ import java.util.Map;
 @Service
 public class ElasticsearchCollectionService implements CollectionService {
 
-    private final ElasticsearchRepository repository;
-    private final ItemsFilterProcessor processor;
     private final ElasticStatsService aggregationService;
     private Map<String, CollectionMetadata> collections = new HashMap<>();
-    private static String LINK_BASE;
 
-    public ElasticsearchCollectionService(ElasticsearchRepository repository, ItemsFilterProcessor processor,
-                                          ElasticStatsService aggregationService, LinksConfigProps linksConfigProperties,
+    public ElasticsearchCollectionService(ElasticStatsService aggregationService,
                                           List<CollectionMetadata> collectionMetadataList) {
-        this.repository = repository;
-        this.processor = processor;
         this.aggregationService = aggregationService;
 
-        // generate the base string for links
-        LinksConfigProps.Self self = linksConfigProperties.getSelf();
-        LINK_BASE = self.getScheme() + "://" + self.getHost();
-        if (self.getPort() != 80) {
-            LINK_BASE += ":" + self.getPort();
-        }
-        LINK_BASE += "/collections/";
-
         // build a map of collection ids to CollectionMetadataAdapter objects so they can easily be retrieved
-        collectionMetadataList.forEach(cm -> collections.put(cm.getId(), cm));
-    }
-
-    /**
-     * Retrieves the first next of a set of paginated item results
-     *
-     * @param searchRequest The API search request
-     * @return The collection of items wrapped in a Mono
-     */
-    @Override
-    public Mono<ItemCollection> getItemsInitialScroll(SearchRequest searchRequest) {
-        BoolQueryBuilder boolQueryBuilder = QueryBuilderHelper.buildQuery(searchRequest);
-
-        if (searchRequest.getCollections() == null || searchRequest.getCollections().length != 1) {
-            throw new RuntimeException("Unable to determine collection type.");
-        }
-        String collectionId = searchRequest.getCollections()[0];
-        //int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
-        ScrollWrapper wrapper =
-                repository.initialScroll(collectionId, boolQueryBuilder, searchRequest);
-
-        return processor.searchItemFlux(
-                wrapper.getItemFlux(), searchRequest)
-                .collectList()
-                .map(itemList -> {
-                    ItemCollection itemCollection = new ItemCollection()
-                            .features(itemList)
-                            .type(ItemCollection.TypeEnum.FEATURECOLLECTION);
-                    if (!itemList.isEmpty() && null != wrapper.getScrollId()) {
-                        itemCollection.addLink(new Link()
-                                .href(LINK_BASE + collectionId + "/items?next=" + wrapper.getScrollId())
-                                .rel("next"));
-                    }
-                    return itemCollection;
-                });
-    }
-
-    /**
-     * Retreives the next next of item results using the Elasticsearch scroll API
-     *
-     * @param searchRequest The API search request
-     * @return The collection of items wrapped in a Mono
-     */
-    @Override
-    public Mono<ItemCollection> getItemsScroll(SearchRequest searchRequest) {
-        Flux<Item> itemFlux = repository.scroll(searchRequest.getNext());
-
-        if (searchRequest.getCollections() == null || searchRequest.getCollections().length != 1) {
-            throw new RuntimeException("Unable to determine collection type.");
-        }
-        String collectionId = searchRequest.getCollections()[0];
-
-        return processor.searchItemFlux(itemFlux, searchRequest)
-                .collectList()
-                // take the api list build an item collection from it
-                .map(itemList -> {
-                    ItemCollection itemCollection = new ItemCollection()
-                            .features(itemList)
-                            .type(ItemCollection.TypeEnum.FEATURECOLLECTION);
-                    if (!itemList.isEmpty()) {
-                        itemCollection.addLink(new Link()
-                                .href(LINK_BASE + collectionId + "/items?next=" + searchRequest.getNext())
-                                .rel("next"));
-                    }
-                    return itemCollection;
-                });
+        collectionMetadataList.forEach(cm -> {
+            if (cm.getCatalogType() == CatalogType.COLLECTION) {
+                collections.put(cm.getId(), cm);
+            }
+        });
     }
 
     /**
@@ -136,6 +51,5 @@ public class ElasticsearchCollectionService implements CollectionService {
         }
         return Mono.empty();
     }
-
 
 }

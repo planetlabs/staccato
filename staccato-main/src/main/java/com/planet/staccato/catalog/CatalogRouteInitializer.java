@@ -77,7 +77,7 @@ public class CatalogRouteInitializer {
                 });
         context.registerBean(collection.getId() + "SubcatalogRoute", RouterFunction.class, () -> route);
 
-        // register wildcard route for all path structures under /stac/<collection_id, including further subcatalogs and items
+        // register wildcard route for all path structures under /stac/<collection_id>, including further subcatalogs and items
         RouterFunction<ServerResponse> subRoute =
                 route(GET("/stac/" + collection.getId() + "/**"), (request) -> {
                     CollectionMetadata newCollection = getNewInstance(collection);

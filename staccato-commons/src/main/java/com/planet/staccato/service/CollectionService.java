@@ -1,8 +1,6 @@
 package com.planet.staccato.service;
 
 import com.planet.staccato.collection.CollectionMetadata;
-import com.planet.staccato.dto.api.SearchRequest;
-import com.planet.staccato.model.ItemCollection;
 import reactor.core.publisher.Mono;
 
 /**
@@ -13,9 +11,6 @@ import reactor.core.publisher.Mono;
  */
 public interface CollectionService {
 
-    Mono<ItemCollection> getItemsInitialScroll(SearchRequest searchRequest);
-
-    Mono<ItemCollection> getItemsScroll(SearchRequest searchRequest);
-
     Mono<CollectionMetadata> getCollectionMetadata(String collectionId);
+
 }
