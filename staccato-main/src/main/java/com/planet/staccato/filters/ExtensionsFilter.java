@@ -26,6 +26,9 @@ public class ExtensionsFilter implements ItemSearchFilter {
 
     @Override
     public Item doFilter(Item item, SearchRequest request) {
+        if (item.getProperties() == null) {
+            return item;
+        }
         Class propertiesClass = item.getProperties().getClass();
         if (cache.containsKey(propertiesClass)) {
             return item.stacExtensions(cache.get(propertiesClass));
