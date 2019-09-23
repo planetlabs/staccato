@@ -1,7 +1,7 @@
 package com.planet.staccato.service;
 
 import com.planet.staccato.collection.CollectionMetadata;
-import reactor.core.publisher.Flux;
+import com.planet.staccato.model.Collections;
 import reactor.core.publisher.Mono;
 
 /**
@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
  */
 public interface CollectionService {
 
-    Flux<CollectionMetadata> getCollections();
+    Mono<Collections> getCollections();
     Mono<CollectionMetadata> getCollectionMetadata(String collectionId);
 
 }

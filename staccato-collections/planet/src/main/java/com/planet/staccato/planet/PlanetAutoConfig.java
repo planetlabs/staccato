@@ -4,13 +4,9 @@ import com.planet.staccato.collection.CatalogType;
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.collection.LinkHelper;
 import com.planet.staccato.config.LinksConfigProps;
-import com.planet.staccato.model.Link;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author joshfix

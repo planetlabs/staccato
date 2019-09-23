@@ -1,6 +1,7 @@
 package com.planet.staccato.collection;
 
 import com.planet.staccato.dto.api.SearchRequest;
+import com.planet.staccato.model.Collections;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.service.ApiService;
@@ -8,7 +9,6 @@ import com.planet.staccato.service.CollectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -26,7 +26,7 @@ public class CollectionController implements CollectionApi {
     private final ApiService apiService;
 
     @Override
-    public Flux<CollectionMetadata> getCollections() {
+    public Mono<Collections> getCollections() {
         return collectionService.getCollections();
     }
 
@@ -38,7 +38,7 @@ public class CollectionController implements CollectionApi {
     @Override
     public Mono<ItemCollection> getCollectionItems(@PathVariable("collectionId") String collectionId,
                                                    SearchRequest searchRequest) {
-        return apiService.getItems(searchRequest);
+        return apiService.getItems( searchRequest.collections(new String[]{collectionId}));
     }
 
     @Override
