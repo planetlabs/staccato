@@ -6,6 +6,7 @@ import com.planet.staccato.model.ItemCollection;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -16,6 +17,9 @@ import reactor.core.publisher.Mono;
  * @see <a href="https://github.com/radiantearth/stac-spec/tree/master/collection-spec">collection-spec</a>
  */
 public interface CollectionApi {
+
+    @GetMapping(value = "/collections", produces = MediaType.APPLICATION_JSON_VALUE)
+    Flux<CollectionMetadata> getCollections();
 
     @GetMapping(value = "/collections/{collectionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<CollectionMetadata> getCollection(@PathVariable("collectionId") String collectionId);

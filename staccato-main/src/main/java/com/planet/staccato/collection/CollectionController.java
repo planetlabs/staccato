@@ -8,6 +8,7 @@ import com.planet.staccato.service.CollectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -23,6 +24,11 @@ public class CollectionController implements CollectionApi {
 
     private final CollectionService collectionService;
     private final ApiService apiService;
+
+    @Override
+    public Flux<CollectionMetadata> getCollections() {
+        return collectionService.getCollections();
+    }
 
     @Override
     public Mono<CollectionMetadata> getCollection(@PathVariable("collectionId") String collectionId) {

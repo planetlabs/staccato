@@ -6,6 +6,7 @@ import com.planet.staccato.es.stats.ElasticStatsService;
 import com.planet.staccato.service.CollectionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
@@ -35,6 +36,17 @@ public class ElasticsearchCollectionService implements CollectionService {
                 collections.put(cm.getId(), cm);
             }
         });
+    }
+
+    /**
+     * Returns all collections.
+     * @return Flux of CollectionMetadata objects
+     */
+    @Override
+    public Flux<CollectionMetadata> getCollections() {
+        return Flux.fromIterable(collections.values())
+                .map(collection -> collection.extent(aggregationService.getExtent(collection.getId(), null)));
+
     }
 
     /**
