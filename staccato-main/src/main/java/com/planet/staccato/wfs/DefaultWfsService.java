@@ -45,7 +45,7 @@ public class DefaultWfsService {
 
     private void initConformance() {
         conformance.setConformsTo(List.of("http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core",
-                "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30",
+                //"http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30",
                 "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html",
                 "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson"));
     }
@@ -57,8 +57,8 @@ public class DefaultWfsService {
         catalog.setDescription("STAC v" + configProps.getVersion() + " implementation by Planet Labs");
 
         catalog.getLinks().add(Link.build()
-                .rel("api")
-                .type(MediaType.APPLICATION_JSON_VALUE)
+                .rel("service-desc")
+                .type("application/vnd.oai.openapi+json;version=3.0")
                 .href(LinksConfigProps.LINK_PREFIX + "/api"));
 
         catalog.getLinks().add(Link.build()
@@ -67,7 +67,7 @@ public class DefaultWfsService {
                 .href(LinksConfigProps.LINK_PREFIX + "/conformance"));
 
         catalog.getLinks().add(Link.build()
-                .rel("collections")
+                .rel("data")
                 .type(MediaType.APPLICATION_JSON_VALUE)
                 .href(LinksConfigProps.LINK_PREFIX + "/collections"));
 

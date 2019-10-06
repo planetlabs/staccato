@@ -1,6 +1,8 @@
 package com.planet.staccato.api;
 
+import com.planet.staccato.dto.api.SearchRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -8,6 +10,7 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -18,21 +21,15 @@ import java.util.List;
  * Created on 2/28/19
  */
 @Slf4j
-//@Component
+@Component
 public class ParameterValidator implements WebFilter {
 
-    private List<String> apiParameters;
+    private List<String> apiParameters = new ArrayList<>();
 
     @PostConstruct
     public void init() {
-        for (Method method :  ApiApi.class.getDeclaredMethods()) {
-            if (method.getName().equalsIgnoreCase("getitems")) {
-                Parameter[] parameters = method.getParameters();
-                apiParameters = new ArrayList<>(parameters.length);
-                for (Parameter parameter : parameters) {
-                    apiParameters.add(parameter.getName().toLowerCase());
-                }
-            }
+        for (Field field : SearchRequest.class.getDeclaredFields()) {
+            apiParameters.add(field.getName());
         }
     }
 
