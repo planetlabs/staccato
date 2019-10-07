@@ -23,7 +23,7 @@ public class PlanetCollectionMetadata extends CollectionMetadataAdapter<PlanetIt
         super();
 
         setId(ID);
-        setCrs(CRS);
+        crs(CRS);
         setTitle(TITLE);
         setDescription(DESCRIPTION);
         setVersion(VERSION);

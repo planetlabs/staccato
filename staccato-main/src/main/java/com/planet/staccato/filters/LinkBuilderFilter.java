@@ -2,6 +2,7 @@ package com.planet.staccato.filters;
 
 import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.config.StacConfigProps;
+import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.Link;
@@ -79,24 +80,27 @@ public class LinkBuilderFilter implements ItemSearchFilter {
     private void buildSelfLink(Item item) {
         item.getLinks().add(Link.build()
                 .href(LINK_BASE + "collections/" + item.getCollection() + "/items/" + item.getId())
-                .rel("self"));
+                .rel("self")
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE));
     }
 
     private void buildCollectionLink(Item item) {
         item.getLinks().add(Link.build()
                 .href(LINK_BASE + "collections/" + item.getCollection())
-                .rel("collection"));
+                .rel("collection")
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE));
     }
 
     private void buildRootLink(Item item) {
         item.getLinks().add(Link.build()
                 .href(LINK_BASE + "stac")
-                .rel("root"));
+                .rel("root")
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE));
     }
 
     private Item buildThumbnailLink(Item item) {
         Link link = new Link();
-        link.href(THUMB_BASE + item.getId() + ".png").rel("thumbnail");
+        link.href(THUMB_BASE + item.getId() + ".png").rel("thumbnail").type("image/png");
         Set<Link> links = item.getLinks();
         if (null == links) {
             links = new HashSet<>();

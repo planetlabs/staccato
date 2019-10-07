@@ -1,6 +1,7 @@
 package com.planet.staccato.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Objects;
 /**
  * ItemCollection
  */
+@Data
 public class ItemCollection {
 
     private TypeEnum type;
@@ -16,6 +18,8 @@ public class ItemCollection {
     private Meta meta;
     private List<Item> features = new ArrayList<>();
     private List<Link> links;
+    private long numberMatched;
+    private long numberReturned;
 
 
     public enum TypeEnum {
@@ -52,19 +56,6 @@ public class ItemCollection {
         return this;
     }
 
-    /**
-     * Get roles
-     *
-     * @return roles
-     **/
-    public TypeEnum getType() {
-        return type;
-    }
-
-    public void setType(TypeEnum type) {
-        this.type = type;
-    }
-
     public ItemCollection features(List<Item> features) {
         this.features = features;
         return this;
@@ -73,27 +64,6 @@ public class ItemCollection {
     public ItemCollection addFeaturesItem(Item featuresItem) {
         this.features.add(featuresItem);
         return this;
-    }
-
-    /**
-     * Get api
-     *
-     * @return api
-     **/
-    public List<Item> getFeatures() {
-        return features;
-    }
-
-    public void setItems(List<Item> features) {
-        this.features = features;
-    }
-
-    public void setLinks(List<Link> links) {
-        this.links = links;
-    }
-
-    public List<Link> getLinks() {
-        return links;
     }
 
     public ItemCollection links(List<Link> links) {
@@ -109,32 +79,20 @@ public class ItemCollection {
         return this;
     }
 
-    public void setMeta(Meta meta) {
-        this.meta = meta;
-    }
-
-    public Meta getMeta() {
-        return meta;
-    }
-
     public ItemCollection meta(Meta meta) {
         setMeta(meta);
         return this;
     }
-/*
-  public ItemCollection links(ItemCollectionLinks links) {
-    this.links = links;
-    return this;
-  }
 
-  public ItemCollectionLinks getLinks() {
-    return links;
-  }
+    public ItemCollection numberMatched(long numberMatched) {
+        setNumberMatched(numberMatched);
+        return this;
+    }
 
-  public void setLinks(ItemCollectionLinks links) {
-    this.links = links;
-  }
-*/
+    public ItemCollection numberReturned(long numberReturned) {
+        setNumberReturned(numberReturned);
+        return this;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -145,10 +103,11 @@ public class ItemCollection {
             return false;
         }
         ItemCollection itemCollection = (ItemCollection) o;
-        return Objects.equals(this.type, itemCollection.type) &&
-                Objects.equals(this.features, itemCollection.features) &&
-                Objects.equals(this.meta, itemCollection.meta);
-        // Objects.equals(this.links, itemCollection.links);
+        return Objects.equals(this.type, itemCollection.type)
+                && Objects.equals(this.features, itemCollection.features)
+                && Objects.equals(this.meta, itemCollection.meta)
+                && Objects.equals(this.numberMatched, itemCollection.numberMatched)
+                && Objects.equals(this.numberReturned, itemCollection.numberReturned);
     }
 
     @Override
@@ -165,7 +124,8 @@ public class ItemCollection {
         sb.append("    roles: ").append(toIndentedString(type)).append("\n");
         sb.append("    api: ").append(toIndentedString(features)).append("\n");
         sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
-        // sb.append("    links: ").append(toIndentedString(links)).append("\n");
+        sb.append("    numberMatched: ").append(toIndentedString(numberMatched)).append("\n");
+        sb.append("    numberReturned: ").append(toIndentedString(numberReturned)).append("\n");
         sb.append("}");
         return sb.toString();
     }

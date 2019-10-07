@@ -42,7 +42,9 @@ public class ItemCollectionBuilder {
         ItemCollection itemCollection = new ItemCollection()
                 .features(itemList)
                 .type(ItemCollection.TypeEnum.FEATURECOLLECTION)
-                .meta(meta);
+                .meta(meta)
+                .numberMatched(meta.getMatched())
+                .numberReturned(meta.getReturned());
 
         int finalLimit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
 

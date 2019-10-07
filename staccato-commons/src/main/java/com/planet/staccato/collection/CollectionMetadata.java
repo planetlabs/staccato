@@ -78,9 +78,10 @@ public interface CollectionMetadata<T extends CoreProperties> {
     void setCatalogType(CatalogType catalogType);
     CollectionMetadata<T> catalogType(CatalogType catalogType);
 
-    String getCrs();
-    void setCrs(String crs);
+    List<String> getCrs();
+    void setCrs(List<String> crs);
     CollectionMetadata<T> crs(String crs);
+    CollectionMetadata<T> crs(List<String> crs);
 
     String getItemType();
     void setItemType(String itemType);

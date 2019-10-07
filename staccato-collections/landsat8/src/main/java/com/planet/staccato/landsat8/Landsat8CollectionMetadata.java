@@ -30,7 +30,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         super();
 
         setId(ID);
-        setCrs(CRS);
+        crs(CRS);
         setTitle(TITLE);
         setDescription(DESCRIPTION);
         setVersion(VERSION);

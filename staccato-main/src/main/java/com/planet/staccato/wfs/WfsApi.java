@@ -1,5 +1,6 @@
 package com.planet.staccato.wfs;
 
+import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.model.Catalog;
 import com.planet.staccato.model.Conformance;
 import org.springframework.http.MediaType;
@@ -15,9 +16,8 @@ public interface WfsApi {
     @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<Catalog> getLandingPage();
 
-    @GetMapping(path = "/api", consumes = {"application/vnd.oai.openapi+json;version=3.0",
-            MediaType.APPLICATION_JSON_VALUE},
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/api",
+            produces = {StaccatoMediaType.VND_OAI_OPENAPI_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})
     Mono<Object> getApi();
 
     @GetMapping(path = "/conformance", produces = MediaType.APPLICATION_JSON_VALUE)

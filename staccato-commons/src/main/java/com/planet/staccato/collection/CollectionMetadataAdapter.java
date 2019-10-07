@@ -23,7 +23,7 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     protected String id;
     protected String title;
     protected String description;
-    protected String crs;
+    protected List<String> crs;
     protected String itemType;
     protected Set<String> keywords = new HashSet<>();
     protected String version;
@@ -125,6 +125,15 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
 
     @Override
     public CollectionMetadata<T> crs(String crs) {
+        if (this.crs == null) {
+            this.crs = new ArrayList<>();
+        }
+        this.crs.add(crs);
+        return this;
+    }
+
+    @Override
+    public CollectionMetadata<T> crs(List<String> crs) {
         setCrs(crs);
         return this;
     }
