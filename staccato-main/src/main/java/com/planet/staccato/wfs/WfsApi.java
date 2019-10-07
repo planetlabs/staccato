@@ -15,7 +15,9 @@ public interface WfsApi {
     @GetMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<Catalog> getLandingPage();
 
-    @GetMapping(path = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/api", consumes = {"application/vnd.oai.openapi+json;version=3.0",
+            MediaType.APPLICATION_JSON_VALUE},
+            produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<Object> getApi();
 
     @GetMapping(path = "/conformance", produces = MediaType.APPLICATION_JSON_VALUE)

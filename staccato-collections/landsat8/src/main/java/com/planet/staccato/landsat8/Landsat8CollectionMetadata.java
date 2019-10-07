@@ -23,7 +23,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
     public static final String VERSION = "0.0.0";
     public static final String LICENSE = "PDDL-1.0";
     public static final String[] KEYWORDS = {"landsat", "landsat8"};
-    public static final String CRS = "EPSG:4326";
+    public static final String CRS = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
 
     public Landsat8CollectionMetadata() {

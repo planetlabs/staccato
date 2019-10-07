@@ -29,6 +29,7 @@ public class LinkHelper {
 
         links.add(Link.build()
                 .rel("items")
+                .type("application/geo+json")
                 .href(LinksConfigProps.LINK_PREFIX + "/collections/" + collectionId + "/items"));
         return links;
     }

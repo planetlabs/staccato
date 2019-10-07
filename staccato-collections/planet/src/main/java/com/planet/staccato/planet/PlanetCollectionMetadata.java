@@ -17,7 +17,7 @@ public class PlanetCollectionMetadata extends CollectionMetadataAdapter<PlanetIt
     public static final String VERSION = "0.0.0";
     public static final String LICENSE = "CC-BY-SA";
     public static final String KEYWORDS = "planet";
-    public static final String CRS = "EPSG:4326";
+    public static final String CRS = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
 
     public PlanetCollectionMetadata() {
         super();

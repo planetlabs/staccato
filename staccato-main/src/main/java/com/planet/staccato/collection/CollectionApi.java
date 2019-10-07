@@ -4,6 +4,7 @@ import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Collections;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
+import org.springframework.boot.actuate.liquibase.LiquibaseEndpoint;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,11 +25,13 @@ public interface CollectionApi {
     @GetMapping(value = "/collections/{collectionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<CollectionMetadata> getCollection(@PathVariable("collectionId") String collectionId);
 
-    @GetMapping(value = "/collections/{collectionId}/items", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/collections/{collectionId}/items", produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = {"application/geo+json", MediaType.APPLICATION_JSON_VALUE})
     Mono<ItemCollection> getCollectionItems(@PathVariable("collectionId") String collectionId,
                                             SearchRequest searchRequest);
 
-    @GetMapping(value = "/collections/{collectionId}/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/collections/{collectionId}/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE,
+    consumes = {"application/geo+json", MediaType.APPLICATION_JSON_VALUE})
     Mono<Item> getCollectionItems(@PathVariable("collectionId") String collectionId,
                                   @PathVariable("itemId") String itemId);
 

@@ -29,7 +29,7 @@ public class ParameterValidator implements WebFilter {
     @PostConstruct
     public void init() {
         for (Field field : SearchRequest.class.getDeclaredFields()) {
-            apiParameters.add(field.getName());
+            apiParameters.add(field.getName().toLowerCase());
         }
     }
 
@@ -43,6 +43,5 @@ public class ParameterValidator implements WebFilter {
         });
 
         return chain.filter(exchange);
-
     }
 }

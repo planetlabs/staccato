@@ -7,6 +7,7 @@ import com.planet.staccato.dto.StacTransactionResponse;
 import com.planet.staccato.dto.api.extensions.SortExtension;
 import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.es.config.ElasticsearchConfigProps;
+import com.planet.staccato.exception.StaccatoRuntimeException;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.model.Meta;
@@ -77,7 +78,7 @@ public class ElasticsearchRepository {
                 //.next("0")
                 ;
         return searchItemFlux(indices, queryBuilder, searchRequest)
-                .switchIfEmpty(Mono.error(new RuntimeException("Item with ID '" + id + "' not matched.")))
+                .switchIfEmpty(Mono.error(new StaccatoRuntimeException("Item with ID '" + id + "' not matched.", 404    )))
                 .single();
     }
 
@@ -195,7 +196,7 @@ public class ElasticsearchRepository {
         if (sort == null || sort.isEmpty()) {
             searchSourceBuilder
                     .sort(new FieldSortBuilder("properties.datetime").order(SortOrder.DESC))
-                    .sort(new FieldSortBuilder("id").order(SortOrder.ASC)).size(10);
+                    .sort(new FieldSortBuilder("id").order(SortOrder.ASC));
             return;
         }
 

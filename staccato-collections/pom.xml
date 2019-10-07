@@ -5,7 +5,7 @@
 
     <groupId>com.planet.staccato</groupId>
     <artifactId>staccato-collections</artifactId>
-    <version>0.8.0.1</version>
+    <version>0.8.0.2</version>
     <packaging>pom</packaging>
 
     <name>staccato-collections</name>

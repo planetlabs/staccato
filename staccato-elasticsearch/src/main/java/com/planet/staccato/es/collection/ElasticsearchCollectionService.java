@@ -4,6 +4,7 @@ import com.planet.staccato.collection.CatalogType;
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.es.stats.ElasticStatsService;
+import com.planet.staccato.exception.StaccatoRuntimeException;
 import com.planet.staccato.model.Collections;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.service.CollectionService;
@@ -33,8 +34,7 @@ public class ElasticsearchCollectionService implements CollectionService {
     private List<Link> collectionsLinks = new ArrayList<>();
 
     public ElasticsearchCollectionService(ElasticStatsService aggregationService,
-                                          List<CollectionMetadata> collectionMetadataList,
-                                          LinksConfigProps linksConfigProps) {
+                                          List<CollectionMetadata> collectionMetadataList) {
         this.aggregationService = aggregationService;
 
         initLinks();
@@ -78,7 +78,7 @@ public class ElasticsearchCollectionService implements CollectionService {
             return Mono.just(aggregationService.getExtent(collectionId, null))
                     .map(extent -> metadata.extent(extent));
         }
-        return Mono.empty();
+        throw new StaccatoRuntimeException("No collection found with id '" + collectionId + "'.", 404);
     }
 
 }
