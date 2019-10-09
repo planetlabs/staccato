@@ -8,7 +8,7 @@ import lombok.Data;
  * Created on 2019-06-05
  */
 @Data
-public class Meta {
+public class SearchMetadata {
 
     // limit is special because in the event that the value does not get set, the spec says it must return null
     @JsonInclude
@@ -17,22 +17,22 @@ public class Meta {
     private long returned;
     private String next;
 
-    public Meta limit(long limit) {
+    public SearchMetadata limit(long limit) {
         setLimit(limit);
         return this;
     }
 
-    public Meta matched(long matched) {
+    public SearchMetadata matched(long matched) {
         setMatched(matched);
         return this;
     }
 
-    public Meta returned(long returned) {
+    public SearchMetadata returned(long returned) {
         setReturned(returned);
         return this;
     }
 
-    public Meta next(String next) {
+    public SearchMetadata next(String next) {
         setNext(next);
         return this;
     }

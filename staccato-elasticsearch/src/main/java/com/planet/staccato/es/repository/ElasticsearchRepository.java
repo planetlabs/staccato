@@ -10,7 +10,7 @@ import com.planet.staccato.es.config.ElasticsearchConfigProps;
 import com.planet.staccato.exception.StaccatoRuntimeException;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
-import com.planet.staccato.model.Meta;
+import com.planet.staccato.model.SearchMetadata;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.DocWriteResponse;
@@ -121,10 +121,10 @@ public class ElasticsearchRepository {
     public Mono<ItemCollection> searchItemCollection(Collection<String> indices, QueryBuilder queryBuilder,
                                                      final com.planet.staccato.dto.api.SearchRequest searchRequest) {
         String searchString = buildEsSearchString(indices, queryBuilder, searchRequest);
-        final Meta meta = new Meta();
+        final SearchMetadata searchMetadata = new SearchMetadata();
         return client.searchNoScroll(searchString, indices)
                 // build the meta object and return the search hits
-                .flatMapIterable(response -> ItemCollectionBuilder.buildMeta(meta, response, searchRequest))
+                .flatMapIterable(response -> ItemCollectionBuilder.buildMeta(searchMetadata, response, searchRequest))
                 // process all the hits in parallel -- will use all CPU cores by default
                 .parallel().runOn(Schedulers.parallel())
                 // map each hit to it's source bytes
@@ -133,7 +133,7 @@ public class ElasticsearchRepository {
                 .sequential()
                 .collectList()
                 // take the api list build an item collection from it
-                .map(itemList -> ItemCollectionBuilder.buildItemCollection(meta, itemList, searchRequest));
+                .map(itemList -> ItemCollectionBuilder.buildItemCollection(searchMetadata, itemList, searchRequest));
     }
 
     protected void setIncludeExcludeFields(SearchSourceBuilder searchSourceBuilder, com.planet.staccato.dto.api.SearchRequest searchRequest) {

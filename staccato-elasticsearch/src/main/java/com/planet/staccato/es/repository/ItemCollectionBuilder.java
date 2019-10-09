@@ -6,7 +6,7 @@ import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.model.Link;
-import com.planet.staccato.model.Meta;
+import com.planet.staccato.model.SearchMetadata;
 import joptsimple.internal.Strings;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
@@ -22,29 +22,29 @@ import java.util.Set;
  */
 public class ItemCollectionBuilder {
 
-    public static List<SearchHit> buildMeta(Meta meta, SearchResponse response, SearchRequest searchRequest) {
-        meta.matched(response.getHits().getTotalHits())
+    public static List<SearchHit> buildMeta(SearchMetadata searchMetadata, SearchResponse response, SearchRequest searchRequest) {
+        searchMetadata.matched(response.getHits().getTotalHits())
                 .returned(response.getHits().getHits().length)
                 .limit(searchRequest.getLimit())
                 .matched(response.getHits().getTotalHits());
 
         // only build next token if needed
-        if ((meta.getReturned() == meta.getLimit()) && (meta.getMatched() >= meta.getReturned())) {
+        if ((searchMetadata.getReturned() == searchMetadata.getLimit()) && (searchMetadata.getMatched() >= searchMetadata.getReturned())) {
             SearchHit lastHit = response.getHits().getHits()[response.getHits().getHits().length - 1];
             String nextToken = NextTokenHelper.serialize(lastHit.getSortValues());
-            meta.next(nextToken);
+            searchMetadata.next(nextToken);
         }
 
         return Arrays.asList(response.getHits().getHits());
     }
 
-    public static ItemCollection buildItemCollection(Meta meta, List<Item> itemList, SearchRequest searchRequest) {
+    public static ItemCollection buildItemCollection(SearchMetadata searchMetadata, List<Item> itemList, SearchRequest searchRequest) {
         ItemCollection itemCollection = new ItemCollection()
                 .features(itemList)
                 .type(ItemCollection.TypeEnum.FEATURECOLLECTION)
-                .meta(meta)
-                .numberMatched(meta.getMatched())
-                .numberReturned(meta.getReturned());
+                .metadata(searchMetadata)
+                .numberMatched(searchMetadata.getMatched())
+                .numberReturned(searchMetadata.getReturned());
 
         int finalLimit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
 
@@ -87,9 +87,9 @@ public class ItemCollectionBuilder {
                 .href(selfLink)
                 .rel("self"));
 
-        if (meta.getNext() != null) {
+        if (searchMetadata.getNext() != null) {
             itemCollection.addLink(new Link()
-                    .href(link + "&next=" + meta.getNext())
+                    .href(link + "&next=" + searchMetadata.getNext())
                     .rel("next"));
         }
 

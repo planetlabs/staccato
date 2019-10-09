@@ -14,8 +14,8 @@ import java.util.Objects;
 public class ItemCollection {
 
     private TypeEnum type;
-    @JsonProperty("search:meta")
-    private Meta meta;
+    @JsonProperty("search:metadata")
+    private SearchMetadata metadata;
     private List<Item> features = new ArrayList<>();
     private List<Link> links;
     private long numberMatched;
@@ -79,8 +79,8 @@ public class ItemCollection {
         return this;
     }
 
-    public ItemCollection meta(Meta meta) {
-        setMeta(meta);
+    public ItemCollection metadata(SearchMetadata searchMetadata) {
+        setMetadata(searchMetadata);
         return this;
     }
 
@@ -105,7 +105,7 @@ public class ItemCollection {
         ItemCollection itemCollection = (ItemCollection) o;
         return Objects.equals(this.type, itemCollection.type)
                 && Objects.equals(this.features, itemCollection.features)
-                && Objects.equals(this.meta, itemCollection.meta)
+                && Objects.equals(this.metadata, itemCollection.metadata)
                 && Objects.equals(this.numberMatched, itemCollection.numberMatched)
                 && Objects.equals(this.numberReturned, itemCollection.numberReturned);
     }
@@ -123,7 +123,7 @@ public class ItemCollection {
 
         sb.append("    roles: ").append(toIndentedString(type)).append("\n");
         sb.append("    api: ").append(toIndentedString(features)).append("\n");
-        sb.append("    meta: ").append(toIndentedString(meta)).append("\n");
+        sb.append("    metadata: ").append(toIndentedString(metadata)).append("\n");
         sb.append("    numberMatched: ").append(toIndentedString(numberMatched)).append("\n");
         sb.append("    numberReturned: ").append(toIndentedString(numberReturned)).append("\n");
         sb.append("}");
