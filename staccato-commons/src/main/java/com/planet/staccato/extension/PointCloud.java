@@ -5,6 +5,8 @@ import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author joshfix
  * Created on 2019-05-15
@@ -33,9 +35,9 @@ public interface PointCloud {
     String getDensity();
     void setDensity(String density);
 
-    @JsonProperty(EXTENSION_PREFIX + ":schema")
-    Schema getSchema();
-    void setSchema(Schema schema);
+    @JsonProperty(EXTENSION_PREFIX + ":schemas")
+    List<Schema> getSchemas();
+    void setSchemas(List<Schema> schemas);
 
     @JsonProperty(EXTENSION_PREFIX + ":statistics")
     Statistics getStatistics();

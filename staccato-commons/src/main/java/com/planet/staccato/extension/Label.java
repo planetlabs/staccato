@@ -14,7 +14,7 @@ public interface Label {
 
     String EXTENSION_PREFIX = "label";
 
-    @JsonProperty(EXTENSION_PREFIX + ":property")
+    @JsonProperty(EXTENSION_PREFIX + ":properties")
     Set<String> getProperties();
     void setProperties(Set<String> properties);
 
@@ -30,17 +30,17 @@ public interface Label {
     LabelType getType();
     void setType(LabelType type);
 
-    @JsonProperty(EXTENSION_PREFIX + ":task")
-    Set<String> getTask();
-    void setTask(Set<String> task);
+    @JsonProperty(EXTENSION_PREFIX + ":tasks")
+    Set<String> getTasks();
+    void setTasks(Set<String> tasks);
 
-    @JsonProperty(EXTENSION_PREFIX + ":method")
-    Set<String> getMethod();
-    void setMethod(Set<String> method);
+    @JsonProperty(EXTENSION_PREFIX + ":methods")
+    Set<String> getMethods();
+    void setMethods(Set<String> methods);
 
-    @JsonProperty(EXTENSION_PREFIX + ":overview")
-    LabelOverview getOverview();
-    void setLabelOverview(LabelOverview overview);
+    @JsonProperty(EXTENSION_PREFIX + ":overviews")
+    LabelOverview getOverviews();
+    void setLabelOverviews(LabelOverview overviews);
 
     enum LabelType {
         VECTOR("vector"),
