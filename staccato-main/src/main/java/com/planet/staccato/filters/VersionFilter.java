@@ -19,6 +19,7 @@ import java.util.Set;
 public class VersionFilter implements ItemSearchFilter {
 
     private final String version;
+    private final static String STAC_VERSION_KEY = "stac_version";
     private final static Set<String> TYPES = new HashSet<>(Arrays.asList("*"));
 
     public VersionFilter(StacConfigProps configProps) {
@@ -31,6 +32,21 @@ public class VersionFilter implements ItemSearchFilter {
 
     @Override
     public Item doFilter(Item item, SearchRequest request) {
+        Set<String> include = null;
+        Set<String> exclude = null;
+
+        if (request.getFields() != null) {
+            include = request.getFields().getInclude();
+            exclude = request.getFields().getExclude();
+        }
+
+        if (include != null && !include.isEmpty()) {
+            return include.contains(STAC_VERSION_KEY) ? item.stacVersion(version) : item;
+        } else if (exclude != null && !exclude.isEmpty()) {
+            if (exclude.contains(STAC_VERSION_KEY)) {
+                return item;
+            }
+        }
         return item.stacVersion(version);
     }
 
