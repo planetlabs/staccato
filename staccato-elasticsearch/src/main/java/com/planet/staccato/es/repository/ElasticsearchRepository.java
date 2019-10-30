@@ -137,8 +137,10 @@ public class ElasticsearchRepository {
     }
 
     protected void setIncludeExcludeFields(SearchSourceBuilder searchSourceBuilder, com.planet.staccato.dto.api.SearchRequest searchRequest) {
-        // if include fieldsExtension were provided, make sure `collection` is present because it's needed for Jackson
-        // deserialization to the proper ItemProperties subtype.  then set the includeFields on the api.
+        // If include fieldsExtension were provided, make sure `collection` is present because it's needed for Jackson
+        // deserialization to the proper ItemProperties subtype.  If the `collection` field was not requested in the
+        // `fields` parameter, it will be removed before the response is returned.  Finally, set the includeFields on
+        // the api.
 
         if (searchRequest.getFields() == null) {
             return;

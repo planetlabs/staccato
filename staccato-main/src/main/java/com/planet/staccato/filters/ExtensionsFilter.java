@@ -18,6 +18,7 @@ public class ExtensionsFilter implements ItemSearchFilter {
 
     private Map<Class, Set<String>> cache = new HashMap<>();
     private final static Set<String> TYPES = new HashSet<>(Arrays.asList("*"));
+    private final static String STAC_EXTENSIONS_KEY = "stac_extensions";
 
     @Override
     public Set<String> types() {
@@ -29,6 +30,26 @@ public class ExtensionsFilter implements ItemSearchFilter {
         if (item.getProperties() == null) {
             return item;
         }
+
+        Set<String> include = null;
+        Set<String> exclude = null;
+
+        if (request.getFields() != null) {
+            include = request.getFields().getInclude();
+            exclude = request.getFields().getExclude();
+        }
+
+        if (include != null && !include.isEmpty()) {
+            return include.contains(STAC_EXTENSIONS_KEY) ? addExtensions(item) : item;
+        } else if (exclude != null && !exclude.isEmpty()) {
+            if (exclude.contains(STAC_EXTENSIONS_KEY)) {
+                return item;
+            }
+        }
+        return addExtensions(item);
+    }
+
+    protected Item addExtensions(Item item) {
         Class propertiesClass = item.getProperties().getClass();
         if (cache.containsKey(propertiesClass)) {
             return item.stacExtensions(cache.get(propertiesClass));
