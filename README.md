@@ -160,7 +160,7 @@ _POST_
 ```
 
 
-## Configuartion
+## Configuration
 
 The STAC API has several properties that are configurable from the command line, as environment properties in the 
 [application.yml](./staccato-main/src/main/resources/application.yml) file.  The table below details the properties that 
