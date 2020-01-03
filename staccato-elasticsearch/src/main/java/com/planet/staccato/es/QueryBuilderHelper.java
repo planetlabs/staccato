@@ -154,8 +154,8 @@ public class QueryBuilderHelper {//implements QueryBuilder {
         ShapeBuilder shapeBuilder = null;
         switch (type) {
             case "Point":
-                double[] pointCoords = (double[]) intersectsMap.get("coordinates");
-                shapeBuilder = new PointBuilder(pointCoords[0], pointCoords[1]);
+                List<Double> pointCoords = (List<Double>) intersectsMap.get("coordinates");
+                shapeBuilder = new PointBuilder(pointCoords.get(0), pointCoords.get(1));
                 break;
             case "Polygon":
                 List polygonCoords = (List) intersectsMap.get("coordinates");
