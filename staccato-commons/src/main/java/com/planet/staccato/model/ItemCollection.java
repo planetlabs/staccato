@@ -23,6 +23,10 @@ public class ItemCollection {
     private long numberMatched;
     private long numberReturned;
 
+    // fields for version extension: https://github.com/radiantearth/stac-spec/blob/master/extensions/version/README.md
+    private String version;
+    private Boolean deprecated;
+
     public enum TypeEnum {
         FEATURECOLLECTION("FeatureCollection");
 
@@ -95,29 +99,39 @@ public class ItemCollection {
         return this;
     }
 
-    public ItemCollection version(String version) {
-        setStacVersion(version);
+    public ItemCollection stacVersion(String stacVersion) {
+        setStacVersion(stacVersion);
         return this;
     }
 
-    public ItemCollection extensions(Set<String> extensions) {
-        setStacExtensions(extensions);
+    public ItemCollection stacExtensions(Set<String> stacExtensions) {
+        setStacExtensions(stacExtensions);
         return this;
     }
 
-    public ItemCollection addExtension(String extension) {
-        if (null == stacExtensions) {
-            stacExtensions = new HashSet<>();
+    public ItemCollection addStacExtension(String stacExtension) {
+        if (null == this.stacExtensions) {
+            this.stacExtensions = new HashSet<>();
         }
-        stacExtensions.add(extension);
+        this.stacExtensions.add(stacExtension);
         return this;
     }
 
-    public ItemCollection addAllExtensions(Collection<String> extensions) {
-        if (null == stacExtensions) {
-            stacExtensions = new HashSet<>();
+    public ItemCollection addStacExtensions(Collection<String> stacExtensions) {
+        if (null == this.stacExtensions) {
+            this.stacExtensions = new HashSet<>();
         }
-        stacExtensions.addAll(extensions);
+        this.stacExtensions.addAll(stacExtensions);
+        return this;
+    }
+
+    public ItemCollection version(String verison) {
+        setVersion(version);
+        return this;
+    }
+
+    public ItemCollection deprecated(boolean deprecated) {
+        setDeprecated(deprecated);
         return this;
     }
 

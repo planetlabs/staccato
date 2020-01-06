@@ -104,7 +104,7 @@ public class ItemCollectionBuilder {
 
         for (Item item: itemList) {
             item.setStacVersion(configProps.getVersion());
-            itemCollection.addAllExtensions(addExtensions(item).getStacExtensions());
+            itemCollection.addStacExtensions(addExtensions(item).getStacExtensions());
         }
 
         return itemCollection;
