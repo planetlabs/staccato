@@ -158,7 +158,7 @@ public class ItemCollection {
         sb.append("    numberReturned: ").append(toIndentedString(numberReturned)).append("\n");
         sb.append("    links: ").append(toIndentedString(links)).append("\n");
         sb.append("    stacVersion: ").append(toIndentedString(stacVersion)).append("\n");
-        sb.append("    stacExtensions: ").append(toIndentedString(stacExtensions)).append("\n");
+        sb.append("    stacExtensions: ").append(toIndentedString(String.join(",", stacExtensions))).append("\n");
         sb.append("}");
         return sb.toString();
     }

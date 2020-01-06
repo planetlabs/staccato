@@ -1,9 +1,9 @@
 package com.planet.staccato.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
+
 
 /**
  * @author joshfix
@@ -14,30 +14,18 @@ public class Asset {
 
 
     private String href;
-    private String name;
     private String type;
-    private String filetype;
     private String title;
-    @JsonProperty("eo:bands")
-    private List<String> bands;
+    private String description;
+    private List<String> roles;
 
     public Asset href(String href) {
         setHref(href);
         return this;
     }
 
-    public Asset name(String name) {
-        setName(name);
-        return this;
-    }
-
     public Asset type(String type) {
         setType(type);
-        return this;
-    }
-
-    public Asset filetype(String filetype) {
-        setFiletype(filetype);
         return this;
     }
 
@@ -50,12 +38,11 @@ public class Asset {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("class Asset {\n");
-
-        sb.append("    name: ").append(toIndentedString(name)).append("\n");
         sb.append("    href: ").append(toIndentedString(href)).append("\n");
-        sb.append("    roles: ").append(toIndentedString(type)).append("\n");
-        sb.append("    filetype: ").append(toIndentedString(filetype)).append("\n");
-        sb.append("    bands: ").append(String.join(",", bands)).append("\n");
+        sb.append("    type: ").append(toIndentedString(type)).append("\n");
+        sb.append("    name: ").append(toIndentedString(title)).append("\n");
+        sb.append("    description: ").append(toIndentedString(description)).append("\n");
+        sb.append("    roles: ").append(String.join(",", roles)).append("\n");
         sb.append("}");
         return sb.toString();
     }
