@@ -23,10 +23,6 @@ public class ItemCollection {
     private long numberMatched;
     private long numberReturned;
 
-    // fields for version extension: https://github.com/radiantearth/stac-spec/blob/master/extensions/version/README.md
-    private String version;
-    private Boolean deprecated;
-
     public enum TypeEnum {
         FEATURECOLLECTION("FeatureCollection");
 
@@ -122,16 +118,6 @@ public class ItemCollection {
             this.stacExtensions = new HashSet<>();
         }
         this.stacExtensions.addAll(stacExtensions);
-        return this;
-    }
-
-    public ItemCollection version(String verison) {
-        setVersion(version);
-        return this;
-    }
-
-    public ItemCollection deprecated(boolean deprecated) {
-        setDeprecated(deprecated);
         return this;
     }
 

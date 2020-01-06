@@ -28,10 +28,6 @@ public class ItemProperties {
     protected String created;
     protected String updated;
 
-    // fields for version extension: https://github.com/radiantearth/stac-spec/blob/master/extensions/version/README.md
-    private String version;
-    private Boolean deprecated;
-
     public ItemProperties datetime(String datetime) {
         setDatetime(datetime);
         return this;
@@ -116,16 +112,6 @@ public class ItemProperties {
 
     public ItemProperties updated(String updated) {
         setUpdated(updated);
-        return this;
-    }
-
-    public ItemProperties version(String verison) {
-        setVersion(version);
-        return this;
-    }
-
-    public ItemProperties deprecated(boolean deprecated) {
-        setDeprecated(deprecated);
         return this;
     }
 
