@@ -1,16 +1,117 @@
 package com.planet.staccato.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
  * provides the core metatdata fieldsExtension plus extensions
  */
+@Data
 public class ItemProperties {
 
     protected String datetime;
+    @JsonProperty("start_datetime")
+    protected String startDatetime;
+    @JsonProperty("end_datetime")
+    protected String endDatetime;
+    protected String license;
+    protected List<Provider> providers;
+    protected String platform;
+    protected List<String> instruments;
+    protected String constellation;
+    protected String mission;
+    protected String created;
+    protected String updated;
 
     public ItemProperties datetime(String datetime) {
-        this.datetime = datetime;
+        setDatetime(datetime);
+        return this;
+    }
+
+    public ItemProperties startDatetime(String startDatetime) {
+        setStartDatetime(startDatetime);
+        return this;
+    }
+
+    public ItemProperties endDatetime(String endDatetime) {
+        setEndDatetime(endDatetime);
+        return this;
+    }
+
+    public ItemProperties license(String license) {
+        setLicense(license);
+        return this;
+    }
+
+    public ItemProperties providers(List<Provider> providers) {
+        setProviders(providers);
+        return this;
+    }
+
+    public ItemProperties addProvider(Provider provider) {
+        if (providers == null) {
+            providers = new ArrayList<>();
+        }
+        providers.add(provider);
+        return this;
+    }
+
+    public ItemProperties addProviders(Collection<Provider> provider) {
+        if (providers == null) {
+            providers = new ArrayList<>();
+        }
+        providers.addAll(providers);
+        return this;
+    }
+
+    public ItemProperties platform(String platform) {
+        setPlatform(platform);
+        return this;
+    }
+
+    public ItemProperties instruments(List<String> instruments) {
+        setInstruments(instruments);
+        return this;
+    }
+
+    public ItemProperties addInstrument(String instrument) {
+        if (instruments == null) {
+            instruments = new ArrayList<>();
+        }
+        instruments.add(instrument);
+        return this;
+    }
+
+    public ItemProperties addInstruments(Collection<String> instrument) {
+        if (instruments == null) {
+            instruments = new ArrayList<>();
+        }
+        instruments.addAll(instruments);
+        return this;
+    }
+
+    public ItemProperties constellation(String constellation) {
+        setConstellation(constellation);
+        return this;
+    }
+
+    public ItemProperties mission(String mission) {
+        setMission(mission);
+        return this;
+    }
+
+    public ItemProperties created(String created) {
+        setCreated(created);
+        return this;
+    }
+
+    public ItemProperties updated(String updated) {
+        setUpdated(updated);
         return this;
     }
 
@@ -25,19 +126,6 @@ public class ItemProperties {
 
     public void setDatetime(String datetime) {
         this.datetime = datetime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        ItemProperties itemProperties = (ItemProperties) o;
-        return Objects.equals(this.datetime, itemProperties.datetime) &&
-                super.equals(o);
     }
 
     @Override
