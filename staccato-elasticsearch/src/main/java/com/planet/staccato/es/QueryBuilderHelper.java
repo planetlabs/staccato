@@ -38,6 +38,8 @@ public class QueryBuilderHelper {//implements QueryBuilder {
     private static final int EAST = 2;
     private static final int NORTH = 3;
     private static final int DEFAULT_LIMIT = 10;
+    // https://github.com/radiantearth/stac-spec/blob/v0.8.0/api-spec/STAC-extensions.yaml#L1144
+    private static final String OPEN_INTERVAL_SYMBOL = "..";
 
     public static BoolQueryBuilder buildQuery(double[] bbox, String time, String query, Integer limit, String next,
                                               String[] ids, String[] collections, FieldsExtension fields,
@@ -113,35 +115,43 @@ public class QueryBuilderHelper {//implements QueryBuilder {
 
         if (time.indexOf("/") > 0) {
             String[] timeArray = time.split("/");
-            startTimeProperty = timeArray[0];
-            endTimeProperty = timeArray[1];
+            startTimeProperty = dateStringOrOpenInterval(timeArray[0]);
+            endTimeProperty = dateStringOrOpenInterval(timeArray[1]);
+            if (endTimeProperty != null) {
+                // check if end time is not null;
+                // otherwise, NullPointerException will be thrown during parse
+                try {
+                    // see if the value can be parsed into a period, eg P1Y2M3W4D
+                    Period period = Period.parse(endTimeProperty);
 
-            try {
-                // see if the value can be parsed into a period, eg P1Y2M3W4D
-                Period period = Period.parse(endTimeProperty);
+                    Instant start = Instant.parse(startTimeProperty);
+                    Instant end = start.plus(period);
 
-                Instant start = Instant.parse(startTimeProperty);
-                Instant end = start.plus(period);
+                    start.plus(period.normalized());
 
-                start.plus(period.normalized());
-
-                startTimeProperty = start.toString();
-                endTimeProperty = end.toString();
-
-            } catch (DateTimeParseException e) {
-                // not a period
+                    startTimeProperty = start.toString();
+                    endTimeProperty = end.toString();
+                } catch (DateTimeParseException e) {
+                    // not a period
+                }
             }
         } else {
             startTimeProperty = time;
             endTimeProperty = time;
         }
-
         RangeQueryBuilder rangeQueryBuilder = QueryBuilders
                 .rangeQuery(FieldName.DATETIME_FULL)
                 .from(startTimeProperty)
                 .to(endTimeProperty);
 
         return Optional.of(rangeQueryBuilder);
+    }
+
+    private static String dateStringOrOpenInterval(String value) {
+        if (value.equals(OPEN_INTERVAL_SYMBOL)) {
+            return null;
+        }
+        return value;
     }
 
     public static Optional<QueryBuilder> intersectsBuilder(Object intersects) {
