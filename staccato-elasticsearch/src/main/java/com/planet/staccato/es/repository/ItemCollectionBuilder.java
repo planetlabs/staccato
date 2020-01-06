@@ -1,6 +1,7 @@
 package com.planet.staccato.es.repository;
 
 import com.planet.staccato.config.LinksConfigProps;
+import com.planet.staccato.config.StacConfigProps;
 import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.model.Item;
@@ -8,21 +9,26 @@ import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.model.SearchMetadata;
 import joptsimple.internal.Strings;
+import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * @author joshfix
  * Created on 2019-09-17
  */
+@Service
+@RequiredArgsConstructor
 public class ItemCollectionBuilder {
 
-    public static List<SearchHit> buildMeta(SearchMetadata searchMetadata, SearchResponse response, SearchRequest searchRequest) {
+    private Map<Class, Set<String>> cache = new HashMap<>();
+    private final StacConfigProps configProps;
+
+    public List<SearchHit> buildMeta(SearchMetadata searchMetadata, SearchResponse response, SearchRequest searchRequest) {
         searchMetadata.matched(response.getHits().getTotalHits())
                 .returned(response.getHits().getHits().length)
                 .limit(searchRequest.getLimit())
@@ -38,7 +44,8 @@ public class ItemCollectionBuilder {
         return Arrays.asList(response.getHits().getHits());
     }
 
-    public static ItemCollection buildItemCollection(SearchMetadata searchMetadata, List<Item> itemList, SearchRequest searchRequest) {
+    public ItemCollection buildItemCollection(SearchMetadata searchMetadata, List<Item> itemList,
+                                              SearchRequest searchRequest) {
         ItemCollection itemCollection = new ItemCollection()
                 .features(itemList)
                 .type(ItemCollection.TypeEnum.FEATURECOLLECTION)
@@ -93,6 +100,43 @@ public class ItemCollectionBuilder {
                     .rel("next"));
         }
 
+        itemCollection.setStacVersion(configProps.getVersion());
+
+        for (Item item: itemList) {
+            item.setStacVersion(configProps.getVersion());
+            itemCollection.addAllExtensions(addExtensions(item).getStacExtensions());
+        }
+
         return itemCollection;
+    }
+
+    /**
+     * Adds extension entries into the item's stac_extensions array.
+     *
+     * @param item
+     * @return
+     */
+    protected Item addExtensions(Item item) {
+        Class propertiesClass = item.getProperties().getClass();
+        if (cache.containsKey(propertiesClass)) {
+            return item.stacExtensions(cache.get(propertiesClass));
+        }
+
+        Set<String> extensions = new HashSet<>();
+        Class[] interfaces = propertiesClass.getInterfaces();
+        for (Class clazz : interfaces) {
+            try {
+                Field prefixField = clazz.getDeclaredField("EXTENSION_PREFIX");
+                if (prefixField != null) {
+                    String prefix = (String)prefixField.get(item.getProperties());
+                    extensions.add(prefix);
+                }
+            } catch (Exception e) {
+                // field doesn't exist, do nothing
+            }
+        }
+        cache.put(propertiesClass, extensions);
+        item.setStacExtensions(extensions);
+        return item;
     }
 }

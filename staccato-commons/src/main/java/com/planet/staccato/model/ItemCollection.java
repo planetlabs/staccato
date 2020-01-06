@@ -3,9 +3,7 @@ package com.planet.staccato.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * ItemCollection
@@ -14,13 +12,16 @@ import java.util.Objects;
 public class ItemCollection {
 
     private TypeEnum type;
+    @JsonProperty("stac_version")
+    private String stacVersion;
+    @JsonProperty("stac_extensions")
+    private Set<String> stacExtensions;
     @JsonProperty("search:metadata")
     private SearchMetadata metadata;
     private List<Item> features = new ArrayList<>();
     private List<Link> links;
     private long numberMatched;
     private long numberReturned;
-
 
     public enum TypeEnum {
         FEATURECOLLECTION("FeatureCollection");
@@ -94,6 +95,32 @@ public class ItemCollection {
         return this;
     }
 
+    public ItemCollection version(String version) {
+        setStacVersion(version);
+        return this;
+    }
+
+    public ItemCollection extensions(Set<String> extensions) {
+        setStacExtensions(extensions);
+        return this;
+    }
+
+    public ItemCollection addExtension(String extension) {
+        if (null == stacExtensions) {
+            stacExtensions = new HashSet<>();
+        }
+        stacExtensions.add(extension);
+        return this;
+    }
+
+    public ItemCollection addAllExtensions(Collection<String> extensions) {
+        if (null == stacExtensions) {
+            stacExtensions = new HashSet<>();
+        }
+        stacExtensions.addAll(extensions);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -107,7 +134,10 @@ public class ItemCollection {
                 && Objects.equals(this.features, itemCollection.features)
                 && Objects.equals(this.metadata, itemCollection.metadata)
                 && Objects.equals(this.numberMatched, itemCollection.numberMatched)
-                && Objects.equals(this.numberReturned, itemCollection.numberReturned);
+                && Objects.equals(this.numberReturned, itemCollection.numberReturned)
+                && Objects.equals(this.links, itemCollection.links)
+                && Objects.equals(this.stacVersion, itemCollection.stacVersion)
+                && Objects.equals(this.stacExtensions, itemCollection.stacExtensions);
     }
 
     @Override
@@ -121,11 +151,14 @@ public class ItemCollection {
         StringBuilder sb = new StringBuilder();
         sb.append("class ItemCollection {\n");
 
-        sb.append("    roles: ").append(toIndentedString(type)).append("\n");
-        sb.append("    api: ").append(toIndentedString(features)).append("\n");
+        sb.append("    type: ").append(toIndentedString(type)).append("\n");
+        sb.append("    features: ").append(toIndentedString(features)).append("\n");
         sb.append("    metadata: ").append(toIndentedString(metadata)).append("\n");
         sb.append("    numberMatched: ").append(toIndentedString(numberMatched)).append("\n");
         sb.append("    numberReturned: ").append(toIndentedString(numberReturned)).append("\n");
+        sb.append("    links: ").append(toIndentedString(links)).append("\n");
+        sb.append("    stacVersion: ").append(toIndentedString(stacVersion)).append("\n");
+        sb.append("    stacExtensions: ").append(toIndentedString(stacExtensions)).append("\n");
         sb.append("}");
         return sb.toString();
     }

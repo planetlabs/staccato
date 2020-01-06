@@ -49,6 +49,7 @@ public class ElasticsearchRepository {
     private final Scheduler scheduler;
     private final ElasticsearchWebClient client;
     private final ElasticsearchConfigProps configProps;
+    private final ItemCollectionBuilder itemCollectionBuilder;
 
     private static final StacTransactionResponse ITEM_NOT_FOUND;
     private static String TYPE;
@@ -124,7 +125,7 @@ public class ElasticsearchRepository {
         final SearchMetadata searchMetadata = new SearchMetadata();
         return client.searchNoScroll(searchString, indices)
                 // build the meta object and return the search hits
-                .flatMapIterable(response -> ItemCollectionBuilder.buildMeta(searchMetadata, response, searchRequest))
+                .flatMapIterable(response -> itemCollectionBuilder.buildMeta(searchMetadata, response, searchRequest))
                 // process all the hits in parallel -- will use all CPU cores by default
                 .parallel().runOn(Schedulers.parallel())
                 // map each hit to it's source bytes
@@ -133,10 +134,11 @@ public class ElasticsearchRepository {
                 .sequential()
                 .collectList()
                 // take the api list build an item collection from it
-                .map(itemList -> ItemCollectionBuilder.buildItemCollection(searchMetadata, itemList, searchRequest));
+                .map(itemList -> itemCollectionBuilder.buildItemCollection(searchMetadata, itemList, searchRequest));
     }
 
-    protected void setIncludeExcludeFields(SearchSourceBuilder searchSourceBuilder, com.planet.staccato.dto.api.SearchRequest searchRequest) {
+    protected void setIncludeExcludeFields(SearchSourceBuilder searchSourceBuilder,
+                                           com.planet.staccato.dto.api.SearchRequest searchRequest) {
         // If include fieldsExtension were provided, make sure `collection` is present because it's needed for Jackson
         // deserialization to the proper ItemProperties subtype.  If the `collection` field was not requested in the
         // `fields` parameter, it will be removed before the response is returned.  Finally, set the includeFields on
@@ -245,7 +247,8 @@ public class ElasticsearchRepository {
         if (!optionalJson.isPresent()) {
             StacTransactionResponse stacTransactionResponse = new StacTransactionResponse();
             stacTransactionResponse.setSuccess(false);
-            stacTransactionResponse.setReason("Unable to serialize item.  Does the data conform to the schema? Item: " + item);
+            stacTransactionResponse.setReason("Unable to serialize item.  Does the data conform to the schema? Item: "
+                    + item);
             return Mono.just(stacTransactionResponse);
         }
 
