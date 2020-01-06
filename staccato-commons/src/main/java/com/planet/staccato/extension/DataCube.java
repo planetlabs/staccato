@@ -23,6 +23,7 @@ public interface DataCube {
     @Data
     abstract class Dimension {
         private String type;
+        private String description;
         private Collection extent;
         private Collection values;
     }
