@@ -1,6 +1,8 @@
 package com.planet.staccato.extension;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.planet.staccato.elasticsearch.annotation.Mapping;
+import com.planet.staccato.elasticsearch.annotation.MappingType;
 
 /**
  * Version extension: https://github.com/radiantearth/stac-spec/blob/master/extensions/version/README.md
@@ -10,10 +12,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public interface Version {
 
+    @Mapping(type = MappingType.KEYWORD)
     @JsonProperty("version")
     String getVersion();
     void setVersion(String version);
 
+    @Mapping(type = MappingType.BOOLEAN)
     @JsonProperty("deprecated")
     boolean isDeprecated();
     void setDeprecated(boolean deprecated);
