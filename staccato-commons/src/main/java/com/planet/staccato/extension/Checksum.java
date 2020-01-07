@@ -18,5 +18,5 @@ public interface Checksum {
     @JsonProperty(EXTENSION_PREFIX + ":multihash")
     String getMultihash();
     void setMultihash(String multihash);
-    
+
 }

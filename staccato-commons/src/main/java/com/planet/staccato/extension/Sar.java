@@ -38,9 +38,9 @@ public interface Sar {
     void setCenterFrequency(Double centerFrequency);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":polarization")
-    Collection<String> getPolarization();
-    void setPolarization(Collection<String> polarization);
+    @JsonProperty(EXTENSION_PREFIX + ":polarizations")
+    Collection<String> getPolarizations();
+    void setPolarizations(Collection<String> polarizations);
 
     @JsonProperty(EXTENSION_PREFIX + ":bands")
     Collection<Band> getBands();
@@ -52,9 +52,9 @@ public interface Sar {
     void setPassDirection(String passDirection);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":type")
-    String getType();
-    void setType(String type);
+    @JsonProperty(EXTENSION_PREFIX + ":product_type")
+    String getProductType();
+    void setProductType(String productType);
 
     @Mapping(type = MappingType.DOUBLE)
     @JsonProperty(EXTENSION_PREFIX + ":resolution_range")
