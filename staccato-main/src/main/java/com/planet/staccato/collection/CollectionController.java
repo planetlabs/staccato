@@ -8,7 +8,6 @@ import com.planet.staccato.service.ApiService;
 import com.planet.staccato.service.CollectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 

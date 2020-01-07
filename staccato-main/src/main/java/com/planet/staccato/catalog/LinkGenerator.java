@@ -5,6 +5,7 @@ import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.model.Link;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 
@@ -23,7 +24,10 @@ import java.util.List;
 public class LinkGenerator {
 
     private final LinksConfigProps linksConfigProps;
-    private static final Link ROOT = new Link().href(LinksConfigProps.LINK_PREFIX + "/stac").rel("root");
+    private static final Link ROOT = new Link()
+            .href(LinksConfigProps.LINK_PREFIX + "/stac")
+            .type(MediaType.APPLICATION_JSON_VALUE)
+            .rel("root");
 
     /**
      * Creates links to subcatalogs based on property fieldsExtension that are eligible for being subcataloged.
@@ -45,14 +49,23 @@ public class LinkGenerator {
             collection.getLinks().add(
                     new Link()
                             .href(self + separator + property.getJsonName())
+                            .type(MediaType.APPLICATION_JSON_VALUE)
                             .rel("child"));
         }
 
         collection.getLinks().add(ROOT);
-        collection.getLinks().add(new Link().href(self).rel("self"));
-        collection.getLinks().add(new Link().href(self + separator + "items").rel("items"));
-        collection.getLinks().add(new Link().href(self.substring(0, self.lastIndexOf("/"))).rel("parent"));
-
+        collection.getLinks().add(new Link()
+                .href(self)
+                .type(MediaType.APPLICATION_JSON_VALUE)
+                .rel("self"));
+        collection.getLinks().add(new Link()
+                .href(self + separator + "items")
+                .type(MediaType.APPLICATION_JSON_VALUE)
+                .rel("items"));
+        collection.getLinks().add(new Link()
+                .href(self.substring(0, self.lastIndexOf("/")))
+                .type(MediaType.APPLICATION_JSON_VALUE)
+                .rel("parent"));
     }
 
     /**

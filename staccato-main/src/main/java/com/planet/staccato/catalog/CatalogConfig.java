@@ -7,11 +7,11 @@ import com.planet.staccato.model.Link;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static org.springframework.web.reactive.function.BodyInserters.fromObject;
 import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -45,11 +45,28 @@ public class CatalogConfig {
 
         catalog.getLinks().add(Link.build()
                 .rel("self")
+                .type(MediaType.APPLICATION_JSON_VALUE)
                 .href(LinksConfigProps.LINK_PREFIX + "/"));
 
         catalog.getLinks().add(Link.build()
                 .rel("search")
+                .type(MediaType.APPLICATION_JSON_VALUE)
                 .href(LinksConfigProps.LINK_PREFIX + "/search"));
+
+        catalog.getLinks().add(Link.build()
+                .rel("service-desc")
+                .type("application/vnd.oai.openapi+json;version=3.0")
+                .href(LinksConfigProps.LINK_PREFIX + "/api"));
+
+        catalog.getLinks().add(Link.build()
+                .rel("conformance")
+                .type(MediaType.APPLICATION_JSON_VALUE)
+                .href(LinksConfigProps.LINK_PREFIX + "/conformance"));
+
+        catalog.getLinks().add(Link.build()
+                .rel("data")
+                .type(MediaType.APPLICATION_JSON_VALUE)
+                .href(LinksConfigProps.LINK_PREFIX + "/collections"));
 
         return catalog;
     }
@@ -61,7 +78,7 @@ public class CatalogConfig {
      */
     @Bean
     public RouterFunction<ServerResponse> rootCatalogRoute() {
-        return route(GET("/stac"), (request) -> ServerResponse.ok().body(fromValue(rootCatalog())));
+        return route(GET("/"), (request) -> ServerResponse.ok().body(fromValue(rootCatalog())));
     }
 
 }

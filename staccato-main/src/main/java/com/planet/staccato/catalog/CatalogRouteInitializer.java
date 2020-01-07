@@ -11,6 +11,7 @@ import com.planet.staccato.service.AggregationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.context.AnnotationConfigReactiveWebServerApplicationContext;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -18,7 +19,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-import static org.springframework.web.reactive.function.BodyInserters.fromObject;
+import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
@@ -50,10 +51,18 @@ public class CatalogRouteInitializer {
             if (collection.getCatalogType() == CatalogType.CATALOG) {
                 registerCatalogEndpoints(collection);
                 rootCatalog.getLinks().add(
-                        Link.build().href(LinksConfigProps.LINK_PREFIX + "/stac/" + collection.getId()).rel("child"));
+                        Link
+                                .build()
+                                .href(LinksConfigProps.LINK_PREFIX + "/stac/" + collection.getId())
+                                .type(MediaType.APPLICATION_JSON_VALUE)
+                                .rel("child"));
             } else {
                 rootCatalog.getLinks().add(
-                        Link.build().href(LinksConfigProps.LINK_PREFIX + "/collections/" + collection.getId()).rel("child"));
+                        Link
+                                .build()
+                                .href(LinksConfigProps.LINK_PREFIX + "/collections/" + collection.getId())
+                                .type(MediaType.APPLICATION_JSON_VALUE)
+                                .rel("child"));
             }
         });
     }
@@ -73,7 +82,7 @@ public class CatalogRouteInitializer {
                     List<PropertyField> remainingProperties = subcatalogPropertiesService.getRemainingProperties(newCollection.getId(), request.path());
                     newCollection.setExtent(aggregationService.getExtent(newCollection.getId(), null));
                     linkGenerator.generatePropertyFieldLinks(request, newCollection, remainingProperties);
-                    return ServerResponse.ok().body(fromObject(newCollection));
+                    return ServerResponse.ok().body(fromValue(newCollection));
                 });
         context.registerBean(collection.getId() + "SubcatalogRoute", RouterFunction.class, () -> route);
 

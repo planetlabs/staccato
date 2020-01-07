@@ -2,15 +2,10 @@ package com.planet.staccato.wfs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.planet.staccato.config.LinksConfigProps;
-import com.planet.staccato.config.StacConfigProps;
-import com.planet.staccato.model.Catalog;
 import com.planet.staccato.model.Conformance;
-import com.planet.staccato.model.Link;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -30,17 +25,10 @@ public class DefaultWfsService {
 
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
     private final Conformance conformance = new Conformance();
-    private final Catalog catalog = new Catalog();
-    private StacConfigProps configProps;
-
-    public DefaultWfsService(StacConfigProps configProps, LinksConfigProps linksConfigProps) {
-        this.configProps = configProps;
-    }
 
     @PostConstruct
     public void init() {
         initConformance();
-        initCatalog();
     }
 
     private void initConformance() {
@@ -49,33 +37,6 @@ public class DefaultWfsService {
                 "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html",
                 "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson",
                 "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/x-cql-text"));
-    }
-
-    private void initCatalog() {
-        catalog.setId("staccato");
-        catalog.setTitle("Staccato");
-        catalog.setVersion(configProps.getVersion());
-        catalog.setDescription("STAC v" + configProps.getVersion() + " implementation by Planet Labs");
-
-        catalog.getLinks().add(Link.build()
-                .rel("service-desc")
-                .type("application/vnd.oai.openapi+json;version=3.0")
-                .href(LinksConfigProps.LINK_PREFIX + "/api"));
-
-        catalog.getLinks().add(Link.build()
-                .rel("conformance")
-                .type(MediaType.APPLICATION_JSON_VALUE)
-                .href(LinksConfigProps.LINK_PREFIX + "/conformance"));
-
-        catalog.getLinks().add(Link.build()
-                .rel("data")
-                .type(MediaType.APPLICATION_JSON_VALUE)
-                .href(LinksConfigProps.LINK_PREFIX + "/collections"));
-
-        catalog.getLinks().add(Link.build()
-                .rel("self")
-                .type(MediaType.APPLICATION_JSON_VALUE)
-                .href(LinksConfigProps.LINK_PREFIX + "/"));
     }
 
     public Mono<Object> getApi() {
@@ -93,7 +54,4 @@ public class DefaultWfsService {
         return Mono.just(conformance);
     }
 
-    public Mono<Catalog> getLandingPage() {
-        return Mono.just(catalog);
-    }
 }

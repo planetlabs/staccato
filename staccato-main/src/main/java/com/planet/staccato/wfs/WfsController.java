@@ -1,6 +1,5 @@
 package com.planet.staccato.wfs;
 
-import com.planet.staccato.model.Catalog;
 import com.planet.staccato.model.Conformance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,11 +14,6 @@ import reactor.core.publisher.Mono;
 public class WfsController implements WfsApi {
 
     private final DefaultWfsService service;
-
-    @Override
-    public Mono<Catalog> getLandingPage() {
-        return service.getLandingPage();
-    }
 
     @Override
     public Mono<Object> getApi() {
