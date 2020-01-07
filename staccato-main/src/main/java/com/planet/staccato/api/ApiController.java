@@ -21,7 +21,6 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/stac")
 public class ApiController implements ApiApi {
 
     private final ApiService service;

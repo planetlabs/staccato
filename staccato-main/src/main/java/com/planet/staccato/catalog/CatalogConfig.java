@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import static org.springframework.web.reactive.function.BodyInserters.fromObject;
+import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
@@ -44,11 +45,11 @@ public class CatalogConfig {
 
         catalog.getLinks().add(Link.build()
                 .rel("self")
-                .href(LinksConfigProps.LINK_PREFIX + "/stac"));
+                .href(LinksConfigProps.LINK_PREFIX + "/"));
 
         catalog.getLinks().add(Link.build()
                 .rel("search")
-                .href(LinksConfigProps.LINK_PREFIX + "/stac/search"));
+                .href(LinksConfigProps.LINK_PREFIX + "/search"));
 
         return catalog;
     }
@@ -60,7 +61,7 @@ public class CatalogConfig {
      */
     @Bean
     public RouterFunction<ServerResponse> rootCatalogRoute() {
-        return route(GET("/stac"), (request) -> ServerResponse.ok().body(fromObject(rootCatalog())));
+        return route(GET("/stac"), (request) -> ServerResponse.ok().body(fromValue(rootCatalog())));
     }
 
 }
