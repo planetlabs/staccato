@@ -2,6 +2,7 @@ package com.planet.staccato.catalog;
 
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.config.LinksConfigProps;
+import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.model.Link;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,13 +79,25 @@ public class LinkGenerator {
     public void generatePropertyValueLinks(ServerRequest request, CollectionMetadata collection, List<String> values) {
         String separator = request.path().endsWith("/") ? "" : "/";
         values.forEach(value -> collection.getLinks().add(
-                new Link().href(LinksConfigProps.LINK_PREFIX + request.path() + separator + value).rel("child")));
+                new Link()
+                        .href(LinksConfigProps.LINK_PREFIX + request.path() + separator + value)
+                        .type(MediaType.APPLICATION_JSON_VALUE)
+                        .rel("child")));
 
         String self = getSelfString(request);
         collection.getLinks().add(ROOT);
-        collection.getLinks().add(new Link().href(self).rel("self"));
-        collection.getLinks().add(new Link().href(self + separator + "items").rel("items"));
-        collection.getLinks().add(new Link().href(self.substring(0, self.lastIndexOf("/"))).rel("parent"));
+        collection.getLinks().add(new Link()
+                .href(self)
+                .type(MediaType.APPLICATION_JSON_VALUE)
+                .rel("self"));
+        collection.getLinks().add(new Link()
+                .href(self + separator + "items")
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
+                .rel("items"));
+        collection.getLinks().add(new Link()
+                .href(self.substring(0, self.lastIndexOf("/")))
+                .type(MediaType.APPLICATION_JSON_VALUE)
+                .rel("parent"));
     }
 
     /**
@@ -114,7 +127,10 @@ public class LinkGenerator {
      * @return A link to the item in the collection
      */
     public Link buildItemLink(String collectionId, String itemId) {
-        return new Link().rel("item").href(LinksConfigProps.LINK_PREFIX + "/collections/" + collectionId + "/items/" + itemId);
+        return new Link()
+                .href(LinksConfigProps.LINK_PREFIX + "/collections/" + collectionId + "/items/" + itemId)
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
+                .rel("item");
     }
 
 }

@@ -6,6 +6,7 @@ import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.Link;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -87,15 +88,15 @@ public class LinkBuilderFilter implements ItemSearchFilter {
     private void buildCollectionLink(Item item) {
         item.getLinks().add(Link.build()
                 .href(LINK_BASE + "collections/" + item.getCollection())
-                .rel("collection")
-                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE));
+                .type(MediaType.APPLICATION_JSON_VALUE)
+                .rel("collection"));
     }
 
     private void buildRootLink(Item item) {
         item.getLinks().add(Link.build()
                 .href(LINK_BASE + "stac")
-                .rel("root")
-                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE));
+                .type(MediaType.APPLICATION_JSON_VALUE)
+                .rel("root"));
     }
 
     private Item buildThumbnailLink(Item item) {

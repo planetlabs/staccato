@@ -22,8 +22,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class CollectionController implements CollectionApi {
 
-    private final CollectionService collectionService;
     private final ApiService apiService;
+    private final CollectionService collectionService;
 
     @Override
     public Mono<Collections> getCollections() {
@@ -38,7 +38,7 @@ public class CollectionController implements CollectionApi {
     @Override
     public Mono<ItemCollection> getCollectionItems(@PathVariable("collectionId") String collectionId,
                                                    SearchRequest searchRequest) {
-        return apiService.getItems( searchRequest.collections(new String[]{collectionId}));
+        return apiService.getItems(searchRequest.collections(new String[]{collectionId}));
     }
 
     @Override

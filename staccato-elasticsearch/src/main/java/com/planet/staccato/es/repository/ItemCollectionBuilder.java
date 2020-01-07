@@ -2,6 +2,7 @@ package com.planet.staccato.es.repository;
 
 import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.config.StacConfigProps;
+import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.model.Item;
@@ -92,11 +93,13 @@ public class ItemCollectionBuilder {
         String selfLink = searchRequest.getNext() == null ? link : link + "&next=" + searchRequest.getNext();
         itemCollection.addLink(new Link()
                 .href(selfLink)
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                 .rel("self"));
 
         if (searchMetadata.getNext() != null) {
             itemCollection.addLink(new Link()
                     .href(link + "&next=" + searchMetadata.getNext())
+                    .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                     .rel("next"));
         }
 

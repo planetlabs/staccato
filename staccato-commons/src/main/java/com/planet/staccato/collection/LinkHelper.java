@@ -1,6 +1,7 @@
 package com.planet.staccato.collection;
 
 import com.planet.staccato.config.LinksConfigProps;
+import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.model.Link;
 
 import java.util.ArrayList;
@@ -12,24 +13,28 @@ import java.util.List;
  */
 public class LinkHelper {
 
+    public static final String APPLICATION_JSON_VALUE = "application/json";
 
     public static List<Link> buildCollectionLinks(String collectionId) {
         List<Link> links = new ArrayList<>();
         links.add(Link.build()
                 .rel("self")
+                .type(APPLICATION_JSON_VALUE)
                 .href(LinksConfigProps.LINK_PREFIX + "/collections/" + collectionId));
 
         links.add(Link.build()
                 .rel("root")
-                .href(LinksConfigProps.LINK_PREFIX + "/stac"));
+                .type(APPLICATION_JSON_VALUE)
+                .href(LinksConfigProps.LINK_PREFIX));
 
         links.add(Link.build()
                 .rel("parent")
-                .href(LinksConfigProps.LINK_PREFIX + "/stac"));
+                .type(APPLICATION_JSON_VALUE)
+                .href(LinksConfigProps.LINK_PREFIX));
 
         links.add(Link.build()
                 .rel("items")
-                .type("application/geo+json")
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                 .href(LinksConfigProps.LINK_PREFIX + "/collections/" + collectionId + "/items"));
         return links;
     }
@@ -38,19 +43,23 @@ public class LinkHelper {
         List<Link> links = new ArrayList<>();
         links.add(Link.build()
                 .rel("self")
-                .href(LinksConfigProps.LINK_PREFIX + "/stac/" + catalogId));
+                .type(APPLICATION_JSON_VALUE)
+                .href(LinksConfigProps.LINK_PREFIX + "/" + catalogId));
 
         links.add(Link.build()
                 .rel("root")
-                .href(LinksConfigProps.LINK_PREFIX + "/stac"));
+                .type(APPLICATION_JSON_VALUE)
+                .href(LinksConfigProps.LINK_PREFIX));
 
         links.add(Link.build()
                 .rel("parent")
-                .href(LinksConfigProps.LINK_PREFIX + "/stac"));
+                .type(APPLICATION_JSON_VALUE)
+                .href(LinksConfigProps.LINK_PREFIX));
 
         links.add(Link.build()
                 .rel("items")
-                .href(LinksConfigProps.LINK_PREFIX + "/stac/" + catalogId + "/items"));
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
+                .href(LinksConfigProps.LINK_PREFIX + "/" + catalogId + "/items"));
         return links;
     }
 

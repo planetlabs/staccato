@@ -57,8 +57,8 @@ Any of the following methods are acceptable ways of running Staccato
 
 ### API Endpoints
 
-- GET /stac/search - dynamic catalog endpoint
-- GET /stac/search/{id} - returns an item by ID
+- GET /search - dynamic catalog endpoint
+- GET /search/{id} - returns an item by ID
 
 ### Collection Endpoints
 
@@ -68,27 +68,27 @@ Any of the following methods are acceptable ways of running Staccato
 
 ### Catalog Endpoints
 
-- GET /stac - retrieves the root catalog
+- GET / - retrieves the root catalog
 - GET /stac/{catalog_id} - retrieves a catalog by ID
 - GET /stac/{catalog_id}/items - retrieves a collection of items belonging to a collection
 - GET /stac/{collection_id}/items/{id} - retrieves an item by ID from a collection
              
 ### Transaction Endpoints
 
-- POST /stac/{collection_id}/items - creates a new item
-- PUT /stac/{collection_id}/items/{item_id} - creates a new item
-- PATCH /stac/{collection_id}/items/{item_id} - updates an item item
-- DELETE /stac/{collection_id}/items/{item_id} - deletes an item
+- POST /collection/{collection_id}/items - creates a new item
+- PUT /collection/{collection_id}/items/{item_id} - creates a new item
+- PATCH /collection/{collection_id}/items/{item_id} - updates an item item
+- DELETE /collection/{collection_id}/items/{item_id} - deletes an item
               
 ### Stats Endpoints
 
-- GET /stac/stats - retrieves aggregations for all collections
-- GET /stac/stats/{collection_id} - retrieves aggregations for a specific collection
+- GET /stats - retrieves aggregations for all collections
+- GET /stats/{collection_id} - retrieves aggregations for a specific collection
 
 ### Schema Endpoints
 
-- GET /stac/schema - returns the STAC specification in JSON format
-- GET /stac/schema/{collection_id} - returns the JSON schema for the specified collection
+- GET /schema - returns the STAC specification in JSON format
+- GET /schema/{collection_id} - returns the JSON schema for the specified collection
 
 ### Actuator Endpoints
 
@@ -108,10 +108,10 @@ Any of the following methods are acceptable ways of running Staccato
 
 Examples:  
 _GET_
-- <https://stac.boundlessgeo.io/stac/search?fields.include=id,bbox>
-- [https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105 AND landsat:wrs_row=83](https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105%20AND%20landsat:wrs_row=83)
-- <https://stac.boundlessgeo.io/stac/search?ids=LC81050832019135LGN00,LC81050822019135LGN00&collections=landsat-8-l1>
-- [https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover<0.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z](https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover%3C.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z)
+- <https://stac.boundlessgeo.io/search?fields.include=id,bbox>
+- [https://stac.boundlessgeo.io/search?query=landsat:wrs_path=105 AND landsat:wrs_row=83](https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105%20AND%20landsat:wrs_row=83)
+- <https://stac.boundlessgeo.io/search?ids=LC81050832019135LGN00,LC81050822019135LGN00&collections=landsat-8-l1>
+- [https://stac.boundlessgeo.io/search?limit=20&page=2&query=eo:cloud_cover<0.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z](https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover%3C.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z)
 
 _POST_
 
