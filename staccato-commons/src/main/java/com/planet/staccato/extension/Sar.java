@@ -18,21 +18,6 @@ public interface Sar {
     String EXTENSION_PREFIX = "sar";
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":platform")
-    String getPlatform();
-    void setPlatform(String platform);
-
-    @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":constellation")
-    String getConstellation();
-    void setConstellation(String constellation);
-
-    @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":instrument")
-    String getInstrument();
-    void setInstrument(String instrument);
-
-    @Mapping(type = MappingType.KEYWORD)
     @JsonProperty(EXTENSION_PREFIX + ":instrument_mode")
     String getInstrumentMode();
     void setInstrumentMode(String instrumentMode);

@@ -17,21 +17,6 @@ public interface EO {
 
     String EXTENSION_PREFIX = "eo";
 
-    @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":constellation")
-    String getConstellation();
-    void setConstellation(String constellation);
-
-    @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":platform")
-    String getPlatform();
-    void setPlatform(String platform);
-
-    @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":instrument")
-    String getInstrument();
-    void setInstrument(String instrument);
-
     @JsonProperty(EXTENSION_PREFIX + ":gsd")
     Double getGsd();
     void setGsd(Double gsd);

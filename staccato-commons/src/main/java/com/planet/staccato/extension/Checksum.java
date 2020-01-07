@@ -15,23 +15,8 @@ public interface Checksum {
     String EXTENSION_PREFIX = "checksum";
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":md5")
-    String getMd5();
-    void setMd5(String md5);
-
-    @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":sha1")
-    String getSha1();
-    void setSha1(String sha1);
-
-    @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":sha2")
-    String getSha2();
-    void setSha2(String sha2);
-
-    @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":sha3")
-    String getSha3();
-    void setSha3(String sha3);
+    @JsonProperty(EXTENSION_PREFIX + ":multihash")
+    String getMultihash();
+    void setMultihash(String multihash);
     
 }
