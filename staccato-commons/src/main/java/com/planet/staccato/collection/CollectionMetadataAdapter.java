@@ -1,7 +1,7 @@
 package com.planet.staccato.collection;
 
-import com.planet.staccato.extension.Scientific;
-import com.planet.staccato.model.CoreProperties;
+import com.planet.staccato.properties.extension.Scientific;
+import com.planet.staccato.properties.CoreProperties;
 import com.planet.staccato.model.Extent;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.model.Provider;
@@ -16,7 +16,7 @@ import java.util.*;
  * Created on 10/15/18
  */
 @Data
-public class CollectionMetadataAdapter<T extends CoreProperties> implements CollectionMetadata<T>, Scientific {
+public class CollectionMetadataAdapter<T extends CoreProperties> implements CollectionMetadata<T> {
 
     protected String stacVersion;
     protected Set<String> stacExtensions;
@@ -34,10 +34,6 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     protected T properties;
     protected List<Link> links = new ArrayList<>();
     protected CatalogType catalogType;
-
-    protected String doi;
-    protected String citation;
-    protected Collection<Publication> publications;
 
     @Override
     public CollectionMetadata<T> stacVersion(String stacVersion) {

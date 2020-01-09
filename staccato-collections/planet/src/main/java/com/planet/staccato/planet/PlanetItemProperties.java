@@ -3,8 +3,8 @@ package com.planet.staccato.planet;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
-import com.planet.staccato.extension.EO;
-import com.planet.staccato.model.CoreProperties;
+import com.planet.staccato.properties.extension.EO;
+import com.planet.staccato.properties.CoreProperties;
 import com.planet.staccato.model.Provider;
 import lombok.Data;
 

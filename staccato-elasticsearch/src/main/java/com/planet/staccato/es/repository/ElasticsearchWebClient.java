@@ -224,7 +224,6 @@ public class ElasticsearchWebClient {
             Method fromXContent = clazz.getMethod("fromXContent", XContentParser.class);
             XContentParser parser = XContentFactory
                     .xContent(XContentType.JSON)
-                    //.createParser(NamedXContentRegistry.EMPTY, bytes);
                     .createParser(NamedXContentRegistry.EMPTY, null, bytes);
             return (T)fromXContent.invoke(null, parser);
         } catch (Exception e) {

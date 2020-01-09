@@ -1,4 +1,4 @@
-package com.planet.staccato.extension;
+package com.planet.staccato.properties.extension;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.planet.staccato.elasticsearch.annotation.Mapping;
@@ -17,26 +17,32 @@ public interface EO {
 
     String EXTENSION_PREFIX = "eo";
 
+    @Mapping(type = MappingType.DOUBLE)
     @JsonProperty(EXTENSION_PREFIX + ":gsd")
     Double getGsd();
     void setGsd(Double gsd);
 
+    @Mapping(type = MappingType.DOUBLE)
     @JsonProperty(EXTENSION_PREFIX + ":cloud_cover")
     Double getCloudCover();
     void setCloudCover(Double cloudCover);
 
+    @Mapping(type = MappingType.INTEGER)
     @JsonProperty(EXTENSION_PREFIX + ":off_nadir")
     Integer getOffNadir();
     void setOffNadir(Integer offNadir);
 
+    @Mapping(type = MappingType.DOUBLE)
     @JsonProperty(EXTENSION_PREFIX + ":azimuth")
     Double getAzimuth();
     void setAzimuth(Double azimuth);
 
+    @Mapping(type = MappingType.DOUBLE)
     @JsonProperty(EXTENSION_PREFIX + ":sun_azimuth")
     Double getSunAzimuth();
     void setSunAzimuth(Double sunAzimuth);
 
+    @Mapping(type = MappingType.DOUBLE)
     @JsonProperty(EXTENSION_PREFIX + ":sun_elevation")
     Double getSunElevation();
     void setSunElevation(Double sunElevation);
@@ -60,15 +66,20 @@ public interface EO {
         @JsonProperty("common_name")
         private String commmonName;
 
+        @Mapping(type = MappingType.TEXT)
         private String description;
 
+        @Mapping(type = MappingType.DOUBLE)
         private Double gsd;
 
+        @Mapping(type = MappingType.DOUBLE)
         private Double accuracy;
 
+        @Mapping(type = MappingType.DOUBLE)
         @JsonProperty("center_wavelength")
         private Double centerWavelength;
 
+        @Mapping(type = MappingType.DOUBLE)
         @JsonProperty("full_width_half_max")
         private Double fullWidthHalfMax;
 
@@ -76,13 +87,11 @@ public interface EO {
             return new Band();
         }
 
-        @Mapping(type = MappingType.KEYWORD)
         public Band name(String name) {
             setName(name);
             return this;
         }
 
-        @Mapping(type = MappingType.KEYWORD)
         public Band commonName(String commonName) {
             setCommmonName(commonName);
             return this;

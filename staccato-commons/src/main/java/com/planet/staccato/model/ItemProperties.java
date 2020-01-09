@@ -15,10 +15,7 @@ import java.util.Objects;
 public class ItemProperties {
 
     protected String datetime;
-    @JsonProperty("start_datetime")
-    protected String startDatetime;
-    @JsonProperty("end_datetime")
-    protected String endDatetime;
+
     protected String license;
     protected List<Provider> providers;
     protected String platform;
@@ -30,16 +27,6 @@ public class ItemProperties {
 
     public ItemProperties datetime(String datetime) {
         setDatetime(datetime);
-        return this;
-    }
-
-    public ItemProperties startDatetime(String startDatetime) {
-        setStartDatetime(startDatetime);
-        return this;
-    }
-
-    public ItemProperties endDatetime(String endDatetime) {
-        setEndDatetime(endDatetime);
         return this;
     }
 

@@ -1,7 +1,7 @@
 package com.planet.staccato.landsat8;
 
 import com.planet.staccato.collection.CollectionMetadataAdapter;
-import com.planet.staccato.extension.EO;
+import com.planet.staccato.properties.extension.EO;
 import com.planet.staccato.model.Provider;
 import lombok.Data;
 
@@ -66,7 +66,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
 
     private void buildProperties() {
         properties.setPlatform("landsat-8");
-        properties.setInstrument("OLI_TIRS");
+        properties.setInstruments(Arrays.asList("OLI_TIRS"));
         properties.setConstellation("landsat");
         properties.setOffNadir(0);
         properties.setBands(buildBands());

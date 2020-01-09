@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.planet.staccato.collection.CollectionMetadata;
-import com.planet.staccato.model.CoreProperties;
+import com.planet.staccato.properties.CoreProperties;
 import com.planet.staccato.model.Item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

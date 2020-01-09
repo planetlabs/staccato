@@ -1,4 +1,4 @@
-package com.planet.staccato.extension;
+package com.planet.staccato.properties.extension;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
