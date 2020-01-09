@@ -65,12 +65,6 @@ public interface EO {
         private String description;
 
         @Mapping(type = MappingType.DOUBLE)
-        private Double gsd;
-
-        @Mapping(type = MappingType.DOUBLE)
-        private Double accuracy;
-
-        @Mapping(type = MappingType.DOUBLE)
         @JsonProperty("center_wavelength")
         private Double centerWavelength;
 
@@ -94,16 +88,6 @@ public interface EO {
 
         public Band description(String description) {
             setDescription(description);
-            return this;
-        }
-
-        public Band gsd(double gsd) {
-            setGsd(gsd);
-            return this;
-        }
-
-        public Band accuracy(double accuracy) {
-            setAccuracy(accuracy);
             return this;
         }
 
