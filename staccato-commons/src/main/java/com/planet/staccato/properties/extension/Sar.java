@@ -28,11 +28,6 @@ public interface Sar {
     void setFrequencyBand(String frequencyBand);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":center_wavelength")
-    Double getCenterWavelength();
-    void setCenterWavelength(Double centerWavelength);
-
-    @Mapping(type = MappingType.DOUBLE)
     @JsonProperty(EXTENSION_PREFIX + ":center_frequency")
     Double getCenterFrequency();
     void setCenterFrequency(Double centerFrequency);
@@ -97,11 +92,6 @@ public interface Sar {
     void setObservationDirection(String observationDirection);
 
     @Mapping(type = MappingType.INTEGER)
-    @JsonProperty(EXTENSION_PREFIX + ":absolute_orbit")
-    Integer getAbsoluteOrbit();
-    void setAbsoluteOrbit(Integer absoluteOrbit);
-
-    @Mapping(type = MappingType.INTEGER)
     @JsonProperty(EXTENSION_PREFIX + ":relative_orbit")
     Integer getRelativeOrbit();
     void setRelativeOrbit(Integer relativeOrbit);
@@ -115,9 +105,6 @@ public interface Sar {
     class Band {
         private String name;
         private String description;
-        @JsonProperty("data_type")
-        private String dataType;
-        private String unit;
         private String polarization;
     }
 }
