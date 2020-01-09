@@ -2,6 +2,7 @@ package com.planet.staccato.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -11,7 +12,6 @@ import java.util.List;
  */
 @Data
 public class Asset {
-
 
     private String href;
     private String type;
@@ -24,7 +24,7 @@ public class Asset {
         return this;
     }
 
-    public Asset type(String type) {
+    private Asset type(String type) {
         setType(type);
         return this;
     }
@@ -34,28 +34,30 @@ public class Asset {
         return this;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("class Asset {\n");
-        sb.append("    href: ").append(toIndentedString(href)).append("\n");
-        sb.append("    type: ").append(toIndentedString(type)).append("\n");
-        sb.append("    name: ").append(toIndentedString(title)).append("\n");
-        sb.append("    description: ").append(toIndentedString(description)).append("\n");
-        sb.append("    roles: ").append(String.join(",", roles)).append("\n");
-        sb.append("}");
-        return sb.toString();
+    public Asset description(String description) {
+        setDescription(description);
+        return this;
     }
 
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString(Object o) {
-        if (o == null) {
-            return "null";
+    public Asset roles(List<String> roles) {
+        this.roles = roles;
+        return this;
+    }
+
+    public Asset addRole(String role) {
+        if (roles == null) {
+            roles = new ArrayList<>();
         }
-        return o.toString().replace("\n", "\n    ");
+        roles.add(role);
+        return this;
+    }
+
+    public Asset addRoles(List<String> roles) {
+        if (roles == null) {
+            roles = new ArrayList<>();
+        }
+        roles.addAll(roles);
+        return this;
     }
 
 }

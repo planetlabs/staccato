@@ -43,7 +43,6 @@ public class Landsat8ItemProperties implements CoreProperties, EO, Landsat8, Lic
     private Double azimuth;
     private Double sunAzimuth;
     private Double sunElevation;
-    private String epsg;
     private String constellation;
     private List<Band> bands;
 

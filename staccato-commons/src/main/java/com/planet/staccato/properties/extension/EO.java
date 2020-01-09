@@ -47,11 +47,6 @@ public interface EO {
     Double getSunElevation();
     void setSunElevation(Double sunElevation);
 
-    @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":epsg")
-    String getEpsg();
-    void setEpsg(String epsg);
-
     @JsonProperty(EXTENSION_PREFIX + ":bands")
     List<Band> getBands();
     void setBands(List<Band> bands);
