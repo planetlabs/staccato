@@ -14,11 +14,11 @@ import lombok.Data;
 public class SearchRequest {
 
     // core fields
+    private String next;
     private double[] bbox;
     private Object intersects;
     private String datetime;
     private Integer limit = 10;
-    private String next;
     private String[] ids;
     private String[] collections;
 

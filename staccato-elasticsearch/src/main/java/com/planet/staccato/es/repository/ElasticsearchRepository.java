@@ -20,6 +20,7 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -123,9 +124,14 @@ public class ElasticsearchRepository {
                                                      final com.planet.staccato.dto.api.SearchRequest searchRequest) {
         String searchString = buildEsSearchString(indices, queryBuilder, searchRequest);
         final SearchMetadata searchMetadata = new SearchMetadata();
-        return client.searchNoScroll(searchString, indices)
+        final StringBuilder nextTokenBuilder = new StringBuilder();
+        return client.search(searchString, indices)
                 // build the meta object and return the search hits
-                .flatMapIterable(response -> itemCollectionBuilder.buildMeta(searchMetadata, response, searchRequest))
+                .flatMapIterable(response -> {
+                    List<SearchHit> searchHits = itemCollectionBuilder.buildMeta(searchMetadata, response, searchRequest);
+                    nextTokenBuilder.append(itemCollectionBuilder.buildNextToken(searchMetadata, response));
+                    return searchHits;
+                })
                 // process all the hits in parallel -- will use all CPU cores by default
                 .parallel().runOn(Schedulers.parallel())
                 // map each hit to it's source bytes
@@ -134,7 +140,8 @@ public class ElasticsearchRepository {
                 .sequential()
                 .collectList()
                 // take the api list build an item collection from it
-                .map(itemList -> itemCollectionBuilder.buildItemCollection(searchMetadata, itemList, searchRequest));
+                .map(itemList -> itemCollectionBuilder
+                        .buildItemCollection(searchMetadata, itemList, searchRequest, nextTokenBuilder.toString()));
     }
 
     protected void setIncludeExcludeFields(SearchSourceBuilder searchSourceBuilder,
@@ -223,7 +230,7 @@ public class ElasticsearchRepository {
     public Flux<Item> searchItemFlux(Collection<String> indices, QueryBuilder queryBuilder,
                                      com.planet.staccato.dto.api.SearchRequest searchRequest) {
         String searchString = buildEsSearchString(indices, queryBuilder, searchRequest);
-        return client.searchNoScroll(searchString, indices)
+        return client.search(searchString, indices)
                 // build a flux from the hits
                 .flatMapIterable(response -> Arrays.asList(response.getHits().getHits()))
                 // process all the hits in parallel -- will use all CPU cores by default

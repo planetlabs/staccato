@@ -15,7 +15,6 @@ public class SearchMetadata {
     private Long limit;
     private long matched;
     private long returned;
-    private String next;
 
     public SearchMetadata limit(long limit) {
         setLimit(limit);
@@ -29,11 +28,6 @@ public class SearchMetadata {
 
     public SearchMetadata returned(long returned) {
         setReturned(returned);
-        return this;
-    }
-
-    public SearchMetadata next(String next) {
-        setNext(next);
         return this;
     }
 

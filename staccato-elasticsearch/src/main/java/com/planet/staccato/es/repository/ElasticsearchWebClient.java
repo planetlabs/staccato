@@ -80,7 +80,7 @@ public class ElasticsearchWebClient {
      * @param indices The indices to api
      * @return The api response object
      */
-    public Mono<SearchResponse> searchNoScroll(String body, Collection<String> indices) {
+    public Mono<SearchResponse> search(String body, Collection<String> indices) {
         return searchInternal(body, "/_search?index=" + String.join(",", indices));
     }
 

@@ -29,24 +29,26 @@ public class ItemCollectionBuilder {
     private Map<Class, Set<String>> cache = new HashMap<>();
     private final StacConfigProps configProps;
 
+    public String buildNextToken(SearchMetadata searchMetadata, SearchResponse response) {
+        // only build next token if needed
+        if ((searchMetadata.getReturned() == searchMetadata.getLimit())
+                && (searchMetadata.getMatched() >= searchMetadata.getReturned())) {
+            SearchHit lastHit = response.getHits().getHits()[response.getHits().getHits().length - 1];
+            return NextTokenHelper.serialize(lastHit.getSortValues());
+        }
+        return null;
+    }
+
     public List<SearchHit> buildMeta(SearchMetadata searchMetadata, SearchResponse response, SearchRequest searchRequest) {
         searchMetadata.matched(response.getHits().getTotalHits())
                 .returned(response.getHits().getHits().length)
                 .limit(searchRequest.getLimit())
                 .matched(response.getHits().getTotalHits());
-
-        // only build next token if needed
-        if ((searchMetadata.getReturned() == searchMetadata.getLimit()) && (searchMetadata.getMatched() >= searchMetadata.getReturned())) {
-            SearchHit lastHit = response.getHits().getHits()[response.getHits().getHits().length - 1];
-            String nextToken = NextTokenHelper.serialize(lastHit.getSortValues());
-            searchMetadata.next(nextToken);
-        }
-
         return Arrays.asList(response.getHits().getHits());
     }
 
     public ItemCollection buildItemCollection(SearchMetadata searchMetadata, List<Item> itemList,
-                                              SearchRequest searchRequest) {
+                                              SearchRequest searchRequest, String nextToken) {
         ItemCollection itemCollection = new ItemCollection()
                 .features(itemList)
                 .type(ItemCollection.TypeEnum.FEATURECOLLECTION)
@@ -96,9 +98,9 @@ public class ItemCollectionBuilder {
                 .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                 .rel("self"));
 
-        if (searchMetadata.getNext() != null) {
+        if (nextToken != null) {
             itemCollection.addLink(new Link()
-                    .href(link + "&next=" + searchMetadata.getNext())
+                    .href(link + "&next=" + nextToken)
                     .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                     .rel("next"));
         }
