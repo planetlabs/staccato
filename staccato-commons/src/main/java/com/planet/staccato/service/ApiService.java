@@ -18,5 +18,5 @@ public interface ApiService {
 
     Flux<Item> getItemsFlux(SearchRequest request);
 
-    Mono<ItemCollection> getItems(SearchRequest searchRequest);
+    Mono<ItemCollection> getItemCollection(SearchRequest searchRequest);
 }

@@ -1,5 +1,6 @@
 package com.planet.staccato.es.repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.config.StacConfigProps;
 import com.planet.staccato.config.StaccatoMediaType;
@@ -13,6 +14,7 @@ import joptsimple.internal.Strings;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -28,6 +30,7 @@ public class ItemCollectionBuilder {
 
     private Map<Class, Set<String>> cache = new HashMap<>();
     private final StacConfigProps configProps;
+    private final ObjectMapper mapper;
 
     public String buildNextToken(SearchMetadata searchMetadata, SearchResponse response) {
         // only build next token if needed
@@ -58,6 +61,41 @@ public class ItemCollectionBuilder {
 
         int finalLimit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
 
+        if (searchRequest.getMethod() != null
+                && searchRequest.getMethod().equalsIgnoreCase(HttpMethod.POST.toString())) {
+            buildPostLink(itemCollection, nextToken);
+        } else {
+            buildGetLink(searchRequest, itemCollection, finalLimit, nextToken);
+        }
+
+        itemCollection.setStacVersion(configProps.getVersion());
+
+        for (Item item : itemList) {
+            item.setStacVersion(configProps.getVersion());
+            itemCollection.addStacExtensions(addExtensions(item).getStacExtensions());
+        }
+
+        return itemCollection;
+    }
+
+    protected void buildPostLink(ItemCollection itemCollection, String nextToken) {
+
+        //Map<String, Object> body = mapper.convertValue(searchRequest, Map.class);
+
+        if (nextToken != null) {
+                // build the next link with the extended link fields for POST requests
+                itemCollection.addLink(new Link()
+                        .href(LinksConfigProps.LINK_BASE)
+                        .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
+                        .rel("next")
+                        .method(HttpMethod.POST.toString())
+                        .addBodyEntry("next", nextToken)
+                        .merge(true));
+        }
+    }
+
+    protected void buildGetLink(SearchRequest searchRequest, ItemCollection itemCollection, int finalLimit,
+                                  String nextToken) {
         // rebuild the original request link
         double[] bbox = searchRequest.getBbox();
         String link = LinksConfigProps.LINK_BASE + "?limit=" + finalLimit;
@@ -92,12 +130,6 @@ public class ItemCollectionBuilder {
             link += "&fields=" + fieldsValue;
         }
 
-        String selfLink = searchRequest.getNext() == null ? link : link + "&next=" + searchRequest.getNext();
-        itemCollection.addLink(new Link()
-                .href(selfLink)
-                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
-                .rel("self"));
-
         if (nextToken != null) {
             itemCollection.addLink(new Link()
                     .href(link + "&next=" + nextToken)
@@ -105,14 +137,12 @@ public class ItemCollectionBuilder {
                     .rel("next"));
         }
 
-        itemCollection.setStacVersion(configProps.getVersion());
+        String selfLink = searchRequest.getNext() == null ? link : link + "&next=" + searchRequest.getNext();
+        itemCollection.addLink(new Link()
+                .href(selfLink)
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
+                .rel("self"));
 
-        for (Item item : itemList) {
-            item.setStacVersion(configProps.getVersion());
-            itemCollection.addStacExtensions(addExtensions(item).getStacExtensions());
-        }
-
-        return itemCollection;
     }
 
     /**
@@ -133,7 +163,7 @@ public class ItemCollectionBuilder {
             try {
                 Field prefixField = clazz.getDeclaredField("EXTENSION_PREFIX");
                 if (prefixField != null) {
-                    String prefix = (String)prefixField.get(item.getProperties());
+                    String prefix = (String) prefixField.get(item.getProperties());
                     extensions.add(prefix);
                 }
             } catch (Exception e) {

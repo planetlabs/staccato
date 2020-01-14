@@ -133,7 +133,7 @@ public class ElasticsearchCatalogService implements CatalogService {
         searchRequest.setQuery(query);
         searchRequest.setLimit(10);
         searchRequest.setCollections(new String[]{collectionId});
-        return searchService.getItems(searchRequest);
+        return searchService.getItemCollection(searchRequest);
     }
 
 }

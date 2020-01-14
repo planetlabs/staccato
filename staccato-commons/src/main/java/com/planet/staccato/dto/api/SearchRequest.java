@@ -22,6 +22,8 @@ public class SearchRequest {
     private String[] ids;
     private String[] collections;
 
+    private String method;
+
     // fields extension
     private FieldsExtension fields;
 

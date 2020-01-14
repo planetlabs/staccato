@@ -6,6 +6,7 @@ import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.service.ApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,26 +36,31 @@ public class ApiController implements ApiApi {
 
     @Override
     public Mono<ItemCollection> getItems(SearchRequest searchRequest) {
-        return service.getItems(searchRequest).name("getItems");
+        searchRequest.setMethod(HttpMethod.GET.toString());
+        return service.getItemCollection(searchRequest).name("getItems");
     }
 
     @Override
     public Flux<Item> getItemsStream(SearchRequest searchRequest) {
+        searchRequest.setMethod(HttpMethod.GET.toString());
         return service.getItemsFlux(searchRequest);
     }
 
     @Override
     public Mono<ItemCollection> getItemsPost(@RequestBody SearchRequest searchRequest) {
-        return service.getItems(searchRequest).name("getItemsPost");
+        searchRequest.setMethod(HttpMethod.POST.toString());
+        return service.getItemCollection(searchRequest).name("getItemsPost");
     }
 
     @Override
     public Flux<Item> getItemsPostStream(SearchRequest searchRequest) {
+        searchRequest.setMethod(HttpMethod.POST.toString());
         return service.getItemsFlux(searchRequest);
     }
 
     @Override
     public Mono<ItemCollection> getItemsFormPost(@ModelAttribute SearchRequest searchRequest) {
-        return service.getItems(searchRequest).name("getItemsFormPost");
+        searchRequest.setMethod(HttpMethod.POST.toString());
+        return service.getItemCollection(searchRequest).name("getItemsFormPost");
     }
 }

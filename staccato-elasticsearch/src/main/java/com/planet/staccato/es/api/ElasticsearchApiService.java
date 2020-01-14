@@ -89,7 +89,7 @@ public class ElasticsearchApiService implements ApiService {
      * @return A flux of items
      */
     @Override
-    public Mono<ItemCollection> getItems(SearchRequest searchRequest) {
+    public Mono<ItemCollection> getItemCollection(SearchRequest searchRequest) {
         Set<String> indices = getIndices(searchRequest);
         BoolQueryBuilder boolQueryBuilder = QueryBuilderHelper.buildQuery(searchRequest);
 

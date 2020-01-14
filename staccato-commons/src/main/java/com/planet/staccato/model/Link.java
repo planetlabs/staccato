@@ -20,8 +20,8 @@ public class Link {
     private String title;
     private Integer length;
     private String method;
-    private Map<String, String> headers;
-    private Map<String, String> body;
+    private Map<String, Object> headers;
+    private Map<String, Object> body;
     private Boolean merge;
     @JsonProperty("label:assets")
     private String labelAssets;
@@ -65,12 +65,12 @@ public class Link {
         return this;
     }
 
-    public Link headers(Map<String, String> headers) {
+    public Link headers(Map<String, Object> headers) {
         setHeaders(headers);
         return this;
     }
 
-    public Link addHeader(String key, String value) {
+    public Link addHeader(String key, Object value) {
         if (this.headers == null) {
             this.headers = new HashMap<>();
         }
@@ -78,7 +78,7 @@ public class Link {
         return this;
     }
 
-    public Link addHeaders(Map<String, String> headers) {
+    public Link addHeaders(Map<String, Object> headers) {
         if (this.headers == null) {
             this.headers = new HashMap<>();
         }
@@ -86,12 +86,12 @@ public class Link {
         return this;
     }
 
-    public Link body(Map<String, String> body) {
+    public Link body(Map<String, Object> body) {
         setBody(body);
         return this;
     }
 
-    public Link addBodyEntry(String key, String value) {
+    public Link addBodyEntry(String key, Object value) {
         if (this.body == null) {
             this.body = new HashMap<>();
         }
@@ -99,16 +99,16 @@ public class Link {
         return this;
     }
 
-    public Link merge(boolean merge) {
-        setMerge(merge);
-        return this;
-    }
-
-    public Link addBodyEntries(Map<String, String> bodyEntries) {
+    public Link addBodyEntries(Map<String, Object> bodyEntries) {
         if (this.body == null) {
             this.body = new HashMap<>();
         }
         body.putAll(bodyEntries);
+        return this;
+    }
+
+    public Link merge(boolean merge) {
+        setMerge(merge);
         return this;
     }
 

@@ -38,7 +38,7 @@ public class CollectionController implements CollectionApi {
     @Override
     public Mono<ItemCollection> getCollectionItems(@PathVariable("collectionId") String collectionId,
                                                    SearchRequest searchRequest) {
-        return apiService.getItems(searchRequest.collections(new String[]{collectionId}));
+        return apiService.getItemCollection(searchRequest.collections(new String[]{collectionId}));
     }
 
     @Override
