@@ -16,7 +16,6 @@ public class ItemCollection {
     private String stacVersion;
     @JsonProperty("stac_extensions")
     private Set<String> stacExtensions;
-    @JsonProperty("search:metadata")
     private Context context;
     private List<Item> features = new ArrayList<>();
     private List<Link> links;
