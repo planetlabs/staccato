@@ -10,7 +10,7 @@ import com.planet.staccato.es.config.ElasticsearchConfigProps;
 import com.planet.staccato.exception.StaccatoRuntimeException;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
-import com.planet.staccato.model.SearchMetadata;
+import com.planet.staccato.model.Context;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.DocWriteResponse;
@@ -123,13 +123,13 @@ public class ElasticsearchRepository {
     public Mono<ItemCollection> searchItemCollection(Collection<String> indices, QueryBuilder queryBuilder,
                                                      final com.planet.staccato.dto.api.SearchRequest searchRequest) {
         String searchString = buildEsSearchString(indices, queryBuilder, searchRequest);
-        final SearchMetadata searchMetadata = new SearchMetadata();
+        final Context context = new Context();
         final StringBuilder nextTokenBuilder = new StringBuilder();
         return client.search(searchString, indices)
                 // build the meta object and return the search hits
                 .flatMapIterable(response -> {
-                    List<SearchHit> searchHits = itemCollectionBuilder.buildMeta(searchMetadata, response, searchRequest);
-                    nextTokenBuilder.append(itemCollectionBuilder.buildNextToken(searchMetadata, response));
+                    List<SearchHit> searchHits = itemCollectionBuilder.buildMeta(context, response, searchRequest);
+                    nextTokenBuilder.append(itemCollectionBuilder.buildNextToken(context, response));
                     return searchHits;
                 })
                 // process all the hits in parallel -- will use all CPU cores by default
@@ -141,7 +141,7 @@ public class ElasticsearchRepository {
                 .collectList()
                 // take the api list build an item collection from it
                 .map(itemList -> itemCollectionBuilder
-                        .buildItemCollection(searchMetadata, itemList, searchRequest, nextTokenBuilder.toString()));
+                        .buildItemCollection(context, itemList, searchRequest, nextTokenBuilder.toString()));
     }
 
     protected void setIncludeExcludeFields(SearchSourceBuilder searchSourceBuilder,

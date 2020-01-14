@@ -9,7 +9,7 @@ import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.model.Link;
-import com.planet.staccato.model.SearchMetadata;
+import com.planet.staccato.model.Context;
 import joptsimple.internal.Strings;
 import lombok.RequiredArgsConstructor;
 import org.elasticsearch.action.search.SearchResponse;
@@ -32,32 +32,32 @@ public class ItemCollectionBuilder {
     private final StacConfigProps configProps;
     private final ObjectMapper mapper;
 
-    public String buildNextToken(SearchMetadata searchMetadata, SearchResponse response) {
+    public String buildNextToken(Context context, SearchResponse response) {
         // only build next token if needed
-        if ((searchMetadata.getReturned() == searchMetadata.getLimit())
-                && (searchMetadata.getMatched() >= searchMetadata.getReturned())) {
+        if ((context.getReturned() == context.getLimit())
+                && (context.getMatched() >= context.getReturned())) {
             SearchHit lastHit = response.getHits().getHits()[response.getHits().getHits().length - 1];
             return NextTokenHelper.serialize(lastHit.getSortValues());
         }
         return null;
     }
 
-    public List<SearchHit> buildMeta(SearchMetadata searchMetadata, SearchResponse response, SearchRequest searchRequest) {
-        searchMetadata.matched(response.getHits().getTotalHits())
+    public List<SearchHit> buildMeta(Context context, SearchResponse response, SearchRequest searchRequest) {
+        context.matched(response.getHits().getTotalHits())
                 .returned(response.getHits().getHits().length)
                 .limit(searchRequest.getLimit())
                 .matched(response.getHits().getTotalHits());
         return Arrays.asList(response.getHits().getHits());
     }
 
-    public ItemCollection buildItemCollection(SearchMetadata searchMetadata, List<Item> itemList,
+    public ItemCollection buildItemCollection(Context context, List<Item> itemList,
                                               SearchRequest searchRequest, String nextToken) {
         ItemCollection itemCollection = new ItemCollection()
                 .features(itemList)
                 .type(ItemCollection.TypeEnum.FEATURECOLLECTION)
-                .metadata(searchMetadata)
-                .numberMatched(searchMetadata.getMatched())
-                .numberReturned(searchMetadata.getReturned());
+                .context(context)
+                .numberMatched(context.getMatched())
+                .numberReturned(context.getReturned());
 
         int finalLimit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
 
@@ -79,9 +79,6 @@ public class ItemCollectionBuilder {
     }
 
     protected void buildPostLink(ItemCollection itemCollection, String nextToken) {
-
-        //Map<String, Object> body = mapper.convertValue(searchRequest, Map.class);
-
         if (nextToken != null) {
                 // build the next link with the extended link fields for POST requests
                 itemCollection.addLink(new Link()

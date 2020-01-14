@@ -17,7 +17,7 @@ public class ItemCollection {
     @JsonProperty("stac_extensions")
     private Set<String> stacExtensions;
     @JsonProperty("search:metadata")
-    private SearchMetadata metadata;
+    private Context context;
     private List<Item> features = new ArrayList<>();
     private List<Link> links;
     private long numberMatched;
@@ -80,8 +80,8 @@ public class ItemCollection {
         return this;
     }
 
-    public ItemCollection metadata(SearchMetadata searchMetadata) {
-        setMetadata(searchMetadata);
+    public ItemCollection context(Context context) {
+        setContext(context);
         return this;
     }
 
@@ -119,59 +119,6 @@ public class ItemCollection {
         }
         this.stacExtensions.addAll(stacExtensions);
         return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        ItemCollection itemCollection = (ItemCollection) o;
-        return Objects.equals(this.type, itemCollection.type)
-                && Objects.equals(this.features, itemCollection.features)
-                && Objects.equals(this.metadata, itemCollection.metadata)
-                && Objects.equals(this.numberMatched, itemCollection.numberMatched)
-                && Objects.equals(this.numberReturned, itemCollection.numberReturned)
-                && Objects.equals(this.links, itemCollection.links)
-                && Objects.equals(this.stacVersion, itemCollection.stacVersion)
-                && Objects.equals(this.stacExtensions, itemCollection.stacExtensions);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(type, features);
-    }
-
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("class ItemCollection {\n");
-
-        sb.append("    type: ").append(toIndentedString(type)).append("\n");
-        sb.append("    features: ").append(toIndentedString(features)).append("\n");
-        sb.append("    metadata: ").append(toIndentedString(metadata)).append("\n");
-        sb.append("    numberMatched: ").append(toIndentedString(numberMatched)).append("\n");
-        sb.append("    numberReturned: ").append(toIndentedString(numberReturned)).append("\n");
-        sb.append("    links: ").append(toIndentedString(links)).append("\n");
-        sb.append("    stacVersion: ").append(toIndentedString(stacVersion)).append("\n");
-        sb.append("    stacExtensions: ").append(toIndentedString(String.join(",", stacExtensions))).append("\n");
-        sb.append("}");
-        return sb.toString();
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString(Object o) {
-        if (o == null) {
-            return "null";
-        }
-        return o.toString().replace("\n", "\n    ");
     }
 
 }
