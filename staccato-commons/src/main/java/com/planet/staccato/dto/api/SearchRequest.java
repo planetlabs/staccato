@@ -22,13 +22,16 @@ public class SearchRequest {
     private String[] ids;
     private String[] collections;
 
+    // helper field
     private String method;
 
     // fields extension
     private FieldsExtension fields;
 
     // sort extension
-    private SortExtension sort;
+    private SortExtension sortby;
+
+    // query extension
     private String query;
 
     public SearchRequest bbox(double[] bbox) {
@@ -71,8 +74,8 @@ public class SearchRequest {
         return this;
     }
 
-    public SearchRequest sort(SortExtension sort) {
-        setSort(sort);
+    public SearchRequest sortby(SortExtension sortby) {
+        setSortby(sortby);
         return this;
     }
 
@@ -80,4 +83,5 @@ public class SearchRequest {
         setIntersects(intersects);
         return this;
     }
+
 }

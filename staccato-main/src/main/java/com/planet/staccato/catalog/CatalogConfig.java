@@ -2,6 +2,7 @@ package com.planet.staccato.catalog;
 
 import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.config.StacConfigProps;
+import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.model.Catalog;
 import com.planet.staccato.model.Link;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +56,7 @@ public class CatalogConfig {
 
         catalog.getLinks().add(Link.build()
                 .rel("service-desc")
-                .type("application/vnd.oai.openapi+json;version=3.0")
+                .type(StaccatoMediaType.VND_OAI_OPENAPI_JSON_VALUE)
                 .href(LinksConfigProps.LINK_PREFIX + "/api"));
 
         catalog.getLinks().add(Link.build()

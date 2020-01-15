@@ -8,9 +8,9 @@ import com.planet.staccato.dto.api.extensions.SortExtension;
 import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.es.config.ElasticsearchConfigProps;
 import com.planet.staccato.exception.StaccatoRuntimeException;
+import com.planet.staccato.model.Context;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
-import com.planet.staccato.model.Context;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.DocWriteResponse;
@@ -193,7 +193,7 @@ public class ElasticsearchRepository {
         int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
         SearchSourceBuilder searchSourceBuilder =
                 buildSearchSourceBuilder(queryBuilder, limit, searchRequest.getNext());
-        configureSort(searchSourceBuilder, searchRequest.getSort());
+        configureSort(searchSourceBuilder, searchRequest.getSortby());
         setIncludeExcludeFields(searchSourceBuilder, searchRequest);
 
         SearchRequest esSearchRequest = buildSearchRequest(searchSourceBuilder, indices);

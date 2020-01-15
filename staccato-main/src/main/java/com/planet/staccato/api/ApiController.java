@@ -1,19 +1,17 @@
 package com.planet.staccato.api;
 
 import com.planet.staccato.dto.api.SearchRequest;
+import com.planet.staccato.dto.api.extensions.SortExtension;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.service.ApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 
 /**
  *  Defines the controller interface for the STAC API specification
@@ -28,6 +26,15 @@ import reactor.core.publisher.Mono;
 public class ApiController implements ApiApi {
 
     private final ApiService service;
+
+    /**
+     * Registers a property editor to convert sortby parameter value for GET requests to SortbyExtension object.
+     * @param binder
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(SortExtension.class, "sortby", new SortbyPropertyEditor());
+    }
 
     @Override
     public Mono<Item> getItem(@PathVariable("id") String id) {

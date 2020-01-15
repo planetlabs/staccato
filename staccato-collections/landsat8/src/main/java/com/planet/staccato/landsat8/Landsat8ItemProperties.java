@@ -3,12 +3,12 @@ package com.planet.staccato.landsat8;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.planet.staccato.model.Provider;
+import com.planet.staccato.properties.CoreProperties;
 import com.planet.staccato.properties.commons.Instrument;
 import com.planet.staccato.properties.commons.Licensing;
 import com.planet.staccato.properties.commons.Metadata;
 import com.planet.staccato.properties.commons.Providers;
 import com.planet.staccato.properties.extension.EO;
-import com.planet.staccato.properties.CoreProperties;
 import lombok.Data;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.planet.staccato.landsat8;
 
 import com.planet.staccato.collection.CollectionMetadataAdapter;
-import com.planet.staccato.properties.extension.EO;
 import com.planet.staccato.model.Provider;
+import com.planet.staccato.properties.extension.EO;
 import lombok.Data;
 
 import java.util.ArrayList;

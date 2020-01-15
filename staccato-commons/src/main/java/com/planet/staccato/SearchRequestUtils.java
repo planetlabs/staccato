@@ -55,7 +55,7 @@ public class SearchRequestUtils {
             request.setIntersects(intersects);
         }
         if (null != sort) {
-            request.setSort(sort);
+            request.setSortby(sort);
         }
         return request;
     }

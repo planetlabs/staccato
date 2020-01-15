@@ -7,13 +7,13 @@ import com.planet.staccato.model.Link;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.planet.staccato.config.StaccatoMediaType.APPLICATION_JSON_VALUE;
+
 /**
  * @author joshfix
  * Created on 2019-09-17
  */
 public class LinkHelper {
-
-    public static final String APPLICATION_JSON_VALUE = "application/json";
 
     public static List<Link> buildCollectionLinks(String collectionId) {
         List<Link> links = new ArrayList<>();

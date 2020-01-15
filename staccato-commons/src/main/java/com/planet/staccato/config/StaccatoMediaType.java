@@ -6,7 +6,9 @@ package com.planet.staccato.config;
  */
 public interface StaccatoMediaType {
 
-    String VND_OAI_OPENAPI_JSON_VALUE = "application/vnd.oai.openapi+json;version=3.0";
+    String APPLICATION_JSON_VALUE = "application/json";
     String APPLICATION_GEO_JSON_VALUE = "application/geo+json";
+    String VND_OAI_OPENAPI_JSON_VALUE = "application/vnd.oai.openapi+json;version=3.0";
+
 
 }

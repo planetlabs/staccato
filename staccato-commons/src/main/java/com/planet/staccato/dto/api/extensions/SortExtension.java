@@ -16,6 +16,21 @@ public class SortExtension extends ArrayList<SortExtension.SortTerm> {
         private String field;
         private SortDirection direction;
 
+        public SortTerm field(String field) {
+            setField(field);
+            return this;
+        }
+
+        public SortTerm direction(SortDirection direction) {
+            setDirection(direction);
+            return this;
+        }
+
+        public SortTerm direction(String direction) {
+            setDirection(SortDirection.fromValue(direction));
+            return this;
+        }
+
         public enum SortDirection {
             ASC("asc"), DESC("desc");
 
@@ -36,7 +51,7 @@ public class SortExtension extends ArrayList<SortExtension.SortTerm> {
 
             public static SortExtension.SortTerm.SortDirection fromValue(String text) {
                 for (SortExtension.SortTerm.SortDirection b : SortExtension.SortTerm.SortDirection.values()) {
-                    if (String.valueOf(b.value).equals(text)) {
+                    if (String.valueOf(b.value).equalsIgnoreCase(text)) {
                         return b;
                     }
                 }
