@@ -72,6 +72,10 @@ public class ItemCollection {
     }
 
     public ItemCollection addLink(Link link) {
+        if (link == null) {
+            return this;
+        }
+
         if (links == null) {
             links = new ArrayList<>(1);
         }
@@ -105,6 +109,10 @@ public class ItemCollection {
     }
 
     public ItemCollection addStacExtension(String stacExtension) {
+        if (stacExtensions == null) {
+            return this;
+        }
+
         if (null == this.stacExtensions) {
             this.stacExtensions = new HashSet<>();
         }
@@ -113,6 +121,10 @@ public class ItemCollection {
     }
 
     public ItemCollection addStacExtensions(Collection<String> stacExtensions) {
+        if (stacExtensions == null) {
+            return this;
+        }
+
         if (null == this.stacExtensions) {
             this.stacExtensions = new HashSet<>();
         }

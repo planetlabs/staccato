@@ -17,8 +17,13 @@ public class SortbyPropertyEditor extends PropertyEditorSupport {
 
     @Override
     public void setAsText(String text) {
+        if (text == null) {
+            return;
+        }
+
         String[] sortby = text.split(",");
         SortExtension sortExtension = new SortExtension();
+
         for (String sortElement : sortby) {
             if (sortElement.contains("|")) {
                 String[] sortElementArray = sortElement.split("\\|");
@@ -29,6 +34,7 @@ public class SortbyPropertyEditor extends PropertyEditorSupport {
                 }
             }
         }
+
         setValue(sortExtension);
     }
 }

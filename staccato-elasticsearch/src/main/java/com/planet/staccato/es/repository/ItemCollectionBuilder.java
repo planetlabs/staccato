@@ -70,8 +70,14 @@ public class ItemCollectionBuilder {
 
         itemCollection.setStacVersion(configProps.getVersion());
 
+        boolean shouldIncludeVersion = searchRequest.getFields() != null
+                && (searchRequest.getFields().isIncluded("stac_version")
+                && !searchRequest.getFields().isExcluded("stac_version"));
+
         for (Item item : itemList) {
-            item.setStacVersion(configProps.getVersion());
+            if (shouldIncludeVersion) {
+                item.setStacVersion(configProps.getVersion());
+            }
             itemCollection.addStacExtensions(addExtensions(item).getStacExtensions());
         }
 
@@ -149,6 +155,11 @@ public class ItemCollectionBuilder {
      * @return
      */
     protected Item addExtensions(Item item) {
+        // this can happen if the fields extension was used but properties were not included
+        if (item.getProperties() == null) {
+            return item;
+        }
+
         Class propertiesClass = item.getProperties().getClass();
         if (cache.containsKey(propertiesClass)) {
             return item.stacExtensions(cache.get(propertiesClass));

@@ -1,6 +1,7 @@
 package com.planet.staccato.api;
 
 import com.planet.staccato.dto.api.SearchRequest;
+import com.planet.staccato.dto.api.extensions.FieldsExtension;
 import com.planet.staccato.dto.api.extensions.SortExtension;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
@@ -25,6 +26,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ApiController implements ApiApi {
 
+    private SortbyPropertyEditor sortbyPropertyEditor = new SortbyPropertyEditor();
+    private FieldsPropertyEditor fieldsPropertyEditor = new FieldsPropertyEditor();
     private final ApiService service;
 
     /**
@@ -33,7 +36,8 @@ public class ApiController implements ApiApi {
      */
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(SortExtension.class, "sortby", new SortbyPropertyEditor());
+        binder.registerCustomEditor(SortExtension.class, "sortby", sortbyPropertyEditor);
+        binder.registerCustomEditor(FieldsExtension.class, "fields", fieldsPropertyEditor);
     }
 
     @Override
