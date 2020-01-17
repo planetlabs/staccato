@@ -30,8 +30,11 @@ public class SortbyPropertyEditor extends PropertyEditorSupport {
                 if (sortElementArray.length == 2) {
                     sortExtension.add(new SortExtension.SortTerm()
                             .field(sortElementArray[0])
-                            .direction(sortElementArray[1]));
+                            .direction(sortElementArray[1].toLowerCase()));
                 }
+            } else {
+                throw new RuntimeException("The sortby parameter must include a '|' (escaped as %7C) character " +
+                        "followed by the sort order ('asc' or 'desc').");
             }
         }
 

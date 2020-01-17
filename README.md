@@ -103,8 +103,8 @@ Any of the following methods are acceptable ways of running Staccato
 - **query** a Common Query Language text string to query properties of the catalog entry (see below for examples)
 - **ids** a list of comma separated IDs to be returned
 - **collections** a list of comma separated collection IDs on which to filter the results
-- **fields.include** a comma separated list of json field names to include in the result
-- **fields.exclude** a comma separated list of json field names to exclude in the result
+- **fields** a comma separated list of json field names to include in the result; fields to be excluded can be prefixed with "-"
+- **sortby** a comma separated list of fields to sort by 
 
 Examples:  
 _GET_
