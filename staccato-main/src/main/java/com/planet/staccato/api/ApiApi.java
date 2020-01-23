@@ -33,7 +33,7 @@ public interface ApiApi {
             produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})
     Flux<Item> getItemsPostStream(@RequestBody SearchRequest searchRequest);
 
-    @PostMapping(value = "/items", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+    @PostMapping(value = "/search", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     Mono<ItemCollection> getItemsFormPost(@ModelAttribute SearchRequest searchRequest);
 
