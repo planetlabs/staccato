@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.planet.staccato</groupId>
-    <artifactId>staccato-main</artifactId>
+    <artifactId>staccato-application</artifactId>
 
-    <name>staccato-main</name>
+    <name>staccato-application</name>
     <description>Planet STAC Implementation</description>
 
     <parent>

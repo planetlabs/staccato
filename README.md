@@ -37,7 +37,7 @@ Requires:
 
 Example build command: `mvn clean install`
 
-Additionally the docker image can be built from the [staccato-main](./staccato-main) package using the command: 
+Additionally the docker image can be built from the [staccato-application](./staccato-application) package using the command: 
 `mvn dockerfile:build`
 
 ### Running 
@@ -50,7 +50,7 @@ An Elasticsearch instance must be available.  To run locally in a docker contain
 Any of the following methods are acceptable ways of running Staccato
 - `./staccato-{version}.jar (self executing jar)`
 - `java -jar staccato-{version}.jar`
-- `mvn spring-boot:run` (from the [staccato-main](./staccato-main) directory)
+- `mvn spring-boot:run` (from the [staccato-application](./staccato-application) directory)
 - `docker run -d -i -t -p:8080:8080 quay.io/boundlessgeo/staccato:{version}`
 
 ## Endpoints
@@ -163,7 +163,7 @@ _POST_
 ## Configuration
 
 The STAC API has several properties that are configurable from the command line, as environment properties in the 
-[application.yml](./staccato-main/src/main/resources/application.yml) file.  The table below details the properties that 
+[application.yml](./staccato-application/src/main/resources/application.yml) file.  The table below details the properties that 
 are available for configuration.
 
 Property | Default Value | Description
@@ -257,7 +257,7 @@ Each query interface defines a method to return the list of item types that the 
 the actual `doFilter` method which does the actual work.  The basic premise is that the `doFilter` method accepts an 
 Item as input and returns an item as output.  This can be used to automatically add data, remove data, or transform 
 data.  Several examples of some included filters can be found in the 
-[filter](./staccato-main/src/main/java/com/planet/staccato/filter) package.  Collections can also provide custom  
+[filter](./staccato-application/src/main/java/com/planet/staccato/filter) package.  Collections can also provide custom  
 filters to accomplish various tasks, such as automatically generating links to related items based on values found in 
 the item's properties.
 
@@ -311,7 +311,7 @@ the `collection` field in every item. Because each collection will have a differ
 implement several different extension interfaces or custom fieldsExtension, Jackson cannot deserialize Item classes without
 more information on which properties class to deserialize to. Having the "collections" field in each item provides an
 extremely convenient 1:1 relationship between the item and it's properties implementation.  The Jackson configuration 
-for this can be found [here](./staccato-main/src/main/java/com/planet/staccato/config/ExtensionConfig.java). 
+for this can be found [here](./staccato-application/src/main/java/com/planet/staccato/config/ExtensionConfig.java). 
 
 ### Custom annotations
 
@@ -326,7 +326,7 @@ Set type `type` attribute to one of the enumerated values found in
 
 The `@Subcatalog` annotation, when applied to a `getter` interface method, will make that field eligible to be 
 automatically subcataloged via the `/stac/{catalog}` endpoint.  The 
-[catalog spec implementation](./staccato-main/src/main/java/com/planet/staccato/catalog) will automatically detect 
+[catalog spec implementation](./staccato-application/src/main/java/com/planet/staccato/catalog) will automatically detect 
 methods with this annotation and build a subcatalog link containing the field name.  That subcatalog will build links 
 containing all unique values in Elasticsearch for that field.  After all eligible subcatalog fieldsExtension have been 
 traversed, the links section will be populated with links to all items that match the selected subcatalog values.
@@ -421,11 +421,11 @@ actual index it belongs to and update it on that index.
 
 STAC will need to be configured with the mappings between the Elasticsearch alias name and the collection ID (eg, the
 value used in the `items.properties.collection` field). This can be set in 
-[application.yml](./staccato-main/src/main/resources/application.yml) under the path 
+[application.yml](./staccato-application/src/main/resources/application.yml) under the path 
 `stac.es.index.aliases`. The key should be the name of the write alias used in Elasticsearch (not the actual index 
 name!). The value should be the collection id.  So in our example case, the key would be `my-index-name` and the value 
 would be the collection ID.  STAC will automatically append `-search` to the alias for executing searches.
 
 At this point, you should be good to start inserting items. See the 
-[transaction API controller](./staccato-main/src/main/java/com/planet/staccato/transaction/TransactionApi.java)
+[transaction API controller](./staccato-application/src/main/java/com/planet/staccato/transaction/TransactionApi.java)
 for the proper methods to use for creating new items.

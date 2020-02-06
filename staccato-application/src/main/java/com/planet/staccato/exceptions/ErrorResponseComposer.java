@@ -3,6 +3,7 @@ package com.planet.staccato.exceptions;
 import com.planet.staccato.exception.StacException;
 import com.planet.staccato.exceptions.handlers.AbstractExceptionHandler;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -53,6 +54,6 @@ public class ErrorResponseComposer<T extends Throwable> {
             return Optional.of(handler.getErrorResponse(ex));
         }
 
-        return Optional.empty();
+        return Optional.of(new StacException(String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage()));
     }
 }
