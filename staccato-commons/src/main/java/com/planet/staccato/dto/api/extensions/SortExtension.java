@@ -1,5 +1,6 @@
 package com.planet.staccato.dto.api.extensions;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 public class SortExtension extends ArrayList<SortExtension.SortTerm> {
 
     @Data
+    @AllArgsConstructor
     public static class SortTerm {
         private String field;
         private SortDirection direction;

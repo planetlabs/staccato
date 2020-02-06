@@ -46,28 +46,21 @@ public class PropertiesExclusionFilter implements ItemSearchFilter {
 
         // if include fields are present, but none of them are properties fields or the collection field, null them out
         if (include != null && !include.isEmpty()) {
-            boolean propertiesRequested = false;
-            boolean collectionRequested = false;
 
-            for (String field : include) {
-                if (field.startsWith("properties.")) {
-                    propertiesRequested = true;
-                    continue;
-                }
-                if (field.equalsIgnoreCase("collection")) {
-                    collectionRequested = true;
-                    continue;
-                }
-            }
-
-            if (!propertiesRequested) {
+            if (!include.stream().anyMatch((s) -> s.startsWith("properties."))) {
                 item.setProperties(null);
             }
-            if (!collectionRequested) {
+
+            if (!include.contains("collection")) {
                 item.setCollection(null);
             }
-        // if no include fields were set, but exclude fields requested collection be excluded, then... exclude it.
+
+            if (!include.contains("stac_extension")) {
+                item.setStacExtensions(null);
+            }
+
         } else if (exclude != null && !exclude.isEmpty()) {
+            // if no include fields were set, but exclude fields requested collection be excluded, then... exclude it.
             for (String field : exclude) {
                 if (field.equalsIgnoreCase("collection")) {
                     item.setCollection(null);

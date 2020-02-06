@@ -1,6 +1,7 @@
 package com.planet.staccato.api;
 
 import com.planet.staccato.dto.api.extensions.SortExtension;
+import com.planet.staccato.dto.api.extensions.SortExtension.SortTerm;
 
 import java.beans.PropertyEditorSupport;
 
@@ -24,17 +25,14 @@ public class SortbyPropertyEditor extends PropertyEditorSupport {
         String[] sortby = text.split(",");
         SortExtension sortExtension = new SortExtension();
 
-        for (String sortElement : sortby) {
-            if (sortElement.contains("|")) {
-                String[] sortElementArray = sortElement.split("\\|");
-                if (sortElementArray.length == 2) {
-                    sortExtension.add(new SortExtension.SortTerm()
-                            .field(sortElementArray[0])
-                            .direction(sortElementArray[1].toLowerCase()));
-                }
+        for (String field : sortby) {
+            if (field.startsWith("-")) {
+                // if the field name starts with an dash, it is to be excluded
+                sortExtension.add(new SortTerm(field.substring(1), SortTerm.SortDirection.DESC));
+            } else if (field.startsWith("+")) {
+                sortExtension.add(new SortTerm(field.substring(1), SortTerm.SortDirection.ASC));
             } else {
-                throw new RuntimeException("The sortby parameter must include a '|' (escaped as %7C) character " +
-                        "followed by the sort order ('asc' or 'desc').");
+                sortExtension.add(new SortTerm(field, SortTerm.SortDirection.ASC));
             }
         }
 

@@ -15,8 +15,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <name>staccato</name>
-    <description>Staccato STAC implementation by Planet Labs</description>
+    <name>Staccato</name>
+    <description>STAC implementation by Planet Labs</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,7 +33,7 @@
     </properties>
 
     <modules>
-        <module>staccato-main</module>
+        <module>staccato-application</module>
         <module>staccato-collections</module>
         <module>staccato-commons</module>
         <module>staccato-community</module>
