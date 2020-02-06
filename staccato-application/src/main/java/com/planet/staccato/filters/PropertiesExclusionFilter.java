@@ -21,7 +21,9 @@ import java.util.Set;
 public class PropertiesExclusionFilter implements ItemSearchFilter {
 
     private final static Set<String> TYPES = new HashSet<>(Arrays.asList("*"));
-
+    private final static String PROPERTIES_PREFIX = "properties.";
+    private final static String COLLECTION_FIELD = "collection";
+    private final static String STAC_EXTENSIONS_FIELD = "stac_extensions";
     @Override
     public Set<String> types() {
         return TYPES;
@@ -47,23 +49,26 @@ public class PropertiesExclusionFilter implements ItemSearchFilter {
         // if include fields are present, but none of them are properties fields or the collection field, null them out
         if (include != null && !include.isEmpty()) {
 
-            if (!include.stream().anyMatch((s) -> s.startsWith("properties."))) {
+            if (!include.stream().anyMatch((s) -> s.startsWith(PROPERTIES_PREFIX))) {
                 item.setProperties(null);
             }
 
-            if (!include.contains("collection")) {
+            if (!include.contains(COLLECTION_FIELD)) {
                 item.setCollection(null);
             }
 
-            if (!include.contains("stac_extension")) {
+            if (!include.contains(STAC_EXTENSIONS_FIELD)) {
                 item.setStacExtensions(null);
             }
 
         } else if (exclude != null && !exclude.isEmpty()) {
-            // if no include fields were set, but exclude fields requested collection be excluded, then... exclude it.
+            // if no include fields were set, but exclude fields requested, exclude those fields.
             for (String field : exclude) {
-                if (field.equalsIgnoreCase("collection")) {
+                if (field.equalsIgnoreCase(COLLECTION_FIELD)) {
                     item.setCollection(null);
+                }
+                if (field.equalsIgnoreCase(STAC_EXTENSIONS_FIELD)) {
+                    item.setStacExtensions(null);
                 }
             }
         }
