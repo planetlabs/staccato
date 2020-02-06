@@ -1,6 +1,7 @@
 package com.planet.staccato;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.staccato.config.StacConfigProps;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,7 @@ public class StaccatoApplicationInitializer implements ApplicationRunner {
         if (!configProps.isIncludeNullFields()) {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         }
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 
         if (null != stacInitializers && !stacInitializers.isEmpty()) {
             for (StacInitializer stacInitializer : stacInitializers) {

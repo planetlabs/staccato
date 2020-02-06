@@ -1,7 +1,6 @@
 package com.planet.staccato.api;
 
 import com.planet.staccato.dto.api.extensions.FieldsExtension;
-import com.planet.staccato.dto.api.extensions.SortExtension;
 
 import java.beans.PropertyEditorSupport;
 

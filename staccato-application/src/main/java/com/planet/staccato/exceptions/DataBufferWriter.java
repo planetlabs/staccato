@@ -1,4 +1,4 @@
-package com.planet.staccato.api;
+package com.planet.staccato.exceptions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 /**
+ * Writes bytes to the http response
+ *
  * @author joshfix
  * Created on 3/7/19
  */
@@ -20,9 +22,9 @@ public class DataBufferWriter {
     private final ObjectMapper objectMapper;
 
     public <T> Mono<Void> write(ServerHttpResponse httpResponse, T object) {
+        DataBufferFactory bufferFactory = httpResponse.bufferFactory();
         return httpResponse
                 .writeWith(Mono.fromSupplier(() -> {
-                    DataBufferFactory bufferFactory = httpResponse.bufferFactory();
                     try {
                         return bufferFactory.wrap(objectMapper.writeValueAsBytes(object));
                     } catch (Exception ex) {

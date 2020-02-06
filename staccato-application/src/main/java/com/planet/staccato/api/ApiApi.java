@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
+
 /**
  * Defines the controller interface for the STAC API specification
  * @see <a href="https://github.com/radiantearth/stac-spec/tree/master/api-spec">api-spec</a>
@@ -20,21 +22,21 @@ public interface ApiApi {
     Mono<Item> getItem(@PathVariable("id") String id);
 
     @GetMapping(path = "/search")
-    Mono<ItemCollection> getItems(SearchRequest searchRequest);
+    Mono<ItemCollection> getItems(@Valid SearchRequest searchRequest);
 
     @GetMapping(path = "/search", produces = {MediaType.TEXT_EVENT_STREAM_VALUE,
             MediaType.APPLICATION_STREAM_JSON_VALUE})
-    Flux<Item> getItemsStream(SearchRequest searchRequest);
+    Flux<Item> getItemsStream(@Valid SearchRequest searchRequest);
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
-    Mono<ItemCollection> getItemsPost(@RequestBody SearchRequest searchRequest);
+    Mono<ItemCollection> getItemsPost(@Valid @RequestBody SearchRequest searchRequest);
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})
-    Flux<Item> getItemsPostStream(@RequestBody SearchRequest searchRequest);
+    Flux<Item> getItemsPostStream(@Valid @RequestBody SearchRequest searchRequest);
 
     @PostMapping(value = "/search", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
-    Mono<ItemCollection> getItemsFormPost(@ModelAttribute SearchRequest searchRequest);
+    Mono<ItemCollection> getItemsFormPost(@Valid @ModelAttribute SearchRequest searchRequest);
 
 }

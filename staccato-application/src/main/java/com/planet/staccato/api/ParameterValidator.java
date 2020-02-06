@@ -1,6 +1,7 @@
 package com.planet.staccato.api;
 
 import com.planet.staccato.dto.api.SearchRequest;
+import com.planet.staccato.exceptions.InvalidParameterException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Verifies that URL parameters passed in GET requests are valid.  If not valid, an InvalidParameterException is thrown
+ *
  * @author joshfix
  * Created on 2/28/19
  */
@@ -36,7 +39,7 @@ public class ParameterValidator implements WebFilter {
         MultiValueMap<String, String> requestParams = exchange.getRequest().getQueryParams();
         requestParams.keySet().forEach(key -> {
             if (!apiParameters.contains(key.toLowerCase())) {
-                throw new InvalidParameterException("Invalid request parameter: " + key);
+                throw new InvalidParameterException(key, apiParameters);
             }
         });
 

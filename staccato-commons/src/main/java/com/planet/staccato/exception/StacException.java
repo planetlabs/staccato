@@ -1,18 +1,19 @@
 package com.planet.staccato.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.util.Objects;
 
 /**
  * StacException
  */
+@NoArgsConstructor
+@AllArgsConstructor
 public class StacException {
 
   private String code;
   private String description;
-
-  public StacException(String description) {
-    this.description = description;
-  }
 
   public StacException code(String code) {
     this.code = code;
