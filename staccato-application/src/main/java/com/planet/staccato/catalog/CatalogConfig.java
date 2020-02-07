@@ -8,6 +8,7 @@ import com.planet.staccato.model.Link;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -52,6 +53,13 @@ public class CatalogConfig {
         catalog.getLinks().add(Link.build()
                 .rel("search")
                 .type(MediaType.APPLICATION_JSON_VALUE)
+                .method(HttpMethod.GET.toString())
+                .href(LinksConfigProps.LINK_PREFIX + "/search"));
+
+        catalog.getLinks().add(Link.build()
+                .rel("search")
+                .type(MediaType.APPLICATION_JSON_VALUE)
+                .method(HttpMethod.POST.toString())
                 .href(LinksConfigProps.LINK_PREFIX + "/search"));
 
         catalog.getLinks().add(Link.build()

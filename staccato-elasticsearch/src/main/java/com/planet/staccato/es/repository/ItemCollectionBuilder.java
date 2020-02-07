@@ -143,6 +143,7 @@ public class ItemCollectionBuilder {
         String selfLink = searchRequest.getNext() == null ? link : link + "&next=" + searchRequest.getNext();
         itemCollection.addLink(new Link()
                 .href(selfLink)
+                .method(HttpMethod.GET.toString())
                 .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                 .rel("self"));
 

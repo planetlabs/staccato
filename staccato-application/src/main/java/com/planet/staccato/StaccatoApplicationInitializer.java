@@ -41,7 +41,7 @@ public class StaccatoApplicationInitializer implements ApplicationRunner {
         if (!configProps.isIncludeNullFields()) {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         }
-        //objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
 
         if (null != stacInitializers && !stacInitializers.isEmpty()) {
             for (StacInitializer stacInitializer : stacInitializers) {
