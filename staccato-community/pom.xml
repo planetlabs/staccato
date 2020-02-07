@@ -8,12 +8,12 @@
 
     <groupId>com.planet.staccato</groupId>
     <artifactId>staccato-community</artifactId>
-    <version>0.9.0.0</version>
+    <version>0.9.0.1</version>
 
     <parent>
         <groupId>com.planet.staccato</groupId>
         <artifactId>staccato</artifactId>
-        <version>0.9.0.0</version>
+        <version>0.9.0.1</version>
     </parent>
 
     <modules>
