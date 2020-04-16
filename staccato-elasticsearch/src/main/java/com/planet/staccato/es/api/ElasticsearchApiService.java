@@ -49,7 +49,7 @@ public class ElasticsearchApiService implements ApiService {
         if (self.getPort() != 80) {
             LINK_BASE += ":" + self.getPort();
         }
-        LINK_BASE += "/stac/api"; // generate the base string for links
+        LINK_BASE += "/api"; // generate the base string for links
     }
 
     /**
@@ -89,7 +89,7 @@ public class ElasticsearchApiService implements ApiService {
      * @return A flux of items
      */
     @Override
-    public Mono<ItemCollection> getItems(SearchRequest searchRequest) {
+    public Mono<ItemCollection> getItemCollection(SearchRequest searchRequest) {
         Set<String> indices = getIndices(searchRequest);
         BoolQueryBuilder boolQueryBuilder = QueryBuilderHelper.buildQuery(searchRequest);
 

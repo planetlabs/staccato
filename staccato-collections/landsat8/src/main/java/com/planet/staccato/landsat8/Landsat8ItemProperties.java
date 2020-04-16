@@ -2,13 +2,16 @@ package com.planet.staccato.landsat8;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.planet.staccato.extension.EO;
-import com.planet.staccato.model.CoreProperties;
 import com.planet.staccato.model.Provider;
+import com.planet.staccato.properties.CoreProperties;
+import com.planet.staccato.properties.commons.Instrument;
+import com.planet.staccato.properties.commons.Licensing;
+import com.planet.staccato.properties.commons.Metadata;
+import com.planet.staccato.properties.commons.Providers;
+import com.planet.staccato.properties.extension.EO;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author joshfix
@@ -17,7 +20,7 @@ import java.util.Set;
 @Data
 @JsonTypeName("landsat-8-l1")
 @JsonDeserialize(as = Landsat8ItemProperties.class)
-public class Landsat8ItemProperties implements CoreProperties, EO, Landsat8 {
+public class Landsat8ItemProperties implements CoreProperties, EO, Landsat8, Licensing, Metadata, Providers, Instrument {
 
     // CoreProperties
     private String datetime;
@@ -25,21 +28,21 @@ public class Landsat8ItemProperties implements CoreProperties, EO, Landsat8 {
     private String updated;
     private String title;
     private String license;
-    private Set<Provider> providers;
+    private String platform;
+    private String mission;
+    private List<Provider> providers;
+    private List<String> instruments;
 
     // Collection field as part of the commons extension (merged from the collection metadata)
     //private String collection = Landsat8CollectionMetadata.ID;
 
     // EO
-    private String platform;
-    private String instrument;
     private Double cloudCover;
     private Integer offNadir;
     private Double gsd;
     private Double azimuth;
     private Double sunAzimuth;
     private Double sunElevation;
-    private String epsg;
     private String constellation;
     private List<Band> bands;
 
@@ -52,5 +55,6 @@ public class Landsat8ItemProperties implements CoreProperties, EO, Landsat8 {
     private String sceneId;
     private String productId;
     private String processingLevel;
+
 }
 

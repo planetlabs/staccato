@@ -45,8 +45,17 @@ public class ElasticsearchConfigProps {
             coreMappings.put("assets", MappingType.OBJECT);
             coreMappings.put("properties.collection", MappingType.KEYWORD);
             coreMappings.put("properties.datetime", MappingType.DATE);
+            coreMappings.put("properties.start_datetime", MappingType.DATE);
+            coreMappings.put("properties.end_datetime", MappingType.DATE);
+            coreMappings.put("properties.created", MappingType.DATE);
+            coreMappings.put("properties.updated", MappingType.DATE);
+            coreMappings.put("properties.mission", MappingType.KEYWORD);
+            coreMappings.put("properties.constellation", MappingType.KEYWORD);
+            coreMappings.put("properties.instruments", MappingType.KEYWORD);
+            coreMappings.put("properties.platform", MappingType.KEYWORD);
+            coreMappings.put("properties.providers", MappingType.KEYWORD);
+            coreMappings.put("properties.license", MappingType.KEYWORD);
             coreMappings.put("centroid", MappingType.GEO_POINT);
-
         }
     }
 

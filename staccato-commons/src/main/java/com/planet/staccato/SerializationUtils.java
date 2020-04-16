@@ -57,7 +57,8 @@ public class SerializationUtils {
      */
     public static Item deserializeItem(byte[] bytes, ObjectMapper mapper) {
         try {
-            return mapper.readValue(bytes, Item.class);
+            Item item = mapper.readValue(bytes, Item.class);
+            return item;
         } catch (Exception e) {
             log.error("Error deserializing hit for item: \n" + new String(bytes), e);
             throw new SerializationException("Error processing results.  Please contact an administrator with the details of your api parameters.");

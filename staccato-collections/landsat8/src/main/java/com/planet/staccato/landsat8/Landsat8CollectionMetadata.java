@@ -1,8 +1,8 @@
 package com.planet.staccato.landsat8;
 
 import com.planet.staccato.collection.CollectionMetadataAdapter;
-import com.planet.staccato.extension.EO;
 import com.planet.staccato.model.Provider;
+import com.planet.staccato.properties.extension.EO;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
 
     private void buildProperties() {
         properties.setPlatform("landsat-8");
-        properties.setInstrument("OLI_TIRS");
+        properties.setInstruments(Arrays.asList("OLI_TIRS"));
         properties.setConstellation("landsat");
         properties.setOffNadir(0);
         properties.setBands(buildBands());
@@ -77,7 +77,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B1")
                 .commonName("coastal")
-                .gsd(30)
                 .centerWavelength(0.44d)
                 .fullWidthHalfMax(0.02d)
         );
@@ -85,7 +84,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B2")
                 .commonName("blue")
-                .gsd(30)
                 .centerWavelength(0.48d)
                 .fullWidthHalfMax(0.06d)
         );
@@ -93,7 +91,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B3")
                 .commonName("green")
-                .gsd(30)
                 .centerWavelength(0.56d)
                 .fullWidthHalfMax(0.06d)
         );
@@ -101,7 +98,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B4")
                 .commonName("red")
-                .gsd(30)
                 .centerWavelength(0.65d)
                 .fullWidthHalfMax(0.04d)
         );
@@ -109,7 +105,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B5")
                 .commonName("nir")
-                .gsd(30)
                 .centerWavelength(0.86d)
                 .fullWidthHalfMax(0.03d)
         );
@@ -117,7 +112,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B6")
                 .commonName("swir16")
-                .gsd(30)
                 .centerWavelength(1.6d)
                 .fullWidthHalfMax(0.08d)
         );
@@ -125,7 +119,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B7")
                 .commonName("swir22")
-                .gsd(30)
                 .centerWavelength(2.2d)
                 .fullWidthHalfMax(0.2d)
         );
@@ -133,7 +126,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B8")
                 .commonName("pan")
-                .gsd(15)
                 .centerWavelength(0.59d)
                 .fullWidthHalfMax(0.18d)
         );
@@ -141,7 +133,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B9")
                 .commonName("cirrus")
-                .gsd(30)
                 .centerWavelength(1.37d)
                 .fullWidthHalfMax(0.02d)
         );
@@ -149,7 +140,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B10")
                 .commonName("lwir11")
-                .gsd(100)
                 .centerWavelength(10.9d)
                 .fullWidthHalfMax(0.8d)
         );
@@ -157,7 +147,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         bands.add(EO.Band.build()
                 .name("B11")
                 .commonName("lwir12")
-                .gsd(100)
                 .centerWavelength(12.0d)
                 .fullWidthHalfMax(1.0d)
         );

@@ -159,28 +159,31 @@ public class QueryBuilderHelper {//implements QueryBuilder {
             return Optional.empty();
         }
         Map<String, Object> intersectsMap = (Map<String, Object>) intersects;
-        String type = (String) intersectsMap.get("type");
+        Map<String, Object> geometryMap = (Map<String, Object>) intersectsMap.get("geometry");
+        String type = (String) geometryMap.get("type");
+
+        List coords = (List) geometryMap.get("coordinates");
+        if (coords.isEmpty()) {
+            return Optional.empty();
+        }
 
         ShapeBuilder shapeBuilder = null;
         switch (type) {
             case "Point":
-                List<Double> pointCoords = (List<Double>) intersectsMap.get("coordinates");
-                shapeBuilder = new PointBuilder(pointCoords.get(0), pointCoords.get(1));
+                shapeBuilder = new PointBuilder((double)coords.get(0), (double)coords.get(1));
                 break;
             case "Polygon":
-                List polygonCoords = (List) intersectsMap.get("coordinates");
                 CoordinatesBuilder polygonCoordsBuilder = new CoordinatesBuilder();
                 // TODO this needs to be more robust
-                for (Object o : (List) polygonCoords.get(0)) {
+                for (Object o : (List) coords.get(0)) {
                     List innerCoords = (List) o;
                     polygonCoordsBuilder.coordinate((double) innerCoords.get(0), (double) innerCoords.get(1));
                 }
                 shapeBuilder = new PolygonBuilder(polygonCoordsBuilder);
                 break;
             case "LineString":
-                List lineStringCoords = (List) intersectsMap.get("coordinates");
                 CoordinatesBuilder lineStringCoordsBuilder = new CoordinatesBuilder();
-                for (Object o : lineStringCoords) {
+                for (Object o : coords) {
                     List innerCoords = (List) o;
                     lineStringCoordsBuilder.coordinate((double) innerCoords.get(0), (double) innerCoords.get(1));
                 }

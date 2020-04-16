@@ -16,6 +16,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -34,6 +35,7 @@ import java.util.Collection;
 public class ElasticsearchWebClient {
 
     private final WebClient client;
+    public static final int MIB = 1_048_576;
     public static final String SEARCH_EXCEPTION = "Elasticsearch encountered an error executing the api.";
     public static final String DELETE_EXCEPTION = "Elasticsearch encountered an error deleting the item.";
     public static final String INDEX_EXCEPTION = "Elasticsearch encountered an error adding the item.";
@@ -52,40 +54,24 @@ public class ElasticsearchWebClient {
                 .append(configProps.getPort())
                 .toString();
         log.debug("Connecting to Elasticsearch at " + esEndpoint);
+
+        // https://github.com/spring-projects/spring-framework/issues/23961
+        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
+                .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(MIB * 500)).build();
+
+        WebClient.Builder builder = WebClient
+                .builder()
+                .baseUrl(esEndpoint)
+                .exchangeStrategies(exchangeStrategies);
+
+        // if a password exists, use it
         if (null != configProps.getUser() && !configProps.getUser().isEmpty()) {
-            client = WebClient.builder().baseUrl(esEndpoint).filter(
-                    ExchangeFilterFunctions.basicAuthentication(configProps.getUser(), configProps.getPassword()))
-                    .build();
-        } else {
-            client = WebClient.create(esEndpoint);
+            builder.filter(
+                    ExchangeFilterFunctions.basicAuthentication(configProps.getUser(), configProps.getPassword()));
         }
-    }
 
-    /**
-     * Executes a api using the Elasticsearch scroll API.
-     *
-     * @param body The JSON api request
-     * @return The api response object
-     */
-    /*
-    public Mono<SearchResponse> searchScroll(String body) {
-        return searchInternal(body, "/_search/scroll");
+        client = builder.build();
     }
-    */
-
-    /**
-     * Executes a api in Elasticsearch against one ore more indices using the scroll API.
-     * TODO: shouldn't statically set the scroll lifetime to 5m.  Need to set this through config props.
-     *
-     * @param body The JSON Search request
-     * @param indices The indices to api
-     * @return The api response object
-     */
-    /*
-    public Mono<SearchResponse> search(String body, Collection<String> indices) {
-        return searchInternal(body, "/_search?scroll=5m&index=" + String.join(",", indices));
-    }
-    */
 
     /**
      * Executes a standard api in Elasticsearch against one ore more indices.
@@ -94,7 +80,7 @@ public class ElasticsearchWebClient {
      * @param indices The indices to api
      * @return The api response object
      */
-    public Mono<SearchResponse> searchNoScroll(String body, Collection<String> indices) {
+    public Mono<SearchResponse> search(String body, Collection<String> indices) {
         return searchInternal(body, "/_search?index=" + String.join(",", indices));
     }
 
@@ -238,7 +224,6 @@ public class ElasticsearchWebClient {
             Method fromXContent = clazz.getMethod("fromXContent", XContentParser.class);
             XContentParser parser = XContentFactory
                     .xContent(XContentType.JSON)
-                    //.createParser(NamedXContentRegistry.EMPTY, bytes);
                     .createParser(NamedXContentRegistry.EMPTY, null, bytes);
             return (T)fromXContent.invoke(null, parser);
         } catch (Exception e) {

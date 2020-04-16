@@ -8,9 +8,9 @@ import com.planet.staccato.dto.api.extensions.SortExtension;
 import com.planet.staccato.es.QueryBuilderHelper;
 import com.planet.staccato.es.config.ElasticsearchConfigProps;
 import com.planet.staccato.exception.StaccatoRuntimeException;
+import com.planet.staccato.model.Context;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
-import com.planet.staccato.model.SearchMetadata;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.DocWriteResponse;
@@ -20,6 +20,7 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -49,6 +50,7 @@ public class ElasticsearchRepository {
     private final Scheduler scheduler;
     private final ElasticsearchWebClient client;
     private final ElasticsearchConfigProps configProps;
+    private final ItemCollectionBuilder itemCollectionBuilder;
 
     private static final StacTransactionResponse ITEM_NOT_FOUND;
     private static String TYPE;
@@ -121,10 +123,15 @@ public class ElasticsearchRepository {
     public Mono<ItemCollection> searchItemCollection(Collection<String> indices, QueryBuilder queryBuilder,
                                                      final com.planet.staccato.dto.api.SearchRequest searchRequest) {
         String searchString = buildEsSearchString(indices, queryBuilder, searchRequest);
-        final SearchMetadata searchMetadata = new SearchMetadata();
-        return client.searchNoScroll(searchString, indices)
+        final Context context = new Context();
+        final StringBuilder nextTokenBuilder = new StringBuilder();
+        return client.search(searchString, indices)
                 // build the meta object and return the search hits
-                .flatMapIterable(response -> ItemCollectionBuilder.buildMeta(searchMetadata, response, searchRequest))
+                .flatMapIterable(response -> {
+                    List<SearchHit> searchHits = itemCollectionBuilder.buildMeta(context, response, searchRequest);
+                    nextTokenBuilder.append(itemCollectionBuilder.buildNextToken(context, response));
+                    return searchHits;
+                })
                 // process all the hits in parallel -- will use all CPU cores by default
                 .parallel().runOn(Schedulers.parallel())
                 // map each hit to it's source bytes
@@ -133,10 +140,12 @@ public class ElasticsearchRepository {
                 .sequential()
                 .collectList()
                 // take the api list build an item collection from it
-                .map(itemList -> ItemCollectionBuilder.buildItemCollection(searchMetadata, itemList, searchRequest));
+                .map(itemList -> itemCollectionBuilder
+                        .buildItemCollection(context, itemList, searchRequest, nextTokenBuilder.toString()));
     }
 
-    protected void setIncludeExcludeFields(SearchSourceBuilder searchSourceBuilder, com.planet.staccato.dto.api.SearchRequest searchRequest) {
+    protected void setIncludeExcludeFields(SearchSourceBuilder searchSourceBuilder,
+                                           com.planet.staccato.dto.api.SearchRequest searchRequest) {
         // If include fieldsExtension were provided, make sure `collection` is present because it's needed for Jackson
         // deserialization to the proper ItemProperties subtype.  If the `collection` field was not requested in the
         // `fields` parameter, it will be removed before the response is returned.  Finally, set the includeFields on
@@ -184,7 +193,7 @@ public class ElasticsearchRepository {
         int limit = QueryBuilderHelper.getLimit(searchRequest.getLimit());
         SearchSourceBuilder searchSourceBuilder =
                 buildSearchSourceBuilder(queryBuilder, limit, searchRequest.getNext());
-        configureSort(searchSourceBuilder, searchRequest.getSort());
+        configureSort(searchSourceBuilder, searchRequest.getSortby());
         setIncludeExcludeFields(searchSourceBuilder, searchRequest);
 
         SearchRequest esSearchRequest = buildSearchRequest(searchSourceBuilder, indices);
@@ -221,7 +230,7 @@ public class ElasticsearchRepository {
     public Flux<Item> searchItemFlux(Collection<String> indices, QueryBuilder queryBuilder,
                                      com.planet.staccato.dto.api.SearchRequest searchRequest) {
         String searchString = buildEsSearchString(indices, queryBuilder, searchRequest);
-        return client.searchNoScroll(searchString, indices)
+        return client.search(searchString, indices)
                 // build a flux from the hits
                 .flatMapIterable(response -> Arrays.asList(response.getHits().getHits()))
                 // process all the hits in parallel -- will use all CPU cores by default
@@ -245,7 +254,8 @@ public class ElasticsearchRepository {
         if (!optionalJson.isPresent()) {
             StacTransactionResponse stacTransactionResponse = new StacTransactionResponse();
             stacTransactionResponse.setSuccess(false);
-            stacTransactionResponse.setReason("Unable to serialize item.  Does the data conform to the schema? Item: " + item);
+            stacTransactionResponse.setReason("Unable to serialize item.  Does the data conform to the schema? Item: "
+                    + item);
             return Mono.just(stacTransactionResponse);
         }
 

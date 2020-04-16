@@ -3,7 +3,8 @@ package com.planet.staccato.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Link
@@ -17,6 +18,10 @@ public class Link {
     private String hreflang;
     private String title;
     private Integer length;
+    private String method;
+    private Map<String, Object> headers;
+    private Map<String, Object> body;
+    private Boolean merge;
     @JsonProperty("label:assets")
     private String labelAssets;
 
@@ -25,88 +30,90 @@ public class Link {
     }
 
     public Link href(String href) {
-        this.href = href;
+        setHref(href);
         return this;
     }
 
     public Link rel(String rel) {
-        this.rel = rel;
+        setRel(rel);
         return this;
     }
 
     public Link type(String type) {
-        this.type = type;
+        setType(type);
         return this;
     }
 
     public Link title(String title) {
-        this.title = title;
+        setTitle(title);
         return this;
     }
 
     public Link hreflang(String hreflang) {
-        this.hreflang = hreflang;
+        setHreflang(hreflang);
         return this;
     }
 
     public Link length(int length) {
-        this.length = length;
+        setLength(length);
+        return this;
+    }
+
+    public Link method(String method) {
+        setMethod(method);
+        return this;
+    }
+
+    public Link headers(Map<String, Object> headers) {
+        setHeaders(headers);
+        return this;
+    }
+
+    public Link addHeader(String key, Object value) {
+        if (this.headers == null) {
+            this.headers = new HashMap<>();
+        }
+        this.headers.put(key, value);
+        return this;
+    }
+
+    public Link addHeaders(Map<String, Object> headers) {
+        if (this.headers == null) {
+            this.headers = new HashMap<>();
+        }
+        headers.putAll(headers);
+        return this;
+    }
+
+    public Link body(Map<String, Object> body) {
+        setBody(body);
+        return this;
+    }
+
+    public Link addBodyEntry(String key, Object value) {
+        if (this.body == null) {
+            this.body = new HashMap<>();
+        }
+        body.put(key, value);
+        return this;
+    }
+
+    public Link addBodyEntries(Map<String, Object> bodyEntries) {
+        if (this.body == null) {
+            this.body = new HashMap<>();
+        }
+        body.putAll(bodyEntries);
+        return this;
+    }
+
+    public Link merge(boolean merge) {
+        setMerge(merge);
         return this;
     }
 
     public Link labelAssets(String labelAssets) {
         this.labelAssets = labelAssets;
         return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Link link = (Link) o;
-        return Objects.equals(this.href, link.href) &&
-                Objects.equals(this.rel, link.rel) &&
-                Objects.equals(this.type, link.type) &&
-                Objects.equals(this.length, link.length) &&
-                Objects.equals(this.title, link.title) &&
-                Objects.equals(this.labelAssets, link.labelAssets) &&
-                Objects.equals(this.hreflang, link.hreflang);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(href, rel, type, title, length, hreflang, labelAssets);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("class Link {\n");
-
-        sb.append("    href: ").append(toIndentedString(href)).append("\n");
-        sb.append("    rel: ").append(toIndentedString(rel)).append("\n");
-        sb.append("    roles: ").append(toIndentedString(type)).append("\n");
-        sb.append("    title: ").append(toIndentedString(title)).append("\n");
-        sb.append("    hreflang: ").append(toIndentedString(hreflang)).append("\n");
-        sb.append("    length: ").append(toIndentedString(length)).append("\n");
-        sb.append("    labelAssets: ").append(toIndentedString(labelAssets)).append("\n");
-        sb.append("}");
-        return sb.toString();
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString(Object o) {
-        if (o == null) {
-            return "null";
-        }
-        return o.toString().replace("\n", "\n    ");
     }
 
 }

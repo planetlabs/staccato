@@ -5,28 +5,34 @@ import com.planet.staccato.dto.api.extensions.SortExtension;
 import lombok.Data;
 
 /**
- * Model of convinience for representing the parameters in a api request.
+ * Model of convenience for representing the parameters in a api request.
  *
  * @author joshfix
  * Created on 12/7/17
  */
 @Data
+@SingleGeometry
 public class SearchRequest {
 
     // core fields
+    private String next;
     private double[] bbox;
     private Object intersects;
     private String datetime;
     private Integer limit = 10;
-    private String next;
     private String[] ids;
     private String[] collections;
+
+    // helper field
+    private String method;
 
     // fields extension
     private FieldsExtension fields;
 
     // sort extension
-    private SortExtension sort;
+    private SortExtension sortby;
+
+    // query extension
     private String query;
 
     public SearchRequest bbox(double[] bbox) {
@@ -69,8 +75,8 @@ public class SearchRequest {
         return this;
     }
 
-    public SearchRequest sort(SortExtension sort) {
-        setSort(sort);
+    public SearchRequest sortby(SortExtension sortby) {
+        setSortby(sortby);
         return this;
     }
 
@@ -78,4 +84,5 @@ public class SearchRequest {
         setIntersects(intersects);
         return this;
     }
+
 }

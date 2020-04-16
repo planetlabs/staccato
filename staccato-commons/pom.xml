@@ -5,7 +5,7 @@
     <parent>
         <artifactId>staccato</artifactId>
         <groupId>com.planet.staccato</groupId>
-        <version>0.8.0.3</version>
+        <version>0.9.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -36,6 +36,10 @@
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
         </dependency>
         <!--
         <dependency>

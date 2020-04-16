@@ -1,9 +1,10 @@
 package com.planet.staccato.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * @author joshfix
@@ -12,32 +13,19 @@ import java.util.List;
 @Data
 public class Asset {
 
-
     private String href;
-    private String name;
     private String type;
-    private String filetype;
     private String title;
-    @JsonProperty("eo:bands")
-    private List<String> bands;
+    private String description;
+    private List<String> roles;
 
     public Asset href(String href) {
         setHref(href);
         return this;
     }
 
-    public Asset name(String name) {
-        setName(name);
-        return this;
-    }
-
-    public Asset type(String type) {
+    private Asset type(String type) {
         setType(type);
-        return this;
-    }
-
-    public Asset filetype(String filetype) {
-        setFiletype(filetype);
         return this;
     }
 
@@ -46,29 +34,30 @@ public class Asset {
         return this;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("class Asset {\n");
-
-        sb.append("    name: ").append(toIndentedString(name)).append("\n");
-        sb.append("    href: ").append(toIndentedString(href)).append("\n");
-        sb.append("    roles: ").append(toIndentedString(type)).append("\n");
-        sb.append("    filetype: ").append(toIndentedString(filetype)).append("\n");
-        sb.append("    bands: ").append(String.join(",", bands)).append("\n");
-        sb.append("}");
-        return sb.toString();
+    public Asset description(String description) {
+        setDescription(description);
+        return this;
     }
 
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString(Object o) {
-        if (o == null) {
-            return "null";
+    public Asset roles(List<String> roles) {
+        this.roles = roles;
+        return this;
+    }
+
+    public Asset addRole(String role) {
+        if (roles == null) {
+            roles = new ArrayList<>();
         }
-        return o.toString().replace("\n", "\n    ");
+        roles.add(role);
+        return this;
+    }
+
+    public Asset addRoles(List<String> roles) {
+        if (roles == null) {
+            roles = new ArrayList<>();
+        }
+        roles.addAll(roles);
+        return this;
     }
 
 }

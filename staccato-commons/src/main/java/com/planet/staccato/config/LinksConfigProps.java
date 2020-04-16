@@ -32,7 +32,7 @@ public class LinksConfigProps {
             LINK_PREFIX += ":" + getSelf().getPort();
         }
 
-        LINK_BASE = LINK_PREFIX + "/stac/search"; // generate the base string for links
+        LINK_BASE = LINK_PREFIX + "/search"; // generate the base string for links
     }
 
     @Data
