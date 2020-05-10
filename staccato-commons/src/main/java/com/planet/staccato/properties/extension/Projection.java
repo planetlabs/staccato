@@ -15,37 +15,37 @@ import java.util.List;
  */
 public interface Projection {
 
-    String EXTENSION_PREFIX = "proj";
+    String PREFIX = "proj";
 
     @Mapping(type = MappingType.INTEGER)
-    @JsonProperty(EXTENSION_PREFIX + ":epsg")
+    @JsonProperty(PREFIX + ":epsg")
     Integer getEpsg();
     void setEpsg(Integer epsg);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":proj4")
+    @JsonProperty(PREFIX + ":proj4")
     String getProj4();
     void setProj4(String proj4);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":wkt2")
+    @JsonProperty(PREFIX + ":wkt2")
     String getWkt2();
     void setWkt2(String wkt2);
 
-    @JsonProperty(EXTENSION_PREFIX + ":projjson")
+    @JsonProperty(PREFIX + ":projjson")
     Object getProjjson();
     void setProjjson(String projjson);
 
-    @JsonProperty(EXTENSION_PREFIX + ":geometry")
+    @JsonProperty(PREFIX + ":geometry")
     Object getGeometry();
     void setGeometry(Object geometry);
 
-    @JsonProperty(EXTENSION_PREFIX + ":bbox")
+    @JsonProperty(PREFIX + ":bbox")
     List<Double> getBbox();
     void setBbox(List<Double> bbox);
 
     @Mapping(type = MappingType.GEO_POINT)
-    @JsonProperty(EXTENSION_PREFIX + ":centroid")
+    @JsonProperty(PREFIX + ":centroid")
     Centroid getCentroid();
     void setCentroid(Centroid centroid);
 

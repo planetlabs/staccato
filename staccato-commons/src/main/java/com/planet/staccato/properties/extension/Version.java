@@ -5,12 +5,15 @@ import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
 
 /**
+ * TOOD:  Is this a root-level property?
  * Version extension: https://github.com/radiantearth/stac-spec/blob/master/extensions/version/README.md
  *
  * @author joshfix
  * Created on 1/6/20
  */
 public interface Version {
+
+    String PREFIX = "item";
 
     @Mapping(type = MappingType.KEYWORD)
     @JsonProperty("version")

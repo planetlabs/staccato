@@ -2,6 +2,8 @@ package com.planet.staccato.collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.planet.staccato.elasticsearch.annotation.Mapping;
+import com.planet.staccato.elasticsearch.annotation.MappingType;
 import com.planet.staccato.model.Extent;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.model.Provider;
@@ -44,10 +46,6 @@ public interface CollectionMetadata<T extends CoreProperties> {
     Set<String> getKeywords();
     void setKeywords(Set<String> keywords);
     CollectionMetadata<T> keywords(Set<String> keywords);
-
-    String getVersion();
-    void setVersion(String version);
-    CollectionMetadata<T> version(String version);
 
     String getLicense();
     void setLicense(String license);

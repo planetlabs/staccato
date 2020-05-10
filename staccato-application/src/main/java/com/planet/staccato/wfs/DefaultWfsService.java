@@ -41,7 +41,7 @@ public class DefaultWfsService {
 
     public Mono<Object> getApi() {
         try {
-            Resource catalogResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.9.0-rc1/api-spec/openapi/WFS3.yaml");
+            Resource catalogResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.9.0-rc2/api-spec/openapi/WFS3.yaml");
             BufferedReader catalogReader = new BufferedReader(new InputStreamReader(catalogResource.getInputStream()));
             return Mono.just(mapper.readValue(catalogReader, Object.class));
         } catch (IOException e) {

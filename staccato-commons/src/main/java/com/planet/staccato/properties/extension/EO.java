@@ -15,39 +15,39 @@ import java.util.List;
  */
 public interface EO {
 
-    String EXTENSION_PREFIX = "eo";
+    String PREFIX = "eo";
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":gsd")
+    @JsonProperty(PREFIX + ":gsd")
     Double getGsd();
     void setGsd(Double gsd);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":cloud_cover")
+    @JsonProperty(PREFIX + ":cloud_cover")
     Double getCloudCover();
     void setCloudCover(Double cloudCover);
 
     @Mapping(type = MappingType.INTEGER)
-    @JsonProperty(EXTENSION_PREFIX + ":off_nadir")
+    @JsonProperty(PREFIX + ":off_nadir")
     Integer getOffNadir();
     void setOffNadir(Integer offNadir);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":azimuth")
+    @JsonProperty(PREFIX + ":azimuth")
     Double getAzimuth();
     void setAzimuth(Double azimuth);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":sun_azimuth")
+    @JsonProperty(PREFIX + ":sun_azimuth")
     Double getSunAzimuth();
     void setSunAzimuth(Double sunAzimuth);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":sun_elevation")
+    @JsonProperty(PREFIX + ":sun_elevation")
     Double getSunElevation();
     void setSunElevation(Double sunElevation);
 
-    @JsonProperty(EXTENSION_PREFIX + ":bands")
+    @JsonProperty(PREFIX + ":bands")
     List<Band> getBands();
     void setBands(List<Band> bands);
 

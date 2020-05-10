@@ -13,33 +13,33 @@ import java.util.List;
  */
 public interface PointCloud {
 
-    String EXTENSION_PREFIX = "pc";
+    String PREFIX = "pc";
 
     @Mapping(type = MappingType.INTEGER)
-    @JsonProperty(EXTENSION_PREFIX + ":count")
+    @JsonProperty(PREFIX + ":count")
     Integer getCount();
     void setCount(Integer count);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":type")
+    @JsonProperty(PREFIX + ":type")
     String getType();
     void setType(String type);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":encoding")
+    @JsonProperty(PREFIX + ":encoding")
     String getEncoding();
     void setEncoding(String encoding);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":density")
+    @JsonProperty(PREFIX + ":density")
     String getDensity();
     void setDensity(String density);
 
-    @JsonProperty(EXTENSION_PREFIX + ":schemas")
+    @JsonProperty(PREFIX + ":schemas")
     List<Schema> getSchemas();
     void setSchemas(List<Schema> schemas);
 
-    @JsonProperty(EXTENSION_PREFIX + ":statistics")
+    @JsonProperty(PREFIX + ":statistics")
     Statistics getStatistics();
     void setStatistics(Statistics statistics);
 

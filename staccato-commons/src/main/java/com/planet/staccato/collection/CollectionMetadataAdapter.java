@@ -4,6 +4,7 @@ import com.planet.staccato.model.Extent;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.model.Provider;
 import com.planet.staccato.properties.CoreProperties;
+import com.planet.staccato.properties.extension.Version;
 import lombok.Data;
 
 import java.util.*;
@@ -15,7 +16,7 @@ import java.util.*;
  * Created on 10/15/18
  */
 @Data
-public class CollectionMetadataAdapter<T extends CoreProperties> implements CollectionMetadata<T> {
+public class CollectionMetadataAdapter<T extends CoreProperties> implements CollectionMetadata<T>, Version {
 
     protected String stacVersion;
     protected Set<String> stacExtensions;
@@ -25,7 +26,6 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     protected List<String> crs;
     protected String itemType;
     protected Set<String> keywords = new HashSet<>();
-    protected String version;
     protected String license;
     protected Extent extent;
     protected List<Provider> providers = new ArrayList<>();
@@ -33,6 +33,8 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     protected T properties;
     protected List<Link> links = new ArrayList<>();
     protected CatalogType catalogType;
+    protected String version;
+    protected Boolean deprecated;
 
     @Override
     public CollectionMetadata<T> stacVersion(String stacVersion) {
@@ -67,12 +69,6 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     @Override
     public CollectionMetadata<T> keywords(Set<String> keywords) {
         setKeywords(keywords);
-        return this;
-    }
-
-    @Override
-    public CollectionMetadata<T> version(String version) {
-        setVersion(version);
         return this;
     }
 
@@ -139,4 +135,23 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
         return this;
     }
 
+    public CollectionMetadata<T> version(String version) {
+        setVersion(version);
+        return this;
+    }
+
+    @Override
+    public boolean isDeprecated() {
+        return false;
+    }
+
+    @Override
+    public void setDeprecated(boolean deprecated) {
+        this.deprecated = deprecated;
+    }
+
+    public CollectionMetadata<T> deprecated(boolean deprecated) {
+        setDeprecated(deprecated);
+        return this;
+    }
 }

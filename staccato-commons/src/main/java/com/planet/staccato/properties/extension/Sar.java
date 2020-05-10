@@ -15,89 +15,89 @@ import java.util.Collection;
  */
 public interface Sar {
 
-    String EXTENSION_PREFIX = "sar";
+    String PREFIX = "sar";
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":instrument_mode")
+    @JsonProperty(PREFIX + ":instrument_mode")
     String getInstrumentMode();
     void setInstrumentMode(String instrumentMode);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":frequency_band")
+    @JsonProperty(PREFIX + ":frequency_band")
     String getFrequencyBand();
     void setFrequencyBand(String frequencyBand);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":center_frequency")
+    @JsonProperty(PREFIX + ":center_frequency")
     Double getCenterFrequency();
     void setCenterFrequency(Double centerFrequency);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":polarizations")
+    @JsonProperty(PREFIX + ":polarizations")
     Collection<String> getPolarizations();
     void setPolarizations(Collection<String> polarizations);
 
-    @JsonProperty(EXTENSION_PREFIX + ":bands")
+    @JsonProperty(PREFIX + ":bands")
     Collection<Band> getBands();
     void setBands(Collection<Band> bands);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":pass_direction")
+    @JsonProperty(PREFIX + ":pass_direction")
     String getPassDirection();
     void setPassDirection(String passDirection);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":product_type")
+    @JsonProperty(PREFIX + ":product_type")
     String getProductType();
     void setProductType(String productType);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":resolution_range")
+    @JsonProperty(PREFIX + ":resolution_range")
     Double getResolutionRange();
     void setResolutionRange(Double resolutionRange);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":resolution_azimuth")
+    @JsonProperty(PREFIX + ":resolution_azimuth")
     Double getResolutionAzimuth();
     void setResolutionAzimuth(Double resolutionAzimuth);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":pixel_spacing_range")
+    @JsonProperty(PREFIX + ":pixel_spacing_range")
     Double getPixelSpacingRange();
     void setPixelSpacingRange(String pixelSpacingRange);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":pixel_spacing_azimuth")
+    @JsonProperty(PREFIX + ":pixel_spacing_azimuth")
     Double getPixelSpacingAzimuth();
     void setPixelSpacingAzimuth(Double pixelSpacingAzimuth);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":looks_range")
+    @JsonProperty(PREFIX + ":looks_range")
     Double getLooksRange();
     void setLooksRange(Double looksRange);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":looks_azimuth")
+    @JsonProperty(PREFIX + ":looks_azimuth")
     Double getLooksAzimuth();
     void setLooksAzimuth(Double looksAzimuth);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":looks_equivalent_number")
+    @JsonProperty(PREFIX + ":looks_equivalent_number")
     Double getLooksEquivalentNumber();
     void setLooksEquivalentNumber(Double looksEquivalentNumber);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":observation_direction")
+    @JsonProperty(PREFIX + ":observation_direction")
     String getObservationDirection();
     void setObservationDirection(String observationDirection);
 
     @Mapping(type = MappingType.INTEGER)
-    @JsonProperty(EXTENSION_PREFIX + ":relative_orbit")
+    @JsonProperty(PREFIX + ":relative_orbit")
     Integer getRelativeOrbit();
     void setRelativeOrbit(Integer relativeOrbit);
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":incidence_angle")
+    @JsonProperty(PREFIX + ":incidence_angle")
     Double getIncidenceAngle();
     void setIncidenceAngle(Double incidenceAngle);
 

@@ -12,33 +12,33 @@ import java.util.Set;
  */
 public interface Label {
 
-    String EXTENSION_PREFIX = "label";
+    String PREFIX = "label";
 
-    @JsonProperty(EXTENSION_PREFIX + ":properties")
+    @JsonProperty(PREFIX + ":properties")
     Set<String> getProperties();
     void setProperties(Set<String> properties);
 
-    @JsonProperty(EXTENSION_PREFIX + ":classes")
+    @JsonProperty(PREFIX + ":classes")
     LabelClass getClasses();
     void setLabelClass(LabelClass labelClass);
 
-    @JsonProperty(EXTENSION_PREFIX + ":description")
+    @JsonProperty(PREFIX + ":description")
     String getDescription();
     void setDescription(String description);
 
-    @JsonProperty(EXTENSION_PREFIX + ":type")
+    @JsonProperty(PREFIX + ":type")
     LabelType getType();
     void setType(LabelType type);
 
-    @JsonProperty(EXTENSION_PREFIX + ":tasks")
+    @JsonProperty(PREFIX + ":tasks")
     Set<String> getTasks();
     void setTasks(Set<String> tasks);
 
-    @JsonProperty(EXTENSION_PREFIX + ":methods")
+    @JsonProperty(PREFIX + ":methods")
     Set<String> getMethods();
     void setMethods(Set<String> methods);
 
-    @JsonProperty(EXTENSION_PREFIX + ":overviews")
+    @JsonProperty(PREFIX + ":overviews")
     LabelOverview getOverviews();
     void setLabelOverviews(LabelOverview overviews);
 

@@ -12,11 +12,12 @@ import java.util.Map;
  * @author joshfix
  * Created on 2019-05-15
  */
-public interface DataCube {
+public interface DataCube extends StacExtension {
 
-    String EXTENSION_PREFIX = "cube";
+    String NAME = "datacube";
+    String PREFIX = "cube";
 
-    @JsonProperty(EXTENSION_PREFIX + ":dimensions")
+    @JsonProperty(PREFIX + ":dimensions")
     Map<String, ? extends Dimension> getDimensions();
     void setDimensions(Map<String, ? extends Dimension> dimensions);
 
