@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 
+import java.net.*;
 import java.util.List;
 
 
@@ -26,7 +27,7 @@ public class LinkGenerator {
 
     private final LinksConfigProps linksConfigProps;
     private static final Link ROOT = new Link()
-            .href(LinksConfigProps.LINK_PREFIX + "/stac")
+            .href(appendLinkPath(LinksConfigProps.LINK_PREFIX, "stac"))
             .type(MediaType.APPLICATION_JSON_VALUE)
             .rel("root");
 
@@ -43,13 +44,11 @@ public class LinkGenerator {
 
         String self = getSelfString(request);
 
-        // don't want to add double slashes
-        String separator = self.endsWith("/") ? "" : "/";
 
         for (PropertyField property : remainingProperties) {
             collection.getLinks().add(
                     new Link()
-                            .href(self + separator + property.getJsonName())
+                            .href(appendLinkPath(self, property.getJsonName()))
                             .type(MediaType.APPLICATION_JSON_VALUE)
                             .rel("child"));
         }
@@ -60,7 +59,7 @@ public class LinkGenerator {
                 .type(MediaType.APPLICATION_JSON_VALUE)
                 .rel("self"));
         collection.getLinks().add(new Link()
-                .href(self + separator + "items")
+                .href(appendLinkPath(self, "items"))
                 .type(MediaType.APPLICATION_JSON_VALUE)
                 .rel("items"));
         collection.getLinks().add(new Link()
@@ -77,10 +76,9 @@ public class LinkGenerator {
      * @param values A list of unique values in the database for the selected subcataloged field
      */
     public void generatePropertyValueLinks(ServerRequest request, CollectionMetadata collection, List<String> values) {
-        String separator = request.path().endsWith("/") ? "" : "/";
         values.forEach(value -> collection.getLinks().add(
                 new Link()
-                        .href(LinksConfigProps.LINK_PREFIX + request.path() + separator + value)
+                        .href(appendLinkPath(LinksConfigProps.LINK_PREFIX + request.path(), value))
                         .type(MediaType.APPLICATION_JSON_VALUE)
                         .rel("child")));
 
@@ -91,7 +89,7 @@ public class LinkGenerator {
                 .type(MediaType.APPLICATION_JSON_VALUE)
                 .rel("self"));
         collection.getLinks().add(new Link()
-                .href(self + separator + "items")
+                .href(appendLinkPath(self, "items"))
                 .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                 .rel("items"));
         collection.getLinks().add(new Link()
@@ -128,9 +126,44 @@ public class LinkGenerator {
      */
     public Link buildItemLink(String collectionId, String itemId) {
         return new Link()
-                .href(LinksConfigProps.LINK_PREFIX + "/collections/" + collectionId + "/items/" + itemId)
+                .href(appendLinkPath(LinksConfigProps.LINK_PREFIX, "collections", collectionId, "items", itemId))
                 .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                 .rel("item");
+    }
+
+    /**
+     * Appends path to url while preserving url context
+     *
+     * @param url The original url
+     * @param subPaths The sub paths to be appended at the end of the url,
+     *                 sub paths should not contain leading or trailing slashes
+     * @return The url with appended sub path. If arguments are malformed, the original url is returned.
+     */
+    public static String appendLinkPath(String url, String ...subPaths) {
+        String result = url;
+        try {
+            URL originalLink = new URL(url);
+            String newPath = originalLink.getPath();
+
+            for (String subPath: subPaths) {
+                String separator = newPath.endsWith("/") ? "" : "/";
+                newPath += separator + subPath;
+            }
+            URI newLink = new URI(
+                    originalLink.getProtocol(),
+                    originalLink.getAuthority(),
+                    newPath,
+                    originalLink.getQuery(),
+                    null
+            );
+            result = newLink.toString();
+        } catch (MalformedURLException e) {
+            log.warn("LinkGenerator encounters malformed url " + e.toString());
+            return url;
+        } catch(URISyntaxException e) {
+            log.warn("LinkGenerator encounteres uri syntax exception " + e.toString());
+        }
+        return result;
     }
 
 }
