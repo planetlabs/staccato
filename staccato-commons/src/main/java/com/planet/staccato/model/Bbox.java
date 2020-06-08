@@ -25,7 +25,6 @@ public class Bbox extends ArrayList<BigDecimal> {
     return Objects.hash(super.hashCode());
   }
 
-
   @Override
   public String toString() {
     if (size() == 4) {

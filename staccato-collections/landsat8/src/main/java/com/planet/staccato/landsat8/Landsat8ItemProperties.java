@@ -18,11 +18,6 @@ import java.util.List;
 @JsonDeserialize(as = Landsat8ItemProperties.class)
 public class Landsat8ItemProperties implements CoreProperties, EO, Landsat8 {
 
-    public static void main(String... args) {
-        Landsat8ItemProperties l = new Landsat8ItemProperties();
-
-    }
-
     // CoreProperties
     private String datetime;
     private String startDatetime;

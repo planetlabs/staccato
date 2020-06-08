@@ -27,7 +27,7 @@ public interface CoreProperties {
     String getUpdated();
     void setUpdated(String updated);
 
-    // DateTimeRange
+    // DateTime
     @JsonProperty("start_datetime")
     @Mapping(type = MappingType.DATE)
     String getStartDatetime();
