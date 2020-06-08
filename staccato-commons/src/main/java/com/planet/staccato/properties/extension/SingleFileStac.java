@@ -1,11 +1,14 @@
 package com.planet.staccato.properties.extension;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
+import com.planet.staccato.model.Item;
 import com.planet.staccato.model.Provider;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Defines the fieldsExtension and Jackson property values for fieldsExtension in the single item extension.
@@ -13,17 +16,15 @@ import java.util.Collection;
  * @author joshfix
  * Created on 2/11/19
  */
-public interface SingleItem {
+public interface SingleFileStac {
 
-    String EXTENSION_PREFIX = "item";
+    String type = "FeatureCollection";
 
-    @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":license")
-    String getLicense();
-    void setLicense(String license);
+    @JsonProperty("collections")
+    List<CollectionMetadata> getCollections();
+    void setCollections(List<CollectionMetadata> collectionMetadata);
 
-    @JsonProperty(EXTENSION_PREFIX + ":providers")
-    Collection<Provider> getProviders();
-    void setProviders(Collection<Provider> providers);
-
+    @JsonProperty("features")
+    List<Item> getItems();
+    void setItems(List<Item> items);
 }

@@ -60,7 +60,6 @@ public interface CoreProperties {
     Double getGsd();
     void setGsd(Double gsd);
 
-
     // Licensing
     @Mapping(type = MappingType.KEYWORD)
     String getLicense();
