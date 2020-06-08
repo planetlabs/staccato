@@ -44,4 +44,12 @@ public interface Projection {
     Centroid getCentroid();
     void setCentroid(Centroid centroid);
 
+    @Mapping(type = MappingType.INTEGER)
+    @JsonProperty(EXTENSION_PREFIX + ":shape")
+    List<Integer> getShape();
+    void setShape(List<Integer> shape);
+
+    @JsonProperty(EXTENSION_PREFIX + ":transform")
+    List<Double> getTransform();
+    void setTransform(List<Double> transform);
 }

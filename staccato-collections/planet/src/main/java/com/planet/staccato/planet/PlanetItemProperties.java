@@ -21,17 +21,22 @@ public class PlanetItemProperties implements CoreProperties, EO, Planet {
 
     // CoreProperties
     private String datetime;
+    private String startDatetime;
+    private String endDatetime;
     private String created;
     private String updated;
     private String title;
     private String license;
-    private Set<Provider> providers;
+    private String platform;
+    private String mission;
+    private String constellation;
+    private List<Provider> providers;
+    private List<String> instruments;
 
     // Collection field as part of the commons extension (merged from the collection metadata)
     //private String collection = PlanetCollectionMetadata.ID;
 
     // EO
-    private String platform;
     private String instrument;
     private Double cloudCover;
     private Integer offNadir;
@@ -40,7 +45,6 @@ public class PlanetItemProperties implements CoreProperties, EO, Planet {
     private Double sunAzimuth;
     private Double sunElevation;
     private String epsg;
-    private String constellation;
     private List<Band> bands;
 
     // Planet
