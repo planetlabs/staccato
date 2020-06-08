@@ -6,6 +6,7 @@ import com.planet.staccato.model.Extent;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.model.Provider;
 import com.planet.staccato.properties.CoreProperties;
+import com.planet.staccato.properties.extension.CollectionAssets;
 
 import java.util.List;
 import java.util.Map;
