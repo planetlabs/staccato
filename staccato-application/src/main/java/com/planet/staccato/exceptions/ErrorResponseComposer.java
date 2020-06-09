@@ -40,20 +40,20 @@ public class ErrorResponseComposer<T extends Throwable> {
         // find a handler for the exception
         // if no handler is found,
         // loop into for its cause (ex.getCause())
-        while (ex != null) {
-            handler = handlers.get(ex.getClass().getSimpleName());
 
-            if (handler != null) // found a handler
-                break;
+        handler = handlers.get(ex.getClass().getSimpleName());
 
-            ex = (T) ex.getCause();
-        }
+        if (handler == null) // found a handler
+            while (ex != null && ex.getCause() != null) {
+                ex = (T) ex.getCause();
+            }
 
-        if (handler != null) {
+        if (ex != null && handler != null) {
             // a handler is found
             return Optional.of(handler.getErrorResponse(ex));
+        } else if (ex != null) {
+            return Optional.of(new StacException(String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage()));
         }
-
-        return Optional.of(new StacException(String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage()));
+        return Optional.of(new StacException(String.valueOf(HttpStatus.BAD_REQUEST.value()), "Bad request"));
     }
 }

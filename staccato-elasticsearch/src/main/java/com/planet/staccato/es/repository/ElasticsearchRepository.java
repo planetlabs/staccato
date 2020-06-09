@@ -80,8 +80,12 @@ public class ElasticsearchRepository {
                 //.next("0")
                 ;
         return searchItemFlux(indices, queryBuilder, searchRequest)
-                .switchIfEmpty(Mono.error(new StaccatoRuntimeException("Item with ID '" + id + "' not matched.", 404    )))
-                .single();
+                .switchIfEmpty(Mono.error(new StaccatoRuntimeException("Item with ID '" + id + "' not matched.", 404)))
+                .single()
+                .map(r -> {
+                    log.debug("is the result null? " + (r == null));
+                    return r;
+                });
     }
 
     /**

@@ -1,4 +1,4 @@
-FROM amazoncorretto:11.0.2
+FROM amazoncorretto:11.0.7
 MAINTAINER josh@federal.planet.com
 
 ARG JAR_NAME
