@@ -24,7 +24,7 @@ public class Asset {
         return this;
     }
 
-    private Asset type(String type) {
+    public Asset type(String type) {
         setType(type);
         return this;
     }
