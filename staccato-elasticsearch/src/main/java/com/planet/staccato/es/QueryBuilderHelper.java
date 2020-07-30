@@ -159,10 +159,15 @@ public class QueryBuilderHelper {//implements QueryBuilder {
             return Optional.empty();
         }
         Map<String, Object> intersectsMap = (Map<String, Object>) intersects;
-        Map<String, Object> geometryMap = (Map<String, Object>) intersectsMap.get("geometry");
-        String type = (String) geometryMap.get("type");
+        String type = (String) intersectsMap.get("type");
+        if (type == null || type.isBlank()) {
+            throw new FilterException("Unable to determine geometry type from intersects parameter");
+        }
 
-        List coords = (List) geometryMap.get("coordinates");
+        List coords = (List) intersectsMap.get("coordinates");
+        if (coords == null) {
+            throw new FilterException("Unable to determine coordinates from intersects parameter");
+        }
         if (coords.isEmpty()) {
             return Optional.empty();
         }
