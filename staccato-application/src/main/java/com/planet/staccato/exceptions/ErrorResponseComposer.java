@@ -40,6 +40,7 @@ public class ErrorResponseComposer<T extends Throwable> {
         // find a handler for the exception
         // if no handler is found,
         // loop into for its cause (ex.getCause())
+        T originalEx = ex;
         while (ex != null) {
             handler = handlers.get(ex.getClass().getSimpleName());
 
@@ -54,6 +55,12 @@ public class ErrorResponseComposer<T extends Throwable> {
             return Optional.of(handler.getErrorResponse(ex));
         }
 
+        if (ex == null) {
+            ex = originalEx;
+        }
+
         return Optional.of(new StacException(String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage()));
+
+
     }
 }
