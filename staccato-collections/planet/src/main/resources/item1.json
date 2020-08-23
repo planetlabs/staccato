@@ -1,0 +1,104 @@
+{
+  "assets": {
+    "thumbnail": {
+      "href": "https://storage.googleapis.com/pdd-stac/disasters/hurricane-harvey/0831/SkySat_PortArthur_s02_20170831T195425Z.png",
+      "type": "image/png",
+      "title": "Thumbnail"
+    },
+    "visual": {
+      "href": "https://storage.googleapis.com/pdd-stac/disasters/hurricane-harvey/0831/SkySat_PortArthur_s02_20170831T195425Z.tif",
+      "type": "image/vnd.stac.geotiff; cloud-optimized=true",
+      "title": "SkySatScene Visual GeoTIFF"
+    }
+  },
+  "centroid": {
+    "lon": -93.96225848444313,
+    "lat": 29.9850904441108
+  },
+  "bbox": [
+    -94.11678314208984,
+    29.916554657596713,
+    -93.79920959472656,
+    30.052156732418428
+  ],
+  "geometry": {
+    "coordinates": [
+      [
+        [
+          -94.11540985107422,
+          29.998057058071883
+        ],
+        [
+          -94.11609649658203,
+          29.96564257441305
+        ],
+        [
+          -93.82942199707031,
+          29.916554657596713
+        ],
+        [
+          -93.8283920288086,
+          29.94660528850718
+        ],
+        [
+          -93.79920959472656,
+          29.942737894394064
+        ],
+        [
+          -93.79989624023438,
+          29.977836419653794
+        ],
+        [
+          -93.82736206054688,
+          29.981405066834853
+        ],
+        [
+          -93.82530212402342,
+          30.011436098225726
+        ],
+        [
+          -94.11540985107422,
+          30.052156732418428
+        ],
+        [
+          -94.11678314208984,
+          30.02094898463764
+        ],
+        [
+          -94.10202026367188,
+          30.017679032856247
+        ],
+        [
+          -94.10408020019531,
+          29.99627304975274
+        ],
+        [
+          -94.11540985107422,
+          29.998057058071883
+        ]
+      ]
+    ],
+    "type": "Polygon"
+  },
+  "id": "20170831_195425_SS02",
+  "collection": "planet",
+  "type": "Feature",
+  "properties": {
+    "pl:ground_control": true,
+    "pl:provider": "skysat",
+    "eo:off_nadir": 27,
+    "eo:sun_elevation": 58.4,
+    "pl:satellite_id": "SS02",
+    "pl:strip_id": "s02_20170831T195425Z",
+    "eo:azimuth": 202.8,
+    "pl:published": "2017-09-01T19:15:30Z",
+    "pl:item_type": "SkySatScene",
+    "datetime": "2017-08-31T19:54:26.5328Z",
+    "eo:sun_azimuth": 231.9,
+    "pl:quality_category": "test",
+    "pl:satellite_azimuth": 329.8,
+    "pl:updated": "2017-11-01T21:14:45Z",
+    "eo:cloud_cover": 0,
+    "gsd": 1.1
+  }
+}

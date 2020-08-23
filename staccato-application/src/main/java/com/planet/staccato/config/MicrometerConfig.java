@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
  * @author joshfix
  * Created on 10/22/18
  */
-@Component
-@Configuration
+//@Component
+//@Configuration
 public class MicrometerConfig {
 
     @Bean
