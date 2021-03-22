@@ -1,5 +1,6 @@
 package com.planet.staccato.catalog;
 
+import com.planet.staccato.collection.CatalogType;
 import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.config.StacConfigProps;
 import com.planet.staccato.config.StaccatoMediaType;
@@ -40,6 +41,7 @@ public class CatalogConfig {
     public Catalog rootCatalog() {
         Catalog catalog = new Catalog();
 
+        catalog.setType(CatalogType.CATALOG);
         catalog.setId("staccato");
         catalog.setTitle("Staccato");
         catalog.setVersion(configProps.getVersion());

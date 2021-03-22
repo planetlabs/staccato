@@ -5,13 +5,13 @@
 
     <groupId>com.planet.staccato</groupId>
     <artifactId>staccato</artifactId>
-    <version>1.0.0-beta.2</version>
+    <version>1.0.0-rc1</version>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.0.RELEASE</version>
+        <version>2.4.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 

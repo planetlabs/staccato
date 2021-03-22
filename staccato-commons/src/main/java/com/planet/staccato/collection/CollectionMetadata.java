@@ -74,7 +74,8 @@ public interface CollectionMetadata<T extends CoreProperties> {
     void setLinks(List<Link> links);
     CollectionMetadata<T> links(List<Link> links);
 
-    @JsonIgnore
+    //@JsonIgnore
+    @JsonProperty("type")
     CatalogType getCatalogType();
     void setCatalogType(CatalogType catalogType);
     CollectionMetadata<T> catalogType(CatalogType catalogType);
