@@ -2,11 +2,11 @@ package com.planet.staccato.collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.planet.staccato.model.Asset;
 import com.planet.staccato.model.Extent;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.model.Provider;
 import com.planet.staccato.properties.CoreProperties;
-import com.planet.staccato.properties.extension.CollectionAssets;
 
 import java.util.List;
 import java.util.Map;
@@ -61,6 +61,10 @@ public interface CollectionMetadata<T extends CoreProperties> {
     List<Provider> getProviders();
     void setProviders(List<Provider> providers);
     CollectionMetadata<T> providers(List<Provider> providers);
+
+    Map<String, Asset> getAssets();
+    void setAssets(Map<String, Asset> assets);
+    CollectionMetadata<T> assets(Map<String, Asset> assets);
 
     T getProperties();
     void setProperties(T properties);
