@@ -1,5 +1,6 @@
 package com.planet.staccato.collection;
 
+import com.planet.staccato.model.Asset;
 import com.planet.staccato.model.Extent;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.model.Provider;
@@ -23,6 +24,7 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     protected String title;
     protected String description;
     protected List<String> crs;
+    protected Map<String, Asset> assets = new HashMap<>();
     protected String itemType;
     protected Set<String> keywords = new HashSet<>();
     protected String version;
@@ -91,6 +93,22 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     @Override
     public CollectionMetadata<T> providers(List<Provider> providers) {
         setProviders(providers);
+        return this;
+    }
+
+    @Override
+    public Map<String, Asset> getAssets() {
+        return assets;
+    }
+
+    @Override
+    public void setAssets(Map<String, Asset> assets) {
+        this.assets = assets;
+    }
+
+    @Override
+    public CollectionMetadata<T> assets(Map<String, Asset> assets) {
+        setAssets(assets);
         return this;
     }
 
