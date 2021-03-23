@@ -1,9 +1,6 @@
 package com.planet.staccato.collection;
 
-import com.planet.staccato.model.Asset;
-import com.planet.staccato.model.Extent;
-import com.planet.staccato.model.Link;
-import com.planet.staccato.model.Provider;
+import com.planet.staccato.model.*;
 import com.planet.staccato.properties.CoreProperties;
 import lombok.Data;
 
@@ -31,7 +28,7 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     protected String license;
     protected Extent extent;
     protected List<Provider> providers = new ArrayList<>();
-    protected Map<String, Object> summaries;
+    protected Map<String, Stats> summaries;
     protected T properties;
     protected List<Link> links = new ArrayList<>();
     protected CatalogType catalogType;
@@ -119,7 +116,17 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     }
 
     @Override
-    public CollectionMetadata<T> summaries(Map<String, Object> summaries) {
+    public void setSummaries(Map<String, Stats> summaries) {
+        this.summaries = summaries;
+    }
+
+    @Override
+    public Map<String, Stats> getSummaries() {
+        return summaries;
+    }
+
+    @Override
+    public CollectionMetadata<T> summaries(Map<String, Stats> summaries) {
         setSummaries(summaries);
         return this;
     }

@@ -1,9 +1,6 @@
 package com.planet.staccato.properties.extension;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-
-import java.util.Collection;
 
 /**
  * Defines the timestamps extension and Jackson property values

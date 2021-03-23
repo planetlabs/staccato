@@ -2,8 +2,6 @@ package com.planet.staccato.config;
 
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 /**
  * TODO Currently unused.  Determine if Micrometer is worth supporting.  Likely needs to be an optional plugin.

@@ -9,7 +9,6 @@ import com.planet.staccato.properties.extension.EO;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author joshfix

@@ -2,8 +2,6 @@ package com.planet.staccato.properties.extension;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.planet.staccato.model.Asset;
-import com.planet.staccato.properties.ogc.TileMatrix2D;
-import lombok.Data;
 
 import java.util.Map;
 

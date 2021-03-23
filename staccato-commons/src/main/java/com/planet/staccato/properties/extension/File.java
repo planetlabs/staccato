@@ -1,7 +1,6 @@
 package com.planet.staccato.properties.extension;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.planet.staccato.model.ItemCollection;
 import lombok.Data;
 
 import java.util.List;

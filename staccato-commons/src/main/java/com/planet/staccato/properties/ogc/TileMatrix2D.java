@@ -6,7 +6,6 @@ import com.planet.staccato.elasticsearch.annotation.MappingType;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-
 import java.util.List;
 import java.util.Set;
 
