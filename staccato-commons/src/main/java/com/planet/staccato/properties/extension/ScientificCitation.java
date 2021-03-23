@@ -11,7 +11,7 @@ import java.util.Collection;
  * @author joshfix
  * Created on 2/11/19
  */
-public interface Scientific {
+public interface ScientificCitation {
 
     String EXTENSION_PREFIX = "sci";
 
