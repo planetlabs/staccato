@@ -9,16 +9,16 @@ import lombok.Data;
 @Data
 public class Stats {
 
-    private Object min;
-    private Object max;
+    private Object minimum;
+    private Object maximum;
 
-    public Stats min(Object min) {
-        setMin(min);
+    public Stats minimum(Object min) {
+        setMinimum(min);
         return this;
     }
 
-    public Stats max(Object max) {
-        setMax(max);
+    public Stats maximum(Object max) {
+        setMaximum(max);
         return this;
     }
 }
