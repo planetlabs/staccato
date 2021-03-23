@@ -19,7 +19,6 @@
     <modules>
         <module>staccato-community-grpc</module>
         <module>staccato-community-kafka</module>
-        <module>staccato-community-rsocket</module>
     </modules>
 
     <properties>
