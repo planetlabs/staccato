@@ -7,6 +7,8 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author joshfix
@@ -20,6 +22,7 @@ public class Catalog {
     private String title;
     private String id;
     private CatalogType type = CatalogType.CATALOG;
+    private Map<String, Stats> summaries = new HashMap<>();
     private String description;
     private Collection<Link> links = new ArrayList<>();
     @JsonIgnore
