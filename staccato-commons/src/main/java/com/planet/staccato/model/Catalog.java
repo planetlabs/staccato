@@ -22,11 +22,51 @@ public class Catalog {
     private String title;
     private String id;
     private CatalogType type = CatalogType.CATALOG;
-    private Map<String, Stats> summaries = new HashMap<>();
+    private Map<String, Stats> summaries;
     private String description;
     private Collection<Link> links = new ArrayList<>();
     @JsonIgnore
     private Collection<Catalog> subcatalogs = new ArrayList<>();
     @JsonIgnore
     private String path;
+
+    public Catalog version(String version) {
+        setVersion(version);
+        return this;
+    }
+
+    public Catalog title(String title) {
+        setTitle(title);
+        return this;
+    }
+
+    public Catalog id(String id) {
+        setId(id);
+        return this;
+    }
+
+    public Catalog summaries(Map<String, Stats> summaries) {
+        setSummaries(summaries);
+        return this;
+    }
+
+    public Catalog description(String description) {
+        setDescription(description);
+        return this;
+    }
+
+    public Catalog links(Collection<Link> links) {
+        setLinks(links);
+        return this;
+    }
+
+    public Catalog subcatalogs(Collection<Catalog> subcatalogs) {
+        setSubcatalogs(subcatalogs);
+        return this;
+    }
+
+    public Catalog path(String path) {
+        setPath(path);
+        return this;
+    }
 }

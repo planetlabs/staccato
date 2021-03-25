@@ -25,18 +25,18 @@ public interface ApiApi {
     Mono<ItemCollection> getItems(@Valid SearchRequest searchRequest);
 
     @GetMapping(path = "/search", produces = {MediaType.TEXT_EVENT_STREAM_VALUE,
-            MediaType.APPLICATION_STREAM_JSON_VALUE})
+            MediaType.APPLICATION_NDJSON_VALUE})
     Flux<Item> getItemsStream(@Valid SearchRequest searchRequest);
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
     Mono<ItemCollection> getItemsPost(@Valid @RequestBody SearchRequest searchRequest);
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_STREAM_JSON_VALUE})
+            produces = {MediaType.TEXT_EVENT_STREAM_VALUE, MediaType.APPLICATION_NDJSON_VALUE})
     Flux<Item> getItemsPostStream(@Valid @RequestBody SearchRequest searchRequest);
 
     @PostMapping(value = "/search", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+            MediaType.MULTIPART_FORM_DATA_VALUE}, produces = MediaType.APPLICATION_NDJSON_VALUE)
     Mono<ItemCollection> getItemsFormPost(@Valid @ModelAttribute SearchRequest searchRequest);
 
 }

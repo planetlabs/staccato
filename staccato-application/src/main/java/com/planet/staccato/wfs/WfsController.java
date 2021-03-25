@@ -22,6 +22,6 @@ public class WfsController implements WfsApi {
 
     @Override
     public Mono<Conformance> getConformance() {
-        return service.getConformance();
+        return service.getConformanceMono();
     }
 }

@@ -1,11 +1,11 @@
 package com.planet.staccato.catalog;
 
-import com.planet.staccato.collection.CatalogType;
 import com.planet.staccato.config.LinksConfigProps;
 import com.planet.staccato.config.StacConfigProps;
 import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.model.Catalog;
 import com.planet.staccato.model.Link;
+import com.planet.staccato.wfs.DefaultWfsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,9 +28,10 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Component
 @Configuration
 @RequiredArgsConstructor
-public class CatalogConfig {
+public class RootCatalogConfig {
 
     private final StacConfigProps configProps;
+    private final DefaultWfsService wfsService;
 
     /**
      * Creates the root catalog object.
@@ -39,13 +40,12 @@ public class CatalogConfig {
      */
     @Bean
     public Catalog rootCatalog() {
-        Catalog catalog = new Catalog();
-
-        catalog.setType(CatalogType.CATALOG);
-        catalog.setId("staccato");
-        catalog.setTitle("Staccato");
-        catalog.setVersion(configProps.getVersion());
-        catalog.setDescription("STAC v" + configProps.getVersion() + " implementation by Planet Labs");
+        Catalog catalog = new RootCatalog()
+                .conformsTo(wfsService.getConformance())
+                .id("staccato")
+                .title("Staccato")
+                .version(configProps.getVersion())
+                .description("STAC v" + configProps.getVersion() + " implementation by Planet Labs");
 
         catalog.getLinks().add(Link.build()
                 .rel("self")
@@ -54,15 +54,10 @@ public class CatalogConfig {
 
         catalog.getLinks().add(Link.build()
                 .rel("search")
-                .type(MediaType.APPLICATION_JSON_VALUE)
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                 .method(HttpMethod.GET.toString())
                 .href(LinksConfigProps.LINK_PREFIX + "/search"));
 
-        catalog.getLinks().add(Link.build()
-                .rel("search")
-                .type(MediaType.APPLICATION_JSON_VALUE)
-                .method(HttpMethod.POST.toString())
-                .href(LinksConfigProps.LINK_PREFIX + "/search"));
 
         catalog.getLinks().add(Link.build()
                 .rel("service-desc")

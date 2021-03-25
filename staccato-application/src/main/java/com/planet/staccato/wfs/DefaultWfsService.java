@@ -50,7 +50,11 @@ public class DefaultWfsService {
         }
     }
 
-    public Mono<Conformance> getConformance() {
+    public Conformance getConformance() {
+        return conformance;
+    }
+
+    public Mono<Conformance> getConformanceMono() {
         return Mono.just(conformance);
     }
 

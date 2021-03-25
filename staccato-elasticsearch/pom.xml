@@ -12,7 +12,9 @@
     <artifactId>staccato-elasticsearch</artifactId>
 
     <properties>
-        <xbib-cql.version>1.2.0</xbib-cql.version>
+        <!--<xbib-cql.version>1.2.0</xbib-cql.version>-->
+        <xbib-cql.version>3.0.4</xbib-cql.version>
+        <xbib-content-core.version>2.5.2</xbib-content-core.version>
     </properties>
 
     <dependencies>
@@ -34,6 +36,11 @@
             <groupId>org.xbib</groupId>
             <artifactId>cql-elasticsearch</artifactId>
             <version>${xbib-cql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.xbib</groupId>
+            <artifactId>content-core</artifactId>
+            <version>${xbib-content-core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.locationtech.spatial4j</groupId>
