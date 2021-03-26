@@ -29,8 +29,8 @@ public interface ApiApi {
     @GetMapping(path = "/search", produces = {MediaType.TEXT_EVENT_STREAM_VALUE,
             MediaType.APPLICATION_NDJSON_VALUE})
     Flux<Item> getItemsStream(@Valid SearchRequest searchRequest,
-                              @RequestParam("filter-lang") String fitlerLang,
-                              @RequestParam("filter-crs") String filterCrs);
+                              @RequestParam(value = "filter-lang", required = false) String fitlerLang,
+                              @RequestParam(value = "filter-crs", required = false) String filterCrs);
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)
     Mono<ItemCollection> getItemsPost(@Valid @RequestBody SearchRequest searchRequest);
