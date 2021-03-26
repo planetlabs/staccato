@@ -1,7 +1,9 @@
 package com.planet.staccato.dto.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.planet.staccato.dto.api.extensions.FieldsExtension;
 import com.planet.staccato.dto.api.extensions.SortExtension;
+import com.planet.staccato.model.Item;
 import lombok.Data;
 
 /**
@@ -32,8 +34,15 @@ public class SearchRequest {
     // sort extension
     private SortExtension sortby;
 
-    // query extension
+    // STACQL
     private String query;
+
+    // OAF CQL
+    private String filter;
+    @JsonProperty("filter-lang")
+    private FilterLangEnum filterLang;
+    @JsonProperty("filter-crs")
+    private String filterCrs;
 
     public SearchRequest bbox(double[] bbox) {
         setBbox(bbox);
@@ -85,4 +94,54 @@ public class SearchRequest {
         return this;
     }
 
+    public SearchRequest method(String method) {
+        setMethod(method);
+        return this;
+    }
+
+    public SearchRequest filter(String filter) {
+        setFilter(filter);
+        return this;
+    }
+
+    public SearchRequest filterCrs(String filterCrs) {
+        setFilterCrs(filterCrs);
+        return this;
+    }
+
+    public SearchRequest filterLang(FilterLangEnum filterLang) {
+        setFilterLang(filterLang);
+        return this;
+    }
+
+    public enum FilterLangEnum {
+        CQL_TEXT("cql-text"),
+        CQL_JSON("cql-json"),
+        UNSUPPORTED("unsupported");
+
+        private String value;
+
+        FilterLangEnum(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        public static FilterLangEnum fromValue(String text) {
+            for (FilterLangEnum b : FilterLangEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return UNSUPPORTED;
+        }
+    }
 }
+

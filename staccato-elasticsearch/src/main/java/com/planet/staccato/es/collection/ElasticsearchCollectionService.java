@@ -30,7 +30,7 @@ import java.util.Map;
 public class ElasticsearchCollectionService implements CollectionService {
 
     private final ElasticStatsService aggregationService;
-    private Map<String, CollectionMetadata> collections = new HashMap<>();
+    private Map<String, CollectionMetadata> collectionMetadataMap = new HashMap<>();
     private List<Link> collectionsLinks = new ArrayList<>();
 
     public ElasticsearchCollectionService(ElasticStatsService aggregationService,
@@ -42,7 +42,7 @@ public class ElasticsearchCollectionService implements CollectionService {
         // build a map of collection ids to CollectionMetadataAdapter objects so they can easily be retrieved
         collectionMetadataList.forEach(cm -> {
             if (cm.getCatalogType() == CatalogType.COLLECTION) {
-                collections.put(cm.getId(), cm);
+                collectionMetadataMap.put(cm.getId(), cm);
             }
         });
     }
@@ -59,11 +59,15 @@ public class ElasticsearchCollectionService implements CollectionService {
      * @return Flux of CollectionMetadata objects
      */
     @Override
-    public Mono<Collections> getCollections() {
-        return Flux.fromIterable(collections.values())
+    public Mono<Collections> getCollectionsMono() {
+        return Flux.fromIterable(collectionMetadataMap.values())
                 .map(collection -> collection.extent(aggregationService.getExtent(collection.getId(), null)))
                 .collectList()
                 .map(collectionsList -> new Collections().links(collectionsLinks).collections(collectionsList));
+    }
+
+    public Map<String, CollectionMetadata> getCollectionMetadataMap() {
+        return collectionMetadataMap;
     }
 
     /**
@@ -73,8 +77,8 @@ public class ElasticsearchCollectionService implements CollectionService {
      */
     @Override
     public Mono<CollectionMetadata> getCollectionMetadata(String collectionId) {
-        if (collections.containsKey(collectionId)) {
-            CollectionMetadata metadata = collections.get(collectionId);
+        if (collectionMetadataMap.containsKey(collectionId)) {
+            CollectionMetadata metadata = collectionMetadataMap.get(collectionId);
             return Mono.just(aggregationService.getExtent(collectionId, null))
                     .map(extent -> metadata.extent(extent));
         }

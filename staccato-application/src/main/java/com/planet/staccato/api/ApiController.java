@@ -46,13 +46,24 @@ public class ApiController implements ApiApi {
     }
 
     @Override
-    public Mono<ItemCollection> getItems(SearchRequest searchRequest) {
-        searchRequest.setMethod(HttpMethod.GET.toString());
+    public Mono<ItemCollection> getItems(SearchRequest searchRequest,
+                                         @RequestParam("filter-lang") String filterLang,
+                                         @RequestParam("filter-crs") String filterCrs) {
+        searchRequest
+                .method(HttpMethod.GET.toString())
+                .filterLang(SearchRequest.FilterLangEnum.fromValue(filterLang))
+                .filterCrs(filterCrs);
         return service.getItemCollection(searchRequest).name("getItems");
     }
 
     @Override
-    public Flux<Item> getItemsStream(SearchRequest searchRequest) {
+    public Flux<Item> getItemsStream(SearchRequest searchRequest,
+                                     @RequestParam("filter-lang") String filterLang,
+                                     @RequestParam("filter-crs") String filterCrs) {
+        searchRequest
+                .method(HttpMethod.GET.toString())
+                .filterLang(SearchRequest.FilterLangEnum.fromValue(filterLang))
+                .filterCrs(filterCrs);
         searchRequest.setMethod(HttpMethod.GET.toString());
         return service.getItemsFlux(searchRequest);
     }

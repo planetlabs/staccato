@@ -4,6 +4,8 @@ import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.model.Collections;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 /**
  * Defines the API that must be implemented to provide a CollectionService implementation.
  *
@@ -12,7 +14,8 @@ import reactor.core.publisher.Mono;
  */
 public interface CollectionService {
 
-    Mono<Collections> getCollections();
+    Map<String, CollectionMetadata> getCollectionMetadataMap();
+    Mono<Collections> getCollectionsMono();
     Mono<CollectionMetadata> getCollectionMetadata(String collectionId);
 
 }

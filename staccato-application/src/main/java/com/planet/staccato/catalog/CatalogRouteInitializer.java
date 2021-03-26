@@ -8,7 +8,6 @@ import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.model.Link;
 import com.planet.staccato.service.AggregationService;
-import com.planet.staccato.wfs.DefaultWfsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.reactive.context.AnnotationConfigReactiveWebServerApplicationContext;

@@ -19,9 +19,11 @@ import org.xbib.cql.elasticsearch.ElasticsearchQueryGenerator;
 import java.time.Instant;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This service builds Elasticsearch queries from the api parameters passed to the STAC API.
@@ -40,6 +42,7 @@ public class QueryBuilderHelper {//implements QueryBuilder {
     private static final int DEFAULT_LIMIT = 10;
     // https://github.com/radiantearth/stac-spec/blob/v0.8.0/api-spec/STAC-extensions.yaml#L1144
     private static final String OPEN_INTERVAL_SYMBOL = "..";
+    private static final List<String> SUPPORTED_CQL_LANGS = Arrays.asList(SearchRequest.FilterLangEnum.CQL_TEXT.getValue());
 
     public static BoolQueryBuilder buildQuery(double[] bbox, String time, String query, Integer limit, String next,
                                               String[] ids, String[] collections, FieldsExtension fields,
@@ -65,6 +68,12 @@ public class QueryBuilderHelper {//implements QueryBuilder {
         Optional<QueryBuilder> queryBuilder = QueryBuilderHelper.queryBuilder(searchRequest.getQuery());
         if (queryBuilder.isPresent()) {
             boolQueryBuilder.must(queryBuilder.get());
+        }
+
+        Optional<QueryBuilder> filterBuilder = QueryBuilderHelper.filterBuilder(searchRequest.getFilterCrs(),
+                searchRequest.getFilterLang().getValue(), searchRequest.getFilter());
+        if (filterBuilder.isPresent()) {
+            boolQueryBuilder.must(filterBuilder.get());
         }
 
         Optional<QueryBuilder> idsBuilder = QueryBuilderHelper.idsBuilder(searchRequest.getIds());
@@ -205,6 +214,39 @@ public class QueryBuilderHelper {//implements QueryBuilder {
         }
         return Optional.of(
                 new GeoShapeQueryBuilder(FieldName.GEOMETRY, shapeBuilder).relation(ShapeRelation.INTERSECTS));
+    }
+
+    /**
+     * Builds an Elasticsearch query from the OGC CQL filter spec
+     *
+     * @param filterCrs The CRS of the filter as specified by the API paramter "filter-crs"
+     * @param filterLang The language of the filter as specified by the API paramter "filter-lang"
+     * @param filter The query filter passed in the api request
+     * @return The Elasticsearch query builder
+     */
+    public static Optional<QueryBuilder> filterBuilder(String filterCrs, String filterLang, String filter) {
+        if (filter == null || filter.isBlank()) {
+            return Optional.empty();
+        }
+
+        if (filterLang != null && !filterLang.isBlank() && !SUPPORTED_CQL_LANGS.contains(filterLang.toLowerCase())) {
+            throw new FilterException("provided filter-lang value is not supported. supported filter-langs are: " +
+                    String.join("\', \'", SUPPORTED_CQL_LANGS));
+                    //SUPPORTED_CQL_LANGS.stream().map(Enum::toString).collect(Collectors.joining(",")));
+        }
+
+        try {
+            CQLParser parser = new CQLParser(filter);
+            parser.parse();
+            ElasticsearchQueryGenerator generator = new ElasticsearchQueryGenerator();
+            SortedQuery sq = parser.getCQLQuery();
+            sq.getQuery().getScopedClause().accept(new PropertiesVisitor());
+            sq.accept(generator);
+            QueryBuilder builder = QueryBuilders.wrapperQuery(generator.getQueryResult());
+            return Optional.of(builder);
+        } catch (Exception e) {
+            throw new FilterException("Error parsing query.");
+        }
     }
 
     /**

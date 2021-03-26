@@ -1,4 +1,4 @@
-package com.planet.staccato.wfs;
+package com.planet.staccato.oaf;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class DefaultWfsService {
+public class DefaultOafService {
 
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
     private final Conformance conformance = new Conformance();

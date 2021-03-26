@@ -13,6 +13,7 @@ import reactor.core.publisher.Mono;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,12 +27,15 @@ import java.util.List;
 public class ParameterValidator implements WebFilter {
 
     private List<String> apiParameters = new ArrayList<>();
+    private static final String[] PARAMETERS_JAVA_HATES = {"filter-lang", "filter-crs"};
 
     @PostConstruct
     public void init() {
         for (Field field : SearchRequest.class.getDeclaredFields()) {
             apiParameters.add(field.getName().toLowerCase());
         }
+
+        apiParameters.addAll(Arrays.asList(PARAMETERS_JAVA_HATES));
     }
 
     @Override
