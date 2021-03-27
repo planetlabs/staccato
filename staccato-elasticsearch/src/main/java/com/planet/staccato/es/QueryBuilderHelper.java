@@ -65,7 +65,7 @@ public class QueryBuilderHelper {//implements QueryBuilder {
             boolQueryBuilder.must(timeBuilder.get());
         }
 
-        String filterLang = searchRequest.getFilterLang() == null ? null : searchRequest.getFilterLang().getValue();
+        String filterLang = searchRequest.getFilterLang() == null ? null : searchRequest.getFilterLang();
         Optional<QueryBuilder> filterBuilder = QueryBuilderHelper.filterBuilder(searchRequest.getFilterCrs(),
                 filterLang, searchRequest.getFilter());
         if (filterBuilder.isPresent()) {
@@ -180,7 +180,7 @@ public class QueryBuilderHelper {//implements QueryBuilder {
         ShapeBuilder shapeBuilder = null;
         switch (type) {
             case "Point":
-                shapeBuilder = new PointBuilder((double)coords.get(0), (double)coords.get(1));
+                shapeBuilder = new PointBuilder((double) coords.get(0), (double) coords.get(1));
                 break;
             case "Polygon":
                 CoordinatesBuilder polygonCoordsBuilder = new CoordinatesBuilder();
@@ -215,9 +215,9 @@ public class QueryBuilderHelper {//implements QueryBuilder {
     /**
      * Builds an Elasticsearch query from the OGC CQL filter spec
      *
-     * @param filterCrs The CRS of the filter as specified by the API paramter "filter-crs"
+     * @param filterCrs  The CRS of the filter as specified by the API paramter "filter-crs"
      * @param filterLang The language of the filter as specified by the API paramter "filter-lang"
-     * @param filter The query filter passed in the api request
+     * @param filter     The query filter passed in the api request
      * @return The Elasticsearch query builder
      */
     public static Optional<QueryBuilder> filterBuilder(String filterCrs, String filterLang, String filter) {
@@ -229,8 +229,9 @@ public class QueryBuilderHelper {//implements QueryBuilder {
         }
 
         if (filterLang != null && !filterLang.isBlank() && !SUPPORTED_CQL_LANGS.contains(filterLang.toLowerCase())) {
-            throw new FilterException("provided filter-lang value is not supported. supported filter-langs are: " +
-                    String.join("\', \'", SUPPORTED_CQL_LANGS));
+            throw new FilterException(String.format("provided filter-lang value '%s' is not supported. supported filter-langs are: '%s'",
+                    filterLang,
+                    String.join("\', \'", SUPPORTED_CQL_LANGS)));
         } else if (filterLang == null) {
             filterLang = SearchRequest.FilterLangEnum.CQL_TEXT.getValue();
         }

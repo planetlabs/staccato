@@ -44,7 +44,7 @@ public class CollectionController implements CollectionApi {
                                                    SearchRequest searchRequest) {
         searchRequest
                 .method(HttpMethod.GET.toString())
-                .filterLang(SearchRequest.FilterLangEnum.fromValue(filterLang))
+                .filterLang(filterLang)
                 .filterCrs(filterCrs);
         return apiService.getItemCollection(searchRequest.collections(new String[]{collectionId}));
     }

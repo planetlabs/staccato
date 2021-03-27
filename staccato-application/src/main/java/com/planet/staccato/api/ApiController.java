@@ -51,7 +51,7 @@ public class ApiController implements ApiApi {
                                          @RequestParam(value = "filter-crs", required = false) String filterCrs) {
         searchRequest
                 .method(HttpMethod.GET.toString())
-                .filterLang(SearchRequest.FilterLangEnum.fromValue(filterLang))
+                .filterLang(filterLang)
                 .filterCrs(filterCrs);
         return service.getItemCollection(searchRequest).name("getItems");
     }
@@ -62,9 +62,8 @@ public class ApiController implements ApiApi {
                                      @RequestParam(value = "filter-crs", required = false) String filterCrs) {
         searchRequest
                 .method(HttpMethod.GET.toString())
-                .filterLang(SearchRequest.FilterLangEnum.fromValue(filterLang))
+                .filterLang(filterLang)
                 .filterCrs(filterCrs);
-        searchRequest.setMethod(HttpMethod.GET.toString());
         return service.getItemsFlux(searchRequest);
     }
 

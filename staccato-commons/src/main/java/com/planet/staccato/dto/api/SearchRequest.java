@@ -39,10 +39,14 @@ public class SearchRequest {
 
     // OAF CQL
     private String filter;
+    // cql-text is the default filter-lang for Staccato. not providing a filter-lang value should default to cql-text.
     @JsonProperty("filter-lang")
-    private FilterLangEnum filterLang;
+    private String filterLang = DEFAULT_FILTER_LANG;
     @JsonProperty("filter-crs")
-    private String filterCrs;
+    private String filterCrs = DEFAULT_FILTER_CRS;
+
+    public static final String DEFAULT_FILTER_CRS = "http://www.opengis.net/def/crs/OGC/1.3/CRS84";
+    public static final String DEFAULT_FILTER_LANG = FilterLangEnum.CQL_TEXT.getValue();
 
     public SearchRequest bbox(double[] bbox) {
         setBbox(bbox);
@@ -104,9 +108,17 @@ public class SearchRequest {
         return this;
     }
 
-    public SearchRequest filterLang(FilterLangEnum filterLang) {
+    public void setFilterCrs(String filterCrs) {
+        this.filterCrs = (filterCrs == null || filterCrs.isBlank()) ? DEFAULT_FILTER_CRS : filterCrs;
+    }
+
+    public SearchRequest filterLang(String filterLang) {
         setFilterLang(filterLang);
         return this;
+    }
+
+    public void setFilterLang(String filterLang) {
+        this.filterLang = (filterLang == null || filterLang.isBlank()) ? DEFAULT_FILTER_LANG : filterLang;
     }
 
     public enum FilterLangEnum {
@@ -134,6 +146,7 @@ public class SearchRequest {
                     return b;
                 }
             }
+            //return FilterLangEnum.CQL_TEXT;
             return null;
         }
     }
