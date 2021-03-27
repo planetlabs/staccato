@@ -65,13 +65,9 @@ public class QueryBuilderHelper {//implements QueryBuilder {
             boolQueryBuilder.must(timeBuilder.get());
         }
 
-        Optional<QueryBuilder> queryBuilder = QueryBuilderHelper.queryBuilder(searchRequest.getQuery());
-        if (queryBuilder.isPresent()) {
-            boolQueryBuilder.must(queryBuilder.get());
-        }
-
+        String filterLang = searchRequest.getFilterLang() == null ? null : searchRequest.getFilterLang().getValue();
         Optional<QueryBuilder> filterBuilder = QueryBuilderHelper.filterBuilder(searchRequest.getFilterCrs(),
-                searchRequest.getFilterLang().getValue(), searchRequest.getFilter());
+                filterLang, searchRequest.getFilter());
         if (filterBuilder.isPresent()) {
             boolQueryBuilder.must(filterBuilder.get());
         }
@@ -225,6 +221,9 @@ public class QueryBuilderHelper {//implements QueryBuilder {
      * @return The Elasticsearch query builder
      */
     public static Optional<QueryBuilder> filterBuilder(String filterCrs, String filterLang, String filter) {
+        // Until we have an CQL-Elasticsearch library that supports the OGC CQL spec, it is unclear if filterCrs and
+        // filterLang will be needed/used in this method.
+
         if (filter == null || filter.isBlank()) {
             return Optional.empty();
         }
@@ -232,35 +231,12 @@ public class QueryBuilderHelper {//implements QueryBuilder {
         if (filterLang != null && !filterLang.isBlank() && !SUPPORTED_CQL_LANGS.contains(filterLang.toLowerCase())) {
             throw new FilterException("provided filter-lang value is not supported. supported filter-langs are: " +
                     String.join("\', \'", SUPPORTED_CQL_LANGS));
-                    //SUPPORTED_CQL_LANGS.stream().map(Enum::toString).collect(Collectors.joining(",")));
+        } else if (filterLang == null) {
+            filterLang = SearchRequest.FilterLangEnum.CQL_TEXT.getValue();
         }
 
         try {
             CQLParser parser = new CQLParser(filter);
-            parser.parse();
-            ElasticsearchQueryGenerator generator = new ElasticsearchQueryGenerator();
-            SortedQuery sq = parser.getCQLQuery();
-            sq.getQuery().getScopedClause().accept(new PropertiesVisitor());
-            sq.accept(generator);
-            QueryBuilder builder = QueryBuilders.wrapperQuery(generator.getQueryResult());
-            return Optional.of(builder);
-        } catch (Exception e) {
-            throw new FilterException("Error parsing query.");
-        }
-    }
-
-    /**
-     * Builds an Elasticsearch query
-     *
-     * @param query The query values passed in the api request
-     * @return The Elasticsearch query builder
-     */
-    public static Optional<QueryBuilder> queryBuilder(String query) {
-        if (query == null || query.isEmpty()) {
-            return Optional.empty();
-        }
-        try {
-            CQLParser parser = new CQLParser(query);
             parser.parse();
             ElasticsearchQueryGenerator generator = new ElasticsearchQueryGenerator();
             SortedQuery sq = parser.getCQLQuery();

@@ -76,6 +76,7 @@ public class ElasticsearchApiService implements ApiService {
      */
     @Override
     public Flux<Item> getItemsFlux(SearchRequest searchRequest) {
+        // this should be handled by the CQL library; for now it's a workaround
         if (!filterCrs(searchRequest)) {
             return processor.searchItemFlux(Flux.empty(), searchRequest);
         }
@@ -94,6 +95,7 @@ public class ElasticsearchApiService implements ApiService {
      */
     @Override
     public Mono<ItemCollection> getItemCollection(SearchRequest searchRequest) {
+        // this should be handled by the CQL library; for now it's a workaround
         if (!filterCrs(searchRequest)) {
             return processor.searchItemCollectionMono(Mono.just(new ItemCollection()), searchRequest);
         }
@@ -118,7 +120,8 @@ public class ElasticsearchApiService implements ApiService {
 
     /**
      * If the request defined a filter-crs parameter, loop through the collections and add a collections filter for
-     * each collection that contains the specified crs.
+     * each collection that contains the specified crs. This should be a function of the CQL filter; this implementation
+     * is a workaround until a CQL Elasticsearch library is available.
      *
      * @param searchRequest The search request
      * @return A boolean; true means no crs was defined or there were matching collections; false means a crs was

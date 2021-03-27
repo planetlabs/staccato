@@ -93,7 +93,7 @@ public class RequestHandler {
                 FieldsExtension fields = new FieldsExtension().include(idField);
 
                 SearchRequest searchRequest = new SearchRequest()
-                        .query(filterBuilder.toString())
+                        .filter(filterBuilder.toString())
                         .limit(10000)
                         .collections(new String[]{collectionId})
                         .fields(fields);

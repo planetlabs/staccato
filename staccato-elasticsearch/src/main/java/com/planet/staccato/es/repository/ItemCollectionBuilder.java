@@ -106,7 +106,7 @@ public class ItemCollectionBuilder {
             link += bbox == null ? Strings.EMPTY : "&bbox=" + bbox[0] + "," + bbox[1] + "," + bbox[2] + "," + bbox[3];
         }
         link += searchRequest.getDatetime() == null ? Strings.EMPTY : "&datetime=" + searchRequest.getDatetime();
-        link += searchRequest.getQuery() == null ? Strings.EMPTY : "&query=" + searchRequest.getQuery();
+        link += searchRequest.getFilter() == null ? Strings.EMPTY : "&filter=" + searchRequest.getFilter();
         link += searchRequest.getIds() == null ? Strings.EMPTY :
                 "&ids=" + String.join(",", searchRequest.getIds());
         link += searchRequest.getCollections() == null ? Strings.EMPTY :

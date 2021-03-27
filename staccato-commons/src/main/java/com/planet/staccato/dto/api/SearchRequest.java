@@ -34,8 +34,8 @@ public class SearchRequest {
     // sort extension
     private SortExtension sortby;
 
-    // STACQL
-    private String query;
+    // STACQL -- not supported
+    //private String query;
 
     // OAF CQL
     private String filter;
@@ -51,11 +51,6 @@ public class SearchRequest {
 
     public SearchRequest datetime(String time) {
         setDatetime(time);
-        return this;
-    }
-
-    public SearchRequest query(String query) {
-        setQuery(query);
         return this;
     }
 
@@ -116,8 +111,7 @@ public class SearchRequest {
 
     public enum FilterLangEnum {
         CQL_TEXT("cql-text"),
-        CQL_JSON("cql-json"),
-        UNSUPPORTED("unsupported");
+        CQL_JSON("cql-json");
 
         private String value;
 
@@ -140,7 +134,7 @@ public class SearchRequest {
                     return b;
                 }
             }
-            return UNSUPPORTED;
+            return null;
         }
     }
 }
