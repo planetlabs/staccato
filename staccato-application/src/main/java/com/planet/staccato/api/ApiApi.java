@@ -23,13 +23,13 @@ public interface ApiApi {
 
     @GetMapping(path = "/search")
     Mono<ItemCollection> getItems(@Valid SearchRequest searchRequest,
-                                  @RequestParam(value = "filter-lang", required = false) String fitlerLang,
+                                  @RequestParam(value = "filter-lang", required = false) String filterLang,
                                   @RequestParam(value = "filter-crs", required = false) String filterCrs);
 
     @GetMapping(path = "/search", produces = {MediaType.TEXT_EVENT_STREAM_VALUE,
             MediaType.APPLICATION_NDJSON_VALUE})
     Flux<Item> getItemsStream(@Valid SearchRequest searchRequest,
-                              @RequestParam(value = "filter-lang", required = false) String fitlerLang,
+                              @RequestParam(value = "filter-lang", required = false) String filterLang,
                               @RequestParam(value = "filter-crs", required = false) String filterCrs);
 
     @PostMapping(value = "/search", consumes = MediaType.APPLICATION_JSON_VALUE)

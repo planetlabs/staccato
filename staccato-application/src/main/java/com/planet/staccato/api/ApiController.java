@@ -47,8 +47,8 @@ public class ApiController implements ApiApi {
 
     @Override
     public Mono<ItemCollection> getItems(SearchRequest searchRequest,
-                                         @RequestParam("filter-lang") String filterLang,
-                                         @RequestParam("filter-crs") String filterCrs) {
+                                         @RequestParam(value = "filter-lang", required = false) String filterLang,
+                                         @RequestParam(value = "filter-crs", required = false) String filterCrs) {
         searchRequest
                 .method(HttpMethod.GET.toString())
                 .filterLang(SearchRequest.FilterLangEnum.fromValue(filterLang))
@@ -58,8 +58,8 @@ public class ApiController implements ApiApi {
 
     @Override
     public Flux<Item> getItemsStream(SearchRequest searchRequest,
-                                     @RequestParam("filter-lang") String filterLang,
-                                     @RequestParam("filter-crs") String filterCrs) {
+                                     @RequestParam(value = "filter-lang", required = false) String filterLang,
+                                     @RequestParam(value = "filter-crs", required = false) String filterCrs) {
         searchRequest
                 .method(HttpMethod.GET.toString())
                 .filterLang(SearchRequest.FilterLangEnum.fromValue(filterLang))
