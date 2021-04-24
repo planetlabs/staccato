@@ -1,8 +1,6 @@
 package com.planet.staccato.collection;
 
-import com.planet.staccato.model.Extent;
-import com.planet.staccato.model.Link;
-import com.planet.staccato.model.Provider;
+import com.planet.staccato.model.*;
 import com.planet.staccato.properties.CoreProperties;
 import lombok.Data;
 
@@ -23,13 +21,14 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     protected String title;
     protected String description;
     protected List<String> crs;
+    protected Map<String, Asset> assets = new HashMap<>();
     protected String itemType;
     protected Set<String> keywords = new HashSet<>();
     protected String version;
     protected String license;
     protected Extent extent;
     protected List<Provider> providers = new ArrayList<>();
-    protected Map<String, Object> summaries;
+    protected Map<String, Stats> summaries;
     protected T properties;
     protected List<Link> links = new ArrayList<>();
     protected CatalogType catalogType;
@@ -95,13 +94,39 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     }
 
     @Override
+    public Map<String, Asset> getAssets() {
+        return assets;
+    }
+
+    @Override
+    public void setAssets(Map<String, Asset> assets) {
+        this.assets = assets;
+    }
+
+    @Override
+    public CollectionMetadata<T> assets(Map<String, Asset> assets) {
+        setAssets(assets);
+        return this;
+    }
+
+    @Override
     public CollectionMetadata<T> properties(T properties) {
         setProperties(properties);
         return this;
     }
 
     @Override
-    public CollectionMetadata<T> summaries(Map<String, Object> summaries) {
+    public void setSummaries(Map<String, Stats> summaries) {
+        this.summaries = summaries;
+    }
+
+    @Override
+    public Map<String, Stats> getSummaries() {
+        return summaries;
+    }
+
+    @Override
+    public CollectionMetadata<T> summaries(Map<String, Stats> summaries) {
         setSummaries(summaries);
         return this;
     }

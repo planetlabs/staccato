@@ -7,7 +7,9 @@ import com.planet.staccato.model.ItemCollection;
 import com.planet.staccato.service.ApiService;
 import com.planet.staccato.service.CollectionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -27,7 +29,7 @@ public class CollectionController implements CollectionApi {
 
     @Override
     public Mono<Collections> getCollections() {
-        return collectionService.getCollections();
+        return collectionService.getCollectionsMono();
     }
 
     @Override
@@ -37,7 +39,13 @@ public class CollectionController implements CollectionApi {
 
     @Override
     public Mono<ItemCollection> getCollectionItems(@PathVariable("collectionId") String collectionId,
+                                                   @RequestParam(value = "filter-lang", required = false) String filterLang,
+                                                   @RequestParam(value = "filter-crs", required = false) String filterCrs,
                                                    SearchRequest searchRequest) {
+        searchRequest
+                .method(HttpMethod.GET.toString())
+                .filterLang(filterLang)
+                .filterCrs(filterCrs);
         return apiService.getItemCollection(searchRequest.collections(new String[]{collectionId}));
     }
 

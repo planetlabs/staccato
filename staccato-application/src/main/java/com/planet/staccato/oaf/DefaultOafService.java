@@ -1,4 +1,4 @@
-package com.planet.staccato.wfs;
+package com.planet.staccato.oaf;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class DefaultWfsService {
+public class DefaultOafService {
 
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
     private final Conformance conformance = new Conformance();
@@ -41,7 +41,7 @@ public class DefaultWfsService {
 
     public Mono<Object> getApi() {
         try {
-            Resource catalogResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/v0.9.0-rc1/api-spec/openapi/WFS3.yaml");
+            Resource catalogResource = new UrlResource("https://raw.githubusercontent.com/radiantearth/stac-spec/568a04821935cc92de7b4b05ea6fa9f6bf8a0592/api-spec/openapi/OAFeat.yaml");
             BufferedReader catalogReader = new BufferedReader(new InputStreamReader(catalogResource.getInputStream()));
             return Mono.just(mapper.readValue(catalogReader, Object.class));
         } catch (IOException e) {
@@ -50,7 +50,11 @@ public class DefaultWfsService {
         }
     }
 
-    public Mono<Conformance> getConformance() {
+    public Conformance getConformance() {
+        return conformance;
+    }
+
+    public Mono<Conformance> getConformanceMono() {
         return Mono.just(conformance);
     }
 

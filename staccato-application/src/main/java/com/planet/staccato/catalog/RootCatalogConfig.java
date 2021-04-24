@@ -5,6 +5,7 @@ import com.planet.staccato.config.StacConfigProps;
 import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.model.Catalog;
 import com.planet.staccato.model.Link;
+import com.planet.staccato.oaf.DefaultOafService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,9 +28,24 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Component
 @Configuration
 @RequiredArgsConstructor
-public class CatalogConfig {
+public class RootCatalogConfig {
 
     private final StacConfigProps configProps;
+    private final DefaultOafService oafService;
+
+    public static final String ID = "staccato";
+    public static final String TITLE = "Staccato";
+    public static final String DESCRIPTION_TEMPLATE = "STAC v%s implementation by Planet Labs";
+    public static final String SELF_LINK_REL = "self";
+    public static final String SELF_LINK_HREF = "/";
+    public static final String SEARCH_LINK_REL = "search";
+    public static final String SEARCH_LINK_HREF = "/search";
+    public static final String SERVICE_DESC_LINK_REL = "service-desc";
+    public static final String SERVICE_DESC_LINK_HREF = "/api";
+    public static final String CONFORMANCE_LINK_REL = "conformance";
+    public static final String CONFORMANCE_LINK_HREF = "/conformance";
+    public static final String DATA_LINK_REL = "data";
+    public static final String DATA_LINK_HREF = "/collections";
 
     /**
      * Creates the root catalog object.
@@ -38,44 +54,39 @@ public class CatalogConfig {
      */
     @Bean
     public Catalog rootCatalog() {
-        Catalog catalog = new Catalog();
-
-        catalog.setId("staccato");
-        catalog.setTitle("Staccato");
-        catalog.setVersion(configProps.getVersion());
-        catalog.setDescription("STAC v" + configProps.getVersion() + " implementation by Planet Labs");
-
-        catalog.getLinks().add(Link.build()
-                .rel("self")
-                .type(MediaType.APPLICATION_JSON_VALUE)
-                .href(LinksConfigProps.LINK_PREFIX + "/"));
+        Catalog catalog = new RootCatalog()
+                .conformsTo(oafService.getConformance())
+                .id(ID)
+                .title(TITLE)
+                .version(configProps.getVersion())
+                .description(String.format(DESCRIPTION_TEMPLATE, configProps.getVersion()));
 
         catalog.getLinks().add(Link.build()
-                .rel("search")
+                .rel(SELF_LINK_REL)
                 .type(MediaType.APPLICATION_JSON_VALUE)
+                .href(LinksConfigProps.LINK_PREFIX + SELF_LINK_HREF));
+
+        catalog.getLinks().add(Link.build()
+                .rel(SEARCH_LINK_REL)
+                .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                 .method(HttpMethod.GET.toString())
-                .href(LinksConfigProps.LINK_PREFIX + "/search"));
+                .href(LinksConfigProps.LINK_PREFIX + SEARCH_LINK_HREF));
+
 
         catalog.getLinks().add(Link.build()
-                .rel("search")
-                .type(MediaType.APPLICATION_JSON_VALUE)
-                .method(HttpMethod.POST.toString())
-                .href(LinksConfigProps.LINK_PREFIX + "/search"));
-
-        catalog.getLinks().add(Link.build()
-                .rel("service-desc")
+                .rel(SERVICE_DESC_LINK_REL)
                 .type(StaccatoMediaType.VND_OAI_OPENAPI_JSON_VALUE)
-                .href(LinksConfigProps.LINK_PREFIX + "/api"));
+                .href(LinksConfigProps.LINK_PREFIX + SERVICE_DESC_LINK_HREF));
 
         catalog.getLinks().add(Link.build()
-                .rel("conformance")
+                .rel(CONFORMANCE_LINK_REL)
                 .type(MediaType.APPLICATION_JSON_VALUE)
-                .href(LinksConfigProps.LINK_PREFIX + "/conformance"));
+                .href(LinksConfigProps.LINK_PREFIX + CONFORMANCE_LINK_HREF));
 
         catalog.getLinks().add(Link.build()
-                .rel("data")
+                .rel(DATA_LINK_REL)
                 .type(MediaType.APPLICATION_JSON_VALUE)
-                .href(LinksConfigProps.LINK_PREFIX + "/collections"));
+                .href(LinksConfigProps.LINK_PREFIX + DATA_LINK_HREF));
 
         return catalog;
     }

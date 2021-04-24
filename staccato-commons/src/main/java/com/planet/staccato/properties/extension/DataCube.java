@@ -3,6 +3,7 @@ package com.planet.staccato.properties.extension;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ public interface DataCube {
 
     String EXTENSION_PREFIX = "cube";
 
+    @NotBlank
     @JsonProperty(EXTENSION_PREFIX + ":dimensions")
     Map<String, ? extends Dimension> getDimensions();
     void setDimensions(Map<String, ? extends Dimension> dimensions);

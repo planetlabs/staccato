@@ -17,14 +17,14 @@ public class SearchRequestUtils {
      *
      * @param bbox   The bbox api request parameter
      * @param time   The datetime api request parameter
-     * @param query  The query api request parameter
+     * @param filter  The filter api request parameter
      * @param limit  The limit api request parameter
      * @param next   The next api request parameter
      * @param fields The fields extension api request parameter
      * @return The {@link SearchRequest SearchRequest} object
      */
     public static SearchRequest generateSearchRequest(
-            double[] bbox, String time, String query, Integer limit, String next, FieldsExtension fields,
+            double[] bbox, String time, String filter, Integer limit, String next, FieldsExtension fields,
             String[] ids, String[] collections, Object intersects, SortExtension sort) {
         SearchRequest request = new SearchRequest();
         if (null != bbox && (bbox.length == 4 || bbox.length == 6)) {
@@ -33,8 +33,8 @@ public class SearchRequestUtils {
         if (null != time && !time.isBlank()) {
             request.setDatetime(time);
         }
-        if (null != query && !query.isBlank()) {
-            request.setQuery(query);
+        if (null != filter && !filter.isBlank()) {
+            request.setFilter(filter);
         }
         if (null != limit) {
             request.setLimit(limit);

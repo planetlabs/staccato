@@ -1,4 +1,4 @@
-package com.planet.staccato.wfs;
+package com.planet.staccato.oaf;
 
 import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.model.Conformance;
@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
  * @author joshfix
  * Created on 2019-09-23
  */
-public interface WfsApi {
+public interface OafApi {
 
     @GetMapping(path = "/api",
             produces = {StaccatoMediaType.VND_OAI_OPENAPI_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})

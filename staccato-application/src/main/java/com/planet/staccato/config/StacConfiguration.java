@@ -27,4 +27,5 @@ public class StacConfiguration {
         collectionMetadataList.forEach(cm -> metadataMap.put(cm.getId(), cm));
         return metadataMap;
     }
+
 }

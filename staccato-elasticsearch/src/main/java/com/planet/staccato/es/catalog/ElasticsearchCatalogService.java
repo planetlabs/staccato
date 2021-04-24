@@ -129,8 +129,8 @@ public class ElasticsearchCatalogService implements CatalogService {
             }
         }
         com.planet.staccato.dto.api.SearchRequest searchRequest = new com.planet.staccato.dto.api.SearchRequest();
-        String query = sb.toString().isBlank() ? null : sb.toString();
-        searchRequest.setQuery(query);
+        String filter = sb.toString().isBlank() ? null : sb.toString();
+        searchRequest.setFilter(filter);
         searchRequest.setLimit(10);
         searchRequest.setCollections(new String[]{collectionId});
         return searchService.getItemCollection(searchRequest);

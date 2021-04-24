@@ -75,7 +75,7 @@ public class ElasticStatsService implements AggregationService {
             }
         }
 
-        Optional<QueryBuilder> filter = QueryBuilderHelper.queryBuilder(sb.toString());
+        Optional<QueryBuilder> filter = QueryBuilderHelper.filterBuilder(null, null, sb.toString());
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         if (filter.isPresent()) {

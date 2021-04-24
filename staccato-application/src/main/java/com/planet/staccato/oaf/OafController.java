@@ -1,4 +1,4 @@
-package com.planet.staccato.wfs;
+package com.planet.staccato.oaf;
 
 import com.planet.staccato.model.Conformance;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +11,9 @@ import reactor.core.publisher.Mono;
  */
 @RestController
 @RequiredArgsConstructor
-public class WfsController implements WfsApi {
+public class OafController implements OafApi {
 
-    private final DefaultWfsService service;
+    private final DefaultOafService service;
 
     @Override
     public Mono<Object> getApi() {
@@ -22,6 +22,6 @@ public class WfsController implements WfsApi {
 
     @Override
     public Mono<Conformance> getConformance() {
-        return service.getConformance();
+        return service.getConformanceMono();
     }
 }

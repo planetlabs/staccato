@@ -1,10 +1,7 @@
 package com.planet.staccato.collection;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.planet.staccato.model.Extent;
-import com.planet.staccato.model.Link;
-import com.planet.staccato.model.Provider;
+import com.planet.staccato.model.*;
 import com.planet.staccato.properties.CoreProperties;
 
 import java.util.List;
@@ -61,19 +58,23 @@ public interface CollectionMetadata<T extends CoreProperties> {
     void setProviders(List<Provider> providers);
     CollectionMetadata<T> providers(List<Provider> providers);
 
+    Map<String, Asset> getAssets();
+    void setAssets(Map<String, Asset> assets);
+    CollectionMetadata<T> assets(Map<String, Asset> assets);
+
     T getProperties();
     void setProperties(T properties);
     CollectionMetadata<T> properties(T properties);
 
-    Map<String, Object> getSummaries();
-    void setSummaries(Map<String, Object> summaries);
-    CollectionMetadata<T> summaries(Map<String, Object> summaries);
+    Map<String, Stats> getSummaries();
+    void setSummaries(Map<String, Stats> summaries);
+    CollectionMetadata<T> summaries(Map<String, Stats> summaries);
 
     List<Link> getLinks();
     void setLinks(List<Link> links);
     CollectionMetadata<T> links(List<Link> links);
 
-    @JsonIgnore
+    @JsonProperty("type")
     CatalogType getCatalogType();
     void setCatalogType(CatalogType catalogType);
     CollectionMetadata<T> catalogType(CatalogType catalogType);

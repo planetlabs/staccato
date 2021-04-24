@@ -60,7 +60,5 @@ public class ErrorResponseComposer<T extends Throwable> {
         }
 
         return Optional.of(new StacException(String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage()));
-
-
     }
 }

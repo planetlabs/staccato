@@ -79,6 +79,7 @@ public class CatalogRouteInitializer {
         RouterFunction<ServerResponse> route =
                 route(GET("/stac/" + collection.getId()), (request) -> {
                     CollectionMetadata newCollection = getNewInstance(collection);
+                    newCollection.setCatalogType(CatalogType.CATALOG);
                     List<PropertyField> remainingProperties = subcatalogPropertiesService.getRemainingProperties(newCollection.getId(), request.path());
                     newCollection.setExtent(aggregationService.getExtent(newCollection.getId(), null));
                     linkGenerator.generatePropertyFieldLinks(request, newCollection, remainingProperties);
@@ -90,6 +91,7 @@ public class CatalogRouteInitializer {
         RouterFunction<ServerResponse> subRoute =
                 route(GET("/stac/" + collection.getId() + "/**"), (request) -> {
                     CollectionMetadata newCollection = getNewInstance(collection);
+                    newCollection.setCatalogType(CatalogType.CATALOG);
                     if (request.path().toLowerCase().endsWith("/items")) {
                         return ServerResponse.ok().body(requestHandler.handleItemsRequest(newCollection, request), ItemCollection.class);
                     }

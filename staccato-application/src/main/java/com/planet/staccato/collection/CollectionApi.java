@@ -8,6 +8,7 @@ import com.planet.staccato.model.ItemCollection;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import reactor.core.publisher.Mono;
 
 /**
@@ -28,6 +29,8 @@ public interface CollectionApi {
     @GetMapping(value = "/collections/{collectionId}/items",
             produces = {StaccatoMediaType.APPLICATION_GEO_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})
     Mono<ItemCollection> getCollectionItems(@PathVariable("collectionId") String collectionId,
+                                            @RequestParam(value = "filter-lang", required = false) String fitlerLang,
+                                            @RequestParam(value = "filter-crs", required = false) String filterCrs,
                                             SearchRequest searchRequest);
 
     @GetMapping(value = "/collections/{collectionId}/items/{itemId}",

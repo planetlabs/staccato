@@ -9,5 +9,30 @@ package com.planet.staccato.collection;
  * Created on 10/25/18
  */
 public enum CatalogType {
-    COLLECTION, CATALOG
+    COLLECTION("Collection"),
+    CATALOG("Catalog");
+
+    private String value;
+
+    CatalogType(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
+    public static com.planet.staccato.collection.CatalogType fromValue(String text) {
+        for (com.planet.staccato.collection.CatalogType b : com.planet.staccato.collection.CatalogType.values()) {
+            if (String.valueOf(b.value).equals(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }

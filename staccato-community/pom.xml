@@ -8,18 +8,17 @@
 
     <groupId>com.planet.staccato</groupId>
     <artifactId>staccato-community</artifactId>
-    <version>0.9.0.1</version>
+    <version>1.0.0-rc1</version>
 
     <parent>
         <groupId>com.planet.staccato</groupId>
         <artifactId>staccato</artifactId>
-        <version>0.9.0.1</version>
+        <version>1.0.0-rc1</version>
     </parent>
 
     <modules>
         <module>staccato-community-grpc</module>
         <module>staccato-community-kafka</module>
-        <module>staccato-community-rsocket</module>
     </modules>
 
     <properties>

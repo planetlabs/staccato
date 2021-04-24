@@ -19,9 +19,11 @@ import org.xbib.cql.elasticsearch.ElasticsearchQueryGenerator;
 import java.time.Instant;
 import java.time.Period;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This service builds Elasticsearch queries from the api parameters passed to the STAC API.
@@ -40,6 +42,7 @@ public class QueryBuilderHelper {//implements QueryBuilder {
     private static final int DEFAULT_LIMIT = 10;
     // https://github.com/radiantearth/stac-spec/blob/v0.8.0/api-spec/STAC-extensions.yaml#L1144
     private static final String OPEN_INTERVAL_SYMBOL = "..";
+    private static final List<String> SUPPORTED_CQL_LANGS = Arrays.asList(SearchRequest.FilterLangEnum.CQL_TEXT.getValue());
 
     public static BoolQueryBuilder buildQuery(double[] bbox, String time, String query, Integer limit, String next,
                                               String[] ids, String[] collections, FieldsExtension fields,
@@ -62,9 +65,11 @@ public class QueryBuilderHelper {//implements QueryBuilder {
             boolQueryBuilder.must(timeBuilder.get());
         }
 
-        Optional<QueryBuilder> queryBuilder = QueryBuilderHelper.queryBuilder(searchRequest.getQuery());
-        if (queryBuilder.isPresent()) {
-            boolQueryBuilder.must(queryBuilder.get());
+        String filterLang = searchRequest.getFilterLang() == null ? null : searchRequest.getFilterLang();
+        Optional<QueryBuilder> filterBuilder = QueryBuilderHelper.filterBuilder(searchRequest.getFilterCrs(),
+                filterLang, searchRequest.getFilter());
+        if (filterBuilder.isPresent()) {
+            boolQueryBuilder.must(filterBuilder.get());
         }
 
         Optional<QueryBuilder> idsBuilder = QueryBuilderHelper.idsBuilder(searchRequest.getIds());
@@ -175,7 +180,7 @@ public class QueryBuilderHelper {//implements QueryBuilder {
         ShapeBuilder shapeBuilder = null;
         switch (type) {
             case "Point":
-                shapeBuilder = new PointBuilder((double)coords.get(0), (double)coords.get(1));
+                shapeBuilder = new PointBuilder((double) coords.get(0), (double) coords.get(1));
                 break;
             case "Polygon":
                 CoordinatesBuilder polygonCoordsBuilder = new CoordinatesBuilder();
@@ -208,17 +213,31 @@ public class QueryBuilderHelper {//implements QueryBuilder {
     }
 
     /**
-     * Builds an Elasticsearch query
+     * Builds an Elasticsearch query from the OGC CQL filter spec
      *
-     * @param query The query values passed in the api request
+     * @param filterCrs  The CRS of the filter as specified by the API paramter "filter-crs"
+     * @param filterLang The language of the filter as specified by the API paramter "filter-lang"
+     * @param filter     The query filter passed in the api request
      * @return The Elasticsearch query builder
      */
-    public static Optional<QueryBuilder> queryBuilder(String query) {
-        if (query == null || query.isEmpty()) {
+    public static Optional<QueryBuilder> filterBuilder(String filterCrs, String filterLang, String filter) {
+        // Until we have an CQL-Elasticsearch library that supports the OGC CQL spec, it is unclear if filterCrs and
+        // filterLang will be needed/used in this method.
+
+        if (filter == null || filter.isBlank()) {
             return Optional.empty();
         }
+
+        if (filterLang != null && !filterLang.isBlank() && !SUPPORTED_CQL_LANGS.contains(filterLang.toLowerCase())) {
+            throw new FilterException(String.format("provided filter-lang value '%s' is not supported. supported filter-langs are: '%s'",
+                    filterLang,
+                    String.join("\', \'", SUPPORTED_CQL_LANGS)));
+        } else if (filterLang == null) {
+            filterLang = SearchRequest.FilterLangEnum.CQL_TEXT.getValue();
+        }
+
         try {
-            CQLParser parser = new CQLParser(query);
+            CQLParser parser = new CQLParser(filter);
             parser.parse();
             ElasticsearchQueryGenerator generator = new ElasticsearchQueryGenerator();
             SortedQuery sq = parser.getCQLQuery();

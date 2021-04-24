@@ -18,11 +18,6 @@ public interface EO {
     String EXTENSION_PREFIX = "eo";
 
     @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":gsd")
-    Double getGsd();
-    void setGsd(Double gsd);
-
-    @Mapping(type = MappingType.DOUBLE)
     @JsonProperty(EXTENSION_PREFIX + ":cloud_cover")
     Double getCloudCover();
     void setCloudCover(Double cloudCover);

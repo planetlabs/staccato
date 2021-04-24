@@ -23,11 +23,6 @@ public interface Projection {
     void setEpsg(Integer epsg);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonProperty(EXTENSION_PREFIX + ":proj4")
-    String getProj4();
-    void setProj4(String proj4);
-
-    @Mapping(type = MappingType.KEYWORD)
     @JsonProperty(EXTENSION_PREFIX + ":wkt2")
     String getWkt2();
     void setWkt2(String wkt2);
@@ -49,4 +44,12 @@ public interface Projection {
     Centroid getCentroid();
     void setCentroid(Centroid centroid);
 
+    @Mapping(type = MappingType.INTEGER)
+    @JsonProperty(EXTENSION_PREFIX + ":shape")
+    List<Integer> getShape();
+    void setShape(List<Integer> shape);
+
+    @JsonProperty(EXTENSION_PREFIX + ":transform")
+    List<Double> getTransform();
+    void setTransform(List<Double> transform);
 }
