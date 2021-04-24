@@ -5,6 +5,7 @@ import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Collections;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
+import com.planet.staccato.queryables.Queryables;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,10 @@ public interface CollectionApi {
 
     @GetMapping(value = "/collections/{collectionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<CollectionMetadata> getCollection(@PathVariable("collectionId") String collectionId);
+
+    @GetMapping(value = "/collections/{collectionId}/queryables",
+            produces = {StaccatoMediaType.APPLICATION_GEO_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    Mono<Queryables> getQueryables(@PathVariable("collectionId") String collectionId);
 
     @GetMapping(value = "/collections/{collectionId}/items",
             produces = {StaccatoMediaType.APPLICATION_GEO_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE})

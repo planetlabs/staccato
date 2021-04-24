@@ -7,6 +7,7 @@ import com.planet.staccato.es.stats.ElasticStatsService;
 import com.planet.staccato.exception.StaccatoRuntimeException;
 import com.planet.staccato.model.Collections;
 import com.planet.staccato.model.Link;
+import com.planet.staccato.queryables.Queryables;
 import com.planet.staccato.service.CollectionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -32,12 +33,19 @@ public class ElasticsearchCollectionService implements CollectionService {
     private final ElasticStatsService aggregationService;
     private Map<String, CollectionMetadata> collectionMetadataMap = new HashMap<>();
     private List<Link> collectionsLinks = new ArrayList<>();
+    private Map<String, Queryables> queryablesMap = new HashMap<>();
 
-    public ElasticsearchCollectionService(ElasticStatsService aggregationService,
-                                          List<CollectionMetadata> collectionMetadataList) {
+    public ElasticsearchCollectionService(
+            ElasticStatsService aggregationService,
+            List<CollectionMetadata> collectionMetadataList,
+            List<Queryables> queryables
+    ) {
         this.aggregationService = aggregationService;
 
         initLinks();
+
+        // build map of collection ids to queryables
+        queryables.forEach(q -> queryablesMap.put(q.getId(), q));
 
         // build a map of collection ids to CollectionMetadataAdapter objects so they can easily be retrieved
         collectionMetadataList.forEach(cm -> {
@@ -56,6 +64,7 @@ public class ElasticsearchCollectionService implements CollectionService {
 
     /**
      * Returns all collections.
+     *
      * @return Flux of CollectionMetadata objects
      */
     @Override
@@ -72,6 +81,7 @@ public class ElasticsearchCollectionService implements CollectionService {
 
     /**
      * Calculates the extent for a collection and returns the {@link CollectionMetadata CollectionMetadata} object
+     *
      * @param collectionId The ID of the collection
      * @return the {@Link CollectionMetadata CollectionMetadata} object wrapped in a Mono
      */
@@ -85,4 +95,8 @@ public class ElasticsearchCollectionService implements CollectionService {
         throw new StaccatoRuntimeException("No collection found with id '" + collectionId + "'.", 404);
     }
 
+    @Override
+    public Mono<Queryables> getQueryables(String collectionId) {
+        return Mono.just(queryablesMap.get(collectionId));
+    }
 }

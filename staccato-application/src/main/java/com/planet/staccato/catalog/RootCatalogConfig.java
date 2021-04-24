@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import static com.planet.staccato.config.StaccatoRelType.QUERYABLES_LINK_REL;
 import static org.springframework.web.reactive.function.BodyInserters.fromValue;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -46,6 +47,7 @@ public class RootCatalogConfig {
     public static final String CONFORMANCE_LINK_HREF = "/conformance";
     public static final String DATA_LINK_REL = "data";
     public static final String DATA_LINK_HREF = "/collections";
+    public static final String QUERYABLES_LINK_HREF = "/queryables";
 
     /**
      * Creates the root catalog object.
@@ -87,6 +89,11 @@ public class RootCatalogConfig {
                 .rel(DATA_LINK_REL)
                 .type(MediaType.APPLICATION_JSON_VALUE)
                 .href(LinksConfigProps.LINK_PREFIX + DATA_LINK_HREF));
+
+        catalog.getLinks().add(Link.build()
+                .rel(QUERYABLES_LINK_REL)
+                .type(StaccatoMediaType.APPLICATION_SCHEMA_JSON_VALUE)
+                .href(LinksConfigProps.LINK_PREFIX + QUERYABLES_LINK_HREF));
 
         return catalog;
     }

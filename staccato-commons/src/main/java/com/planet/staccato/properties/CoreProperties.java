@@ -57,12 +57,6 @@ public interface CoreProperties {
     String getMission();
     void setMission(String mission);
 
-    @DecimalMin(value = "0", inclusive = false, message = "GSD must be greater than zero")
-    @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty("gsd")
-    Double getGsd();
-    void setGsd(Double gsd);
-
     // Licensing
     @Mapping(type = MappingType.KEYWORD)
     String getLicense();

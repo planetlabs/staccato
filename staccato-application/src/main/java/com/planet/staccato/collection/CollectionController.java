@@ -4,6 +4,7 @@ import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.model.Collections;
 import com.planet.staccato.model.Item;
 import com.planet.staccato.model.ItemCollection;
+import com.planet.staccato.queryables.Queryables;
 import com.planet.staccato.service.ApiService;
 import com.planet.staccato.service.CollectionService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,11 @@ public class CollectionController implements CollectionApi {
     @Override
     public Mono<CollectionMetadata> getCollection(@PathVariable("collectionId") String collectionId) {
         return collectionService.getCollectionMetadata(collectionId);
+    }
+
+    @Override
+    public Mono<Queryables> getQueryables(String collectionId) {
+        return collectionService.getQueryables(collectionId);
     }
 
     @Override

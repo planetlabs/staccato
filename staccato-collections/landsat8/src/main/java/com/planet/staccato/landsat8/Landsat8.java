@@ -56,8 +56,8 @@ public interface Landsat8 {
     void setProductId(String productId);
 
     @Mapping(type = MappingType.KEYWORD)
-    @JsonAlias("processingLevel")
-    @JsonProperty(EXTENSION_PREFIX + ":processingLevel")
+    @JsonAlias({"processing_level", "landsat:processingLevel"})
+    @JsonProperty(EXTENSION_PREFIX + ":processing_level")
     String getProcessingLevel();
     void setProcessingLevel(String processingLevel);
 }

@@ -2,6 +2,7 @@ package com.planet.staccato.service;
 
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.model.Collections;
+import com.planet.staccato.queryables.Queryables;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -17,5 +18,6 @@ public interface CollectionService {
     Map<String, CollectionMetadata> getCollectionMetadataMap();
     Mono<Collections> getCollectionsMono();
     Mono<CollectionMetadata> getCollectionMetadata(String collectionId);
+    Mono<Queryables> getQueryables(String collectionId);
 
 }

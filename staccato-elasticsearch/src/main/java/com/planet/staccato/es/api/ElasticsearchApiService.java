@@ -96,7 +96,7 @@ public class ElasticsearchApiService implements ApiService {
     @Override
     public Mono<ItemCollection> getItemCollection(SearchRequest searchRequest) {
         // this should be handled by the CQL library; for now it's a workaround
-        if (!filterCrs(searchRequest)) {
+        if (searchRequest.getCollections() == null && !filterCrs(searchRequest)) {
             return processor.searchItemCollectionMono(Mono.just(new ItemCollection()), searchRequest);
         }
         Set<String> indices = getIndices(searchRequest);
