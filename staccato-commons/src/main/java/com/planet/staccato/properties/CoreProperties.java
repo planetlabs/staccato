@@ -5,6 +5,8 @@ import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
 import com.planet.staccato.model.Provider;
 
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
 import java.util.List;
 
 /**
@@ -55,6 +57,7 @@ public interface CoreProperties {
     String getMission();
     void setMission(String mission);
 
+    @DecimalMin(value = "0", inclusive = false, message = "GSD must be greater than zero")
     @Mapping(type = MappingType.DOUBLE)
     @JsonProperty("gsd")
     Double getGsd();
