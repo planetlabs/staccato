@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.planet.staccato.model.*;
 import com.planet.staccato.properties.CoreProperties;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +27,7 @@ public interface CollectionMetadata<T extends CoreProperties> {
     void setStacExtensions(Set<String> stacExtensions);
     CollectionMetadata<T> stacExtensions(Set<String> stacExtensions);
 
+    @NotBlank(message = "Property 'id' must not be blank.")
     String getId();
     void setId(String id);
     CollectionMetadata<T> id(String id);

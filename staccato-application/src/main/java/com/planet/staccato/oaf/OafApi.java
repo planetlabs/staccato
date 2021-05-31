@@ -2,8 +2,10 @@ package com.planet.staccato.oaf;
 
 import com.planet.staccato.config.StaccatoMediaType;
 import com.planet.staccato.model.Conformance;
+import com.planet.staccato.queryables.Queryables;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -18,5 +20,8 @@ public interface OafApi {
 
     @GetMapping(path = "/conformance", produces = MediaType.APPLICATION_JSON_VALUE)
     Mono<Conformance> getConformance();
+
+    @GetMapping(path = "/queryables", produces = StaccatoMediaType.APPLICATION_SCHEMA_JSON_VALUE)
+    Flux<Queryables> getQueryables();
 
 }

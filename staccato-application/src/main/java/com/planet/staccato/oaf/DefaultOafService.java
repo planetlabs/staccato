@@ -3,10 +3,12 @@ package com.planet.staccato.oaf;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.planet.staccato.model.Conformance;
+import com.planet.staccato.queryables.Queryables;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
@@ -23,8 +25,13 @@ import java.util.List;
 @Service
 public class DefaultOafService {
 
+    private final List<Queryables> queryables;
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
     private final Conformance conformance = new Conformance();
+
+    public DefaultOafService(List<Queryables> queryables) {
+        this.queryables = queryables;
+    }
 
     @PostConstruct
     public void init() {
@@ -57,5 +64,10 @@ public class DefaultOafService {
     public Mono<Conformance> getConformanceMono() {
         return Mono.just(conformance);
     }
+
+    public Flux<Queryables> getQueryables() {
+        return Flux.fromIterable(queryables);
+    }
+
 
 }

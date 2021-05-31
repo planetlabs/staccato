@@ -1,8 +1,10 @@
 package com.planet.staccato.oaf;
 
 import com.planet.staccato.model.Conformance;
+import com.planet.staccato.queryables.Queryables;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -24,4 +26,10 @@ public class OafController implements OafApi {
     public Mono<Conformance> getConformance() {
         return service.getConformanceMono();
     }
+
+    @Override
+    public Flux<Queryables> getQueryables() {
+        return service.getQueryables();
+    }
+
 }

@@ -68,7 +68,6 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         properties.setPlatform("landsat-8");
         properties.setInstruments(Arrays.asList("OLI_TIRS"));
         properties.setConstellation("landsat");
-        properties.setOffNadir(0);
         properties.setBands(buildBands());
     }
 

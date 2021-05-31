@@ -5,6 +5,8 @@ import com.planet.staccato.elasticsearch.annotation.Mapping;
 import com.planet.staccato.elasticsearch.annotation.MappingType;
 import com.planet.staccato.model.Provider;
 
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
 import java.util.List;
 
 /**
@@ -54,11 +56,6 @@ public interface CoreProperties {
     @Mapping(type = MappingType.KEYWORD)
     String getMission();
     void setMission(String mission);
-
-    @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty("gsd")
-    Double getGsd();
-    void setGsd(Double gsd);
 
     // Licensing
     @Mapping(type = MappingType.KEYWORD)

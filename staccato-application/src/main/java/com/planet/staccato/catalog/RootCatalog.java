@@ -11,7 +11,7 @@ public class RootCatalog extends Catalog {
     protected Object conformsTo;
 
     public Catalog conformsTo(Object conformsTo) {
-        this.conformsTo = conformsTo;
+        setConformsTo(conformsTo);
         return this;
     }
 }

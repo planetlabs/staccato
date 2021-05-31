@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.planet.staccato.properties.CoreProperties;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -18,11 +19,13 @@ public class Item<T extends CoreProperties> {
     private String stacVersion;
     @JsonProperty("stac_extensions")
     private Set<String> stacExtensions;
+    @NotBlank(message = "Field 'id' must not be blank.")
     private String id;
     private Bbox bbox;
     private Object geometry;
     private Centroid centroid;
     private TypeEnum type;
+    @NotBlank(message = "Field 'collection' must not be blank.")
     private String collection;
     private T properties;
     private Set<Link> links;

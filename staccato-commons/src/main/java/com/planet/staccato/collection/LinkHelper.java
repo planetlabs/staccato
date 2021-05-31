@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.planet.staccato.config.StaccatoMediaType.APPLICATION_JSON_VALUE;
+import static com.planet.staccato.config.StaccatoRelType.QUERYABLES_LINK_REL;
 
 /**
  * @author joshfix
@@ -36,6 +37,11 @@ public class LinkHelper {
                 .rel("items")
                 .type(StaccatoMediaType.APPLICATION_GEO_JSON_VALUE)
                 .href(LinksConfigProps.LINK_PREFIX + "/collections/" + collectionId + "/items"));
+
+        links.add(Link.build()
+                .href(LinksConfigProps.LINK_PREFIX + "/collections/" + collectionId + "/queryables")
+                .rel(QUERYABLES_LINK_REL)
+                .type(StaccatoMediaType.APPLICATION_SCHEMA_JSON_VALUE));
         return links;
     }
 

@@ -22,26 +22,6 @@ public interface EO {
     Double getCloudCover();
     void setCloudCover(Double cloudCover);
 
-    @Mapping(type = MappingType.INTEGER)
-    @JsonProperty(EXTENSION_PREFIX + ":off_nadir")
-    Integer getOffNadir();
-    void setOffNadir(Integer offNadir);
-
-    @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":azimuth")
-    Double getAzimuth();
-    void setAzimuth(Double azimuth);
-
-    @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":sun_azimuth")
-    Double getSunAzimuth();
-    void setSunAzimuth(Double sunAzimuth);
-
-    @Mapping(type = MappingType.DOUBLE)
-    @JsonProperty(EXTENSION_PREFIX + ":sun_elevation")
-    Double getSunElevation();
-    void setSunElevation(Double sunElevation);
-
     @JsonProperty(EXTENSION_PREFIX + ":bands")
     List<Band> getBands();
     void setBands(List<Band> bands);

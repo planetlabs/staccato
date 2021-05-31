@@ -3,6 +3,7 @@ package com.planet.staccato.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,9 @@ import java.util.Map;
 @Data
 public class Link {
 
+    @NotBlank(message = "Link property 'href' may not be blank.")
     private String href;
+    @NotBlank(message = "Link property 'rel' may not be blank.")
     private String rel;
     private String type;
     private String hreflang;
