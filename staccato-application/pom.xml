@@ -177,7 +177,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <repository>quay.io/boundlessgeo/staccato</repository>
+                    <!--<repository>quay.io/boundlessgeo/staccato</repository>-->
+                    <repository>gcr.io/focus-cargo-315523/staccato</repository>
                     <tag>${project.version}</tag>
                     <buildArgs>
                         <JAR_NAME>staccato-${project.version}.jar</JAR_NAME>
