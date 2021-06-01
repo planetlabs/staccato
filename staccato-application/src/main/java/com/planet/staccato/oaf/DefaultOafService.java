@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,23 +28,16 @@ public class DefaultOafService {
 
     private final List<Queryables> queryables;
     private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-    private final Conformance conformance = new Conformance();
+    private final String[] conformance = new String[]{
+            "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core",
+            //"http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30",
+            "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html",
+            "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson",
+            "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/x-cql-text"
+    };
 
     public DefaultOafService(List<Queryables> queryables) {
         this.queryables = queryables;
-    }
-
-    @PostConstruct
-    public void init() {
-        initConformance();
-    }
-
-    private void initConformance() {
-        conformance.setConformsTo(List.of("http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core",
-                //"http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30",
-                "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html",
-                "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson",
-                "http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/x-cql-text"));
     }
 
     public Mono<Object> getApi() {
@@ -57,12 +51,12 @@ public class DefaultOafService {
         }
     }
 
-    public Conformance getConformance() {
+    public String[] getConformance() {
         return conformance;
     }
 
-    public Mono<Conformance> getConformanceMono() {
-        return Mono.just(conformance);
+    public Mono<List<String>> getConformanceMono() {
+        return Flux.just(conformance).collectList();
     }
 
     public Flux<Queryables> getQueryables() {

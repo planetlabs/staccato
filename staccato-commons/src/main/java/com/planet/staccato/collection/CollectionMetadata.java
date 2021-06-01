@@ -43,11 +43,7 @@ public interface CollectionMetadata<T extends CoreProperties> {
     Set<String> getKeywords();
     void setKeywords(Set<String> keywords);
     CollectionMetadata<T> keywords(Set<String> keywords);
-/*
-    String getVersion();
-    void setVersion(String version);
-    CollectionMetadata<T> version(String version);
-*/
+
     String getLicense();
     void setLicense(String license);
     CollectionMetadata<T> license(String license);

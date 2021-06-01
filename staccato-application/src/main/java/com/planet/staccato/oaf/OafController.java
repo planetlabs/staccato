@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 /**
  * @author joshfix
  * Created on 2019-09-23
@@ -23,7 +25,7 @@ public class OafController implements OafApi {
     }
 
     @Override
-    public Mono<Conformance> getConformance() {
+    public Mono<List<String>> getConformance() {
         return service.getConformanceMono();
     }
 
