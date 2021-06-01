@@ -4,6 +4,7 @@ import com.planet.staccato.collection.CatalogType;
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.collection.LinkHelper;
 import com.planet.staccato.config.LinksConfigProps;
+import com.planet.staccato.config.StacConfigProps;
 import com.planet.staccato.queryables.QueryableProperty;
 import com.planet.staccato.queryables.Queryables;
 import lombok.AllArgsConstructor;
@@ -22,10 +23,12 @@ public class PlanetAutoConfig {
 
     // autowiring this in ensures the static LINK_PREFIX value is built
     private final LinksConfigProps linksConfigProps;
+    private final StacConfigProps stacConfigProps;
 
     @Bean
     public CollectionMetadata planetCollection() {
         PlanetCollectionMetadata metadata = new PlanetCollectionMetadata();
+        metadata.setStacVersion(stacConfigProps.getVersion());
         metadata.links(LinkHelper.buildCollectionLinks(metadata.getId()))
                 .catalogType(CatalogType.COLLECTION);
         return metadata;
@@ -34,6 +37,7 @@ public class PlanetAutoConfig {
     @Bean
     public CollectionMetadata planetCatalog() {
         PlanetCollectionMetadata metadata = new PlanetCollectionMetadata();
+        metadata.setStacVersion(stacConfigProps.getVersion());
         metadata.links(LinkHelper.buildCollectionLinks(metadata.getId()))
                 .setCatalogType(CatalogType.CATALOG);
         return metadata;

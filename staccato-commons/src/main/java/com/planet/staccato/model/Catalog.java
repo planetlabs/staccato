@@ -7,7 +7,6 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -18,7 +17,7 @@ import java.util.Map;
 public class Catalog {
 
     @JsonProperty("stac_version")
-    private String version;
+    private String stacVersion;
     private String title;
     private String id;
     private CatalogType type = CatalogType.CATALOG;
@@ -31,7 +30,7 @@ public class Catalog {
     private String path;
 
     public Catalog version(String version) {
-        setVersion(version);
+        setStacVersion(version);
         return this;
     }
 

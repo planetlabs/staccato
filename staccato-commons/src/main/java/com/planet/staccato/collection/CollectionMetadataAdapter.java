@@ -70,12 +70,6 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     }
 
     @Override
-    public CollectionMetadata<T> version(String version) {
-        setVersion(version);
-        return this;
-    }
-
-    @Override
     public CollectionMetadata<T> license(String license) {
         setLicense(license);
         return this;

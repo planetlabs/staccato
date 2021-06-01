@@ -4,6 +4,7 @@ import com.planet.staccato.collection.CatalogType;
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.collection.LinkHelper;
 import com.planet.staccato.config.LinksConfigProps;
+import com.planet.staccato.config.StacConfigProps;
 import com.planet.staccato.queryables.QueryableProperty;
 import com.planet.staccato.queryables.Queryables;
 import lombok.AllArgsConstructor;
@@ -22,10 +23,12 @@ public class Landsat8AutoConfig {
 
     // autowiring this in ensures the static LINK_PREFIX value is built
     private final LinksConfigProps linksConfigProps;
+    private final StacConfigProps stacConfigProps;
 
     @Bean
     public CollectionMetadata landsat8Collection() {
         Landsat8CollectionMetadata metadata = new Landsat8CollectionMetadata();
+        metadata.setStacVersion(stacConfigProps.getVersion());
         metadata.links(LinkHelper.buildCollectionLinks(metadata.getId()))
                 .catalogType(CatalogType.COLLECTION);
         return metadata;
@@ -34,6 +37,7 @@ public class Landsat8AutoConfig {
     @Bean
     public CollectionMetadata landsat8Catalog() {
         Landsat8CollectionMetadata metadata = new Landsat8CollectionMetadata();
+        metadata.setStacVersion(stacConfigProps.getVersion());
         metadata.links(LinkHelper.buildCollectionLinks(metadata.getId()))
                 .setCatalogType(CatalogType.CATALOG);
         return metadata;
