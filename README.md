@@ -87,7 +87,7 @@ staccato.es.host | localhost | The hostname of the Elasticsearch aggregationServ
 staccato.es.port | 9200 | The Elasticsearch aggregationService port
 staccato.es.number-of-shards | 5 | The number of shards used when auto-initializing an Elasticsearch index
 staccato.es.number-of-replicas | 0 | The number of replicas used when auto-initializing an Elasticsearch index
-staccato.es.type | _doc | The Elasticsearch document type.  It is not recommended to change this from it's default value as "_doc" will be the only value supported in ES7
+staccato.es.type | _doc | The Elasticsearch document type.  It is not recommended to change this from its default value as "_doc" will be the only value supported in ES7
 staccato.es.max-reconnection-attempts | 10 | The number of reconnection attempts to the Elasticsearch aggregationService
 staccato.es.rest-client-max-connections-total | 200 | The Elasticsearch client threadpool size.  This is the maximum number of connections a single STAC instance may have open to Elasticsearch.
 staccato.es.rest-client-max-connections-per-route | 200 | The maximum number of Elasticsearch client connections per route.
@@ -219,7 +219,7 @@ It is also important to note that this implementation currently relies on implem
 the `collection` field in every item. Because each collection will have a different properties implementation that may
 implement several different extension interfaces or custom fieldsExtension, Jackson cannot deserialize Item classes without
 more information on which properties class to deserialize to. Having the "collections" field in each item provides an
-extremely convenient 1:1 relationship between the item and it's properties implementation.  The Jackson configuration 
+extremely convenient 1:1 relationship between the item and its properties implementation.  The Jackson configuration 
 for this can be found [here](./staccato-application/src/main/java/com/planet/staccato/config/ExtensionConfig.java). 
 
 ### Custom annotations
@@ -322,7 +322,7 @@ Elasticsearch to rollover the index.  When the criteria has been met, Elasticsea
 index named `my-index-name-000002`.  Because this name matches the pattern `my-index-name-*` that was established in 
 our template, all of the shard, read replica, mapping, etc configuration will automatically be applied.  In addition, 
 the `my-index-name` write alias will automatically be changed to point to `my-index-name-000002`, and the search alias  
-`my-index-name-search` will add to it's list.  `my-index-name-000002`.  When executing searches against the search 
+`my-index-name-search` will add to its list.  `my-index-name-000002`.  When executing searches against the search 
 alias `my=index-name-search`, Elasticsearch will return matches from both indexes, `my-index-name-000001` and 
 `my-index-name-000002`.  The one important note: if a record needs to be updated, you need to first determine which 
 actual index it belongs to and update it on that index.
