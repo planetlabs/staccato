@@ -37,7 +37,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
         keywords.addAll(Arrays.asList(KEYWORDS));
         properties = new Landsat8ItemProperties();
 
-        buildProperties();
+        //buildProperties();
         buildProviders();
     }
 
@@ -62,7 +62,7 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
                 .addRole(Provider.Role.PROCESSOR)
                 .url("https://planet.com"));
     }
-
+/*
     private void buildProperties() {
         properties.setPlatform("landsat-8");
         properties.setInstruments(Arrays.asList("OLI_TIRS"));
@@ -151,5 +151,5 @@ public class Landsat8CollectionMetadata extends CollectionMetadataAdapter<Landsa
 
         return bands;
     }
-
+*/
 }

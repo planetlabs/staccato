@@ -1,5 +1,6 @@
 package com.planet.staccato.collection;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.planet.staccato.model.*;
 import com.planet.staccato.properties.CoreProperties;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class CollectionMetadataAdapter<T extends CoreProperties> implements Coll
     protected Extent extent;
     protected List<Provider> providers = new ArrayList<>();
     protected Map<String, Stats> summaries;
+    @JsonIgnore
     protected T properties;
     protected List<Link> links = new ArrayList<>();
     protected CatalogType catalogType;

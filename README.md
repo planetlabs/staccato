@@ -6,7 +6,7 @@
 ## About
 
 Staccato is a server that enables browsing and search of geospatial assets like satellite imagery. It implements the 
-SpatioTemporal Asset Catalog (STAC) v0.8.0 standard and is backed by [Elasticsearch](https://www.elastic.co/products/elasticsearch).
+SpatioTemporal Asset Catalog (STAC) v1.0.0 standard and is backed by [Elasticsearch](https://www.elastic.co/products/elasticsearch).
 In addition to the core STAC catalog browsing and search functionality, it includes support for transactions, statistics,
 auto-generated schemas, [gRPC](https://grpc.io/) endpoints and [Kafka](https://kafka.apache.org/) ingestion.
 
@@ -55,31 +55,6 @@ Any of the following methods are acceptable ways of running Staccato
 
 ## Endpoints
 
-### API Endpoints
-
-- GET /search - dynamic catalog endpoint
-- GET /search/{id} - returns an item by ID
-
-### Collection Endpoints
-
-- GET /collection/{collection_id} - retrieves a collection by ID
-- GET /collection/{collection_id}/items - retrieves a collection of items belonging to a collection
-- GET /collection/{collection_id}/items/{id} - retrieves an item by ID from a collection
-
-### Catalog Endpoints
-
-- GET / - retrieves the root catalog
-- GET /stac/{catalog_id} - retrieves a catalog by ID
-- GET /stac/{catalog_id}/items - retrieves a collection of items belonging to a collection
-- GET /stac/{collection_id}/items/{id} - retrieves an item by ID from a collection
-             
-### Transaction Endpoints
-
-- POST /collection/{collection_id}/items - creates a new item
-- PUT /collection/{collection_id}/items/{item_id} - creates a new item
-- PATCH /collection/{collection_id}/items/{item_id} - updates an item item
-- DELETE /collection/{collection_id}/items/{item_id} - deletes an item
-              
 ### Stats Endpoints
 
 - GET /stats - retrieves aggregations for all collections
@@ -93,72 +68,6 @@ Any of the following methods are acceptable ways of running Staccato
 ### Actuator Endpoints
 
 - GET /actuator - returns a list of utility endpoints for the application
-
-### Query Parameters (all optional)
-- **limit** the maximum number of items to return, example limit=100
-- **page** to paginate, example page=2 (for the second page of results)
-- **time** implicit range query, example time=1995-01-01T00:00:2005-01-01T00:00:00
-- **bbox** implicit intersects query, example bbox=-180,-90,180,90
-- **intersects** a valid GeoJSON geometry 
-- **query** a Common Query Language text string to query properties of the catalog entry (see below for examples)
-- **ids** a list of comma separated IDs to be returned
-- **collections** a list of comma separated collection IDs on which to filter the results
-- **fields** a comma separated list of json field names to include in the result; fields to be excluded can be prefixed with "-"
-- **sortby** a comma separated list of fields to sort by 
-
-Examples:  
-_GET_
-- <https://stac.boundlessgeo.io/search?fields.include=id,bbox>
-- [https://stac.boundlessgeo.io/search?query=landsat:wrs_path=105 AND landsat:wrs_row=83](https://stac.boundlessgeo.io/stac/search?query=landsat:wrs_path=105%20AND%20landsat:wrs_row=83)
-- <https://stac.boundlessgeo.io/search?ids=LC81050832019135LGN00,LC81050822019135LGN00&collections=landsat-8-l1>
-- [https://stac.boundlessgeo.io/search?limit=20&page=2&query=eo:cloud_cover<0.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z](https://stac.boundlessgeo.io/stac/search?limit=20&page=2&query=eo:cloud_cover%3C.1&bbox=27.3245,29.85465,30.5214,31.8685&time=2018-02-12T00:00:00Z/2019-06-12T00:00:00Z)
-
-_POST_
-
-```json
-{
-    "fields": {
-        "include": ["id", "bbox"]
-    }
-}
-```
-```json
-{
-    "query": "landsat:wrs_path=105 AND landsat:wrs_row=83"
-}
-```
-```json
-{
-    "ids": ["LC81050832019135LGN00", "LC81050822019135LGN00"],
-    "collections": ["landsat-8-l1"]
-}
-```
-```json
-{
-    "limit": 2,
-    "query": "eo:cloud_cover<0.1",
-    "time": "2018-02-12T00:00:00Z/2019-06-12T00:00:00Z",
-    "intersects": {
-            "type": "Polygon",
-            "coordinates": [[
-                [-77.08248138427734, 38.788612962793636], [-77.01896667480469, 38.788612962793636],
-                [-77.01896667480469, 38.835161408189364], [-77.08248138427734, 38.835161408189364],
-                [-77.08248138427734, 38.788612962793636]
-            ]]
-        },
-    "sort": [
-        {
-            "field": "properties.eo:cloud_cover",
-            "direction": "desc"
-        },
-        {
-            "field": "properties.landsat:image_quality_tirs",
-            "direction": "asc"
-        }
-    ]
-}
-```
-
 
 ## Configuration
 
@@ -330,7 +239,6 @@ automatically subcataloged via the `/stac/{catalog}` endpoint.  The
 methods with this annotation and build a subcatalog link containing the field name.  That subcatalog will build links 
 containing all unique values in Elasticsearch for that field.  After all eligible subcatalog fieldsExtension have been 
 traversed, the links section will be populated with links to all items that match the selected subcatalog values.
-
 
 ## Elasticsearch
 

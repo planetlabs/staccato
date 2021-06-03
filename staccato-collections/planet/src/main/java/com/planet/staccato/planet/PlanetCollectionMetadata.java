@@ -31,7 +31,7 @@ public class PlanetCollectionMetadata extends CollectionMetadataAdapter<PlanetIt
         keywords.add(KEYWORDS);
         properties = new PlanetItemProperties();
 
-        buildProperties();
+        //buildProperties();
         buildProviders();
     }
 
