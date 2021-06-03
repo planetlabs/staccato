@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 /**
  * @author joshfix
  * Created on 2019-09-23
@@ -19,7 +21,7 @@ public interface OafApi {
     Mono<Object> getApi();
 
     @GetMapping(path = "/conformance", produces = MediaType.APPLICATION_JSON_VALUE)
-    Mono<Conformance> getConformance();
+    Mono<List<String>> getConformance();
 
     @GetMapping(path = "/queryables", produces = StaccatoMediaType.APPLICATION_SCHEMA_JSON_VALUE)
     Flux<Queryables> getQueryables();

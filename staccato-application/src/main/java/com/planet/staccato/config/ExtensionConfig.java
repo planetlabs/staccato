@@ -41,7 +41,7 @@ public class ExtensionConfig {
 
         mapper.addMixIn(Item.class, ItemMixin.class);
         collectionMetadataList.forEach(metadata -> {
-            metadata.setVersion(configProps.getVersion());
+            metadata.setStacVersion(configProps.getVersion());
             NamedType namedType = new NamedType(metadata.getProperties().getClass(), metadata.getId());
             mapper.registerSubtypes(namedType);
         });

@@ -5,13 +5,13 @@
 
     <groupId>com.planet.staccato</groupId>
     <artifactId>staccato</artifactId>
-    <version>1.0.0-rc.2</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.4</version>
+        <version>2.4.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -45,7 +45,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Hoxton.SR1</version>
+                <version>Hoxton.SR11</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -131,34 +131,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <!--
-        <repository>
-            <id>boundless</id>
-            <name>Boundless Maven Repository</name>
-            <url>https://repo.boundlessgeo.com/main</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>boundless-release</id>
-            <name>Boundless Maven Repository</name>
-            <url>https://repo.boundlessgeo.com/release/</url>
-        </repository>
-        <repository>
-            <id>boundless-snapshot</id>
-            <name>Boundless Maven Repository</name>
-            <url>https://repo.boundlessgeo.com/snapshot/</url>
-        </repository>
-        <repository>
-            <id>boundless_ext</id>
-            <name>Boundless Maven Repository</name>
-            <url>https://repo.boundlessgeo.com/ext-release-local/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        -->
         <repository>
             <id>osgeo</id>
             <name>OSGeo Repository</name>
@@ -193,7 +165,7 @@
             </snapshots>
             <id>central</id>
             <name>Maven Plugin Repository</name>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2</url>
         </pluginRepository>
         <pluginRepository>
             <id>spring-snapshots</id>

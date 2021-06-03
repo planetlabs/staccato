@@ -26,12 +26,12 @@ public class PlanetCollectionMetadata extends CollectionMetadataAdapter<PlanetIt
         crs(CRS);
         setTitle(TITLE);
         setDescription(DESCRIPTION);
-        setVersion(VERSION);
+        setStacVersion(VERSION);
         setLicense(LICENSE);
         keywords.add(KEYWORDS);
         properties = new PlanetItemProperties();
 
-        buildProperties();
+        //buildProperties();
         buildProviders();
     }
 

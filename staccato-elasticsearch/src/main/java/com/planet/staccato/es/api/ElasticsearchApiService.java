@@ -2,6 +2,7 @@ package com.planet.staccato.es.api;
 
 import com.planet.staccato.collection.CollectionMetadata;
 import com.planet.staccato.config.LinksConfigProps;
+import com.planet.staccato.config.StacConfigProps;
 import com.planet.staccato.dto.api.SearchRequest;
 import com.planet.staccato.es.IndexAliasLookup;
 import com.planet.staccato.es.QueryBuilderHelper;
@@ -83,8 +84,7 @@ public class ElasticsearchApiService implements ApiService {
         Set<String> indices = getIndices(searchRequest);
         BoolQueryBuilder boolQueryBuilder = QueryBuilderHelper.buildQuery(searchRequest);
         Flux<Item> itemFlux = repository.searchItemFlux(indices, boolQueryBuilder, searchRequest);
-        return processor.searchItemFlux(
-                itemFlux, searchRequest);
+        return processor.searchItemFlux(itemFlux, searchRequest);
     }
 
     /**
