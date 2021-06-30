@@ -14,7 +14,7 @@ Staccato is built using the latest versions of [Spring Boot](https://docs.spring
 and [Spring WebFlux](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html). The 
 application is reactive, utilizing the [Project Reactor](https://projectreactor.io) library. 
 
-Staccato is available to preview at https://stac.boundlessgeo.io and is browsable via the [stac-browser](https://github.com/radiantearth/stac-browser/) at https://boundless.stac.cloud/
+Staccato is available to preview at https://staccato.space/ and is browsable via the [stac-browser](https://github.com/radiantearth/stac-browser/) at https://boundless.stac.cloud/
 
 ## About the STAC Spec
 
