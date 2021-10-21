@@ -61,13 +61,13 @@
             <artifactId>noggit</artifactId>
             <version>0.7</version>
         </dependency>
-<!--
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-core</artifactId>
-            <version>1.0.7</version>
-        </dependency>
--->
+        <!--
+                <dependency>
+                    <groupId>io.micrometer</groupId>
+                    <artifactId>micrometer-core</artifactId>
+                    <version>1.0.7</version>
+                </dependency>
+        -->
         <!-- Test Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -115,7 +115,6 @@
     </dependencies>
 
     <build>
-
         <plugins>
 
             <plugin>
@@ -126,6 +125,21 @@
                     <parameters>true</parameters>
                     <source>11</source>
                     <target>11</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.1.4</version>
+                <configuration>
+                    <containerizingMode>packaged</containerizingMode>
+                    <to>
+                        <image>gcr.io/focus-cargo-315523/staccato:${project.version}</image>
+                    </to>
+                    <from>
+                        <image>amazoncorretto:11.0.7</image>
+                    </from>
                 </configuration>
             </plugin>
 
@@ -162,37 +176,6 @@
                     <executable>true</executable>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>${dockerfile-maven-version}</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <!--<repository>quay.io/boundlessgeo/staccato</repository>-->
-                    <repository>gcr.io/focus-cargo-315523/staccato</repository>
-                    <tag>${project.version}</tag>
-                    <buildArgs>
-                        <JAR_NAME>staccato-${project.version}.jar</JAR_NAME>
-                    </buildArgs>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>javax.activation</groupId>
-                        <artifactId>javax.activation-api</artifactId>
-                        <version>1.2.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
