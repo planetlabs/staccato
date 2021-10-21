@@ -30,7 +30,7 @@
         <locationtech-jts.version>1.16.0</locationtech-jts.version>
         <locationtech-spatial4j.version>0.7</locationtech-spatial4j.version>
         <vividsolutions-jts.version>1.13</vividsolutions-jts.version>
-        <image>gcr.io/focus-cargo-315523/staccato:${project.version}</image>
+        <!-- <image>gcr.io/focus-cargo-315523/staccato:${project.version}</image> -->
     </properties>
 
     <modules>
