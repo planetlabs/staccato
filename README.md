@@ -45,7 +45,7 @@ Additionally the docker image can be built from the [staccato-application](./sta
 
 An Elasticsearch instance must be available.  To run locally in a docker container, use:
 
-`docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.6.0`
+`docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:6.7.0`
 
 Any of the following methods are acceptable ways of running Staccato
 - `./staccato-{version}.jar (self executing jar)`
