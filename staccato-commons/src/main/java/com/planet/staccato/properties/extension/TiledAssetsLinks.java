@@ -49,7 +49,7 @@ public interface TiledAssetsLinks {
         private Double borderTop;
         @JsonProperty("border_left")
         private Double borderLeft;
-        @JsonProperty("border_bottomw")
+        @JsonProperty("border_bottom")
         private Double borderBottom;
         @JsonProperty("border_right")
         private Double borderRight;
