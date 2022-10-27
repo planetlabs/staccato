@@ -164,7 +164,7 @@ public class LinkGenerator {
             log.warn("LinkGenerator encounters malformed url " + e.toString());
             return url;
         } catch(URISyntaxException e) {
-            log.warn("LinkGenerator encounteres uri syntax exception " + e.toString());
+            log.warn("LinkGenerator encountered uri syntax exception " + e.toString());
         }
         return result;
     }
