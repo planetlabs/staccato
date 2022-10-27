@@ -34,7 +34,7 @@ public interface EO {
 
         @Mapping(type = MappingType.KEYWORD)
         @JsonProperty("common_name")
-        private String commmonName;
+        private String commonName;
 
         @Mapping(type = MappingType.TEXT)
         private String description;
@@ -57,7 +57,7 @@ public interface EO {
         }
 
         public Band commonName(String commonName) {
-            setCommmonName(commonName);
+            setCommonName(commonName);
             return this;
         }
 
