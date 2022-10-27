@@ -111,7 +111,7 @@ public class LinkGenerator {
      * @return The protocol/host/port portion of the URL
      */
     public String getSelfString(ServerRequest request) {
-        // request.uri() shceme seems to always be "http"
+        // request.uri() scheme seems to always be "http"
         String self = request.uri().toASCIIString();
         if (request.uri().getScheme().equalsIgnoreCase("http") &&
                 linksConfigProps.getSelf().getScheme().equalsIgnoreCase("https")) {
