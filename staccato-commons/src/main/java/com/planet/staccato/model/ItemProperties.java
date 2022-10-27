@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * provides the core metatdata fieldsExtension plus extensions
+ * provides the core metadata fieldsExtension plus extensions
  */
 @Data
 public class ItemProperties {
