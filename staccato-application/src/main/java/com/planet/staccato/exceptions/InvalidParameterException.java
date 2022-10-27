@@ -17,8 +17,8 @@ public class InvalidParameterException extends RuntimeException {
         super(message);
     }
 
-    public InvalidParameterException(String invalidParameter, Collection<String> knownParmaeters) {
-        super(buildMessage(invalidParameter, knownParmaeters));
+    public InvalidParameterException(String invalidParameter, Collection<String> knownParameters) {
+        super(buildMessage(invalidParameter, knownParameters));
     }
 
     public static String buildMessage(String invalidParameter, Collection<String> knownParameters) {
