@@ -34,7 +34,7 @@ public interface Planet {
     @JsonAlias("quality_category")
     @JsonProperty(EXTENSION_PREFIX + ":quality_category")
     String getQualityCategory();
-    void setQualityCategory(String quailtyCategory);
+    void setQualityCategory(String qualityCategory);
 
     @JsonAlias("satellite_azimuth")
     @JsonProperty(EXTENSION_PREFIX + ":satellite_azimuth")
