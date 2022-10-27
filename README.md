@@ -155,7 +155,7 @@ different operations:
 
 * [index](./staccato-commons/src/main/java/com/planet/staccato/filter/ItemIndexFilter.java)
 * [update](./staccato-commons/src/main/java/com/planet/staccato/filter/ItemUpdateFilter.java)
-* [search](./staccato-commons/src/main/java/com/planet/stacccato/filter/ItemSearchFilter.java)
+* [search](./staccato-commons/src/main/java/com/planet/staccato/filter/ItemSearchFilter.java)
 
 Any Spring managed bean that implements one of these interfaces will be called during the corresponding event in the 
 request lifecycle.  An bean that implements ItemIndexFilter will be called before an item is indexed in Elasticsearch.  
