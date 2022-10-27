@@ -6,7 +6,7 @@ import com.planet.staccato.model.Asset;
 import java.util.Map;
 
 /**
- * Defines the item assets xtension and Jackson property values
+ * Defines the item assets extension and Jackson property values
  * @see <a href="https://github.com/radiantearth/stac-spec/tree/master/extensions/item-assets">Item Assets Extension</a>
  * @author joshfix
  * Created on 06/08/2020
