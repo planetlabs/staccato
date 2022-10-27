@@ -215,8 +215,8 @@ public class QueryBuilderHelper {//implements QueryBuilder {
     /**
      * Builds an Elasticsearch query from the OGC CQL filter spec
      *
-     * @param filterCrs  The CRS of the filter as specified by the API paramter "filter-crs"
-     * @param filterLang The language of the filter as specified by the API paramter "filter-lang"
+     * @param filterCrs  The CRS of the filter as specified by the API parameter "filter-crs"
+     * @param filterLang The language of the filter as specified by the API parameter "filter-lang"
      * @param filter     The query filter passed in the api request
      * @return The Elasticsearch query builder
      */
