@@ -111,7 +111,7 @@ public class LinkGenerator {
      * @return The protocol/host/port portion of the URL
      */
     public String getSelfString(ServerRequest request) {
-        // request.uri() shceme seems to always be "http"
+        // request.uri() scheme seems to always be "http"
         String self = request.uri().toASCIIString();
         if (request.uri().getScheme().equalsIgnoreCase("http") &&
                 linksConfigProps.getSelf().getScheme().equalsIgnoreCase("https")) {
@@ -164,7 +164,7 @@ public class LinkGenerator {
             log.warn("LinkGenerator encounters malformed url " + e.toString());
             return url;
         } catch(URISyntaxException e) {
-            log.warn("LinkGenerator encounteres uri syntax exception " + e.toString());
+            log.warn("LinkGenerator encountered uri syntax exception " + e.toString());
         }
         return result;
     }

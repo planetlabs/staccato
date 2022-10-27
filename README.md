@@ -155,7 +155,7 @@ different operations:
 
 * [index](./staccato-commons/src/main/java/com/planet/staccato/filter/ItemIndexFilter.java)
 * [update](./staccato-commons/src/main/java/com/planet/staccato/filter/ItemUpdateFilter.java)
-* [search](./staccato-commons/src/main/java/com/planet/stacccato/filter/ItemSearchFilter.java)
+* [search](./staccato-commons/src/main/java/com/planet/staccato/filter/ItemSearchFilter.java)
 
 Any Spring managed bean that implements one of these interfaces will be called during the corresponding event in the 
 request lifecycle.  An bean that implements ItemIndexFilter will be called before an item is indexed in Elasticsearch.  
@@ -202,7 +202,7 @@ the data is serialized/deserialized the way you want.
 or simply extend 
 [`CollectionMetadataAdapter`](../staccato-commons/src/main/java/com/planet/staccato/collection/CollectionMetadataAdapter.java).
 4) A class annotated with `@Configuration` that creates 2 beans, both instances of your `CollectionMetadata` class.
-One bean is the the WFS3 collection and one is the STAC catalog. Yes, it seems silly, but there are differences per
+One bean is the WFS3 collection and one is the STAC catalog. Yes, it seems silly, but there are differences per
 the spec (the collection is WFS3 compliant; the catalog enables STAC-specific capabilities, such as the traversing
 subcatalogs). It is important that when creating the collection bean, you set 
 `metadata.setCatalogType(CatalogType.COLLECTION);` and when you create the catalog bean, you set 

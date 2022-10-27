@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * An initializer that will prevent the STAC application from reporting a healthy status until it can successfully
  * connect to the Elasticsearch instance and retrieve the version number or until the maximum number of attempts
  * as defined in {@link ElasticsearchConfigProps ElasticsearchConfigProps.Es.maxReconnectionAttempts} has been reached.
- * After a failed attempt, reattempts will implement a back-off delay strategy according the the fibonacci sequence.
+ * After a failed attempt, reattempts will implement a back-off delay strategy according the fibonacci sequence.
  * @author joshfix
  * Created on 2/27/18
  */
